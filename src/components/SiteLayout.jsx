@@ -202,6 +202,7 @@ function SiteLayout() {
           ref={footerFrameRef}
           className="site-footer-embed"
           src="/partials/tcu-footer.html"
+          loading="lazy"
           title="Site footer"
         />
       </footer>

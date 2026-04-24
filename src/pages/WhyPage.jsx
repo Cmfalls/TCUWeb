@@ -80,7 +80,12 @@ function WhyPage() {
                   {whyContent.fact.twoHalves} <strong>One without the other will not work.</strong>
                 </p>
                 <div className="why-missing-visual">
-                  <div className="why-missing-visual-label">IMG / EMISSIONS / ATMOSPHERE</div>
+                  <img
+                    src="/images/other-half/main-images/corn-sprouts-dark-soil.jpg"
+                    alt="Corn sprouts emerging from dark living soil"
+                    className="why-missing-visual-img"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>

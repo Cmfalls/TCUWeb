@@ -9,7 +9,7 @@ function LogoWall({ items, theme = "light", className = "" }) {
         <article key={item.name} className="logo-card">
           <div className="logo-card-mark">
             {item.logo ? (
-              <img src={item.logo} alt={item.alt || item.name} />
+              <img src={item.logo} alt={item.alt || item.name} loading="lazy" decoding="async" />
             ) : (
               <span className="logo-card-initial" aria-hidden="true">
                 {item.name.slice(0, 1)}

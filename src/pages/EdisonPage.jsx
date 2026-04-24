@@ -96,6 +96,7 @@ function EdisonPage() {
             ref={foundingFrameRef}
             className="edison-founding-embed"
             src="/partials/tcu-built-on-partnership.html"
+            loading="lazy"
             title="Built On A Partnership"
           />
         </div>
@@ -116,7 +117,7 @@ function EdisonPage() {
       {edisonContent.visualBridge && (
         <section className="edison-visual-bridge">
           <figure>
-            <img src={edisonContent.visualBridge.image} alt={edisonContent.visualBridge.imageAlt} />
+            <img src={edisonContent.visualBridge.image} alt={edisonContent.visualBridge.imageAlt} loading="lazy" decoding="async" />
             <figcaption>{edisonContent.visualBridge.caption}</figcaption>
           </figure>
         </section>
@@ -128,6 +129,7 @@ function EdisonPage() {
             ref={threeCropsFrameRef}
             className="edison-three-crops-embed"
             src="/partials/tcu-three-crops.html"
+            loading="lazy"
             title="Three Crops, Three Proofs"
           />
         </div>
@@ -139,6 +141,7 @@ function EdisonPage() {
             ref={fourObjectivesFrameRef}
             className="edison-four-objectives-embed"
             src="/partials/tcu-four-objectives.html"
+            loading="lazy"
             title="Four Objectives"
           />
         </div>

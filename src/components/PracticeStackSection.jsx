@@ -81,7 +81,7 @@ function PracticeStackSection({ content }) {
                 className={`practice-stack-card practice-stack-card-${index + 1} is-${meta.accent}`}
               >
                 <div className="practice-stack-card-image">
-                  <img src={item.image} alt={item.imageAlt} />
+                  <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" />
                 </div>
 
                 <div className="practice-stack-card-body">

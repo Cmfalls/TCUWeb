@@ -54,14 +54,21 @@ function WhyItMattersSection() {
         <div className="why-matters-intro">
           <div className="why-matters-intro-copy">
             <span className="eyebrow">Why It Matters</span>
+            <div className="why-matters-intro-rule" aria-hidden="true" />
             <h2>Edison helps turn conviction into something institutions can examine.</h2>
             <p>
-              The case for regenerative agriculture gets stronger when public language,
-              scientific framing, and working-land evidence reinforce one another over time.
+              The case for regenerative agriculture gets stronger when public language, scientific framing, and
+              working-land evidence reinforce one another over time.
             </p>
+            <div className="why-matters-intro-foot">
+              <span>Public claim</span>
+              <span>Field design</span>
+              <span>Measured trust</span>
+            </div>
           </div>
 
           <figure className="why-matters-hero-visual">
+            <div className="why-matters-hero-chip">Working-land proof</div>
             <img
               src="/images/visuals/edison/edison-aerial-compound-6.jpg"
               alt="Aerial view of Edison working-land research site"
@@ -76,10 +83,11 @@ function WhyItMattersSection() {
 
         <div className="why-matters-progression" aria-label="Evidence progression">
           {progression.map((word, index) => (
-            <span key={word.id} className="why-matters-progress-pair">
-              <span className={activeWord === word.id ? "lit" : ""}>{word.label}</span>
-              {index < progression.length - 1 ? <span aria-hidden="true">-&gt;</span> : null}
-            </span>
+            <div key={word.id} className="why-matters-progress-pair">
+              <span className="why-matters-progress-index">{String(index + 1).padStart(2, "0")}</span>
+              <span className={`why-matters-progress-label ${activeWord === word.id ? "lit" : ""}`}>{word.label}</span>
+              {index < progression.length - 1 ? <span aria-hidden="true" className="why-matters-progress-arrow" /> : null}
+            </div>
           ))}
         </div>
 
@@ -88,19 +96,25 @@ function WhyItMattersSection() {
             <article
               key={card.step}
               className="why-matters-card"
+              tabIndex={0}
               onFocus={() => setActiveWord(card.id)}
               onMouseEnter={() => setActiveWord(card.id)}
+              onBlur={() => setActiveWord(null)}
             >
+              <div className="why-matters-card-head">
+                <div className="why-matters-card-step">Step {card.step}</div>
+                <div className="why-matters-phase">
+                  <span />
+                  <strong>{card.phase}</strong>
+                </div>
+              </div>
               <div className="why-matters-card-media">
                 <img src={card.image} alt={card.imageAlt} loading="lazy" />
               </div>
-              <div className="why-matters-card-step">{card.step}</div>
-              <div className="why-matters-phase">
-                <span />
-                <strong>{card.phase}</strong>
+              <div className="why-matters-card-body">
+                <h3>{card.headline}</h3>
+                <p>{card.body}</p>
               </div>
-              <h3>{card.headline}</h3>
-              <p>{card.body}</p>
               <blockquote>{card.pullquote}</blockquote>
             </article>
           ))}

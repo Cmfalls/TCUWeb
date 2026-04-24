@@ -7,7 +7,7 @@ function TeamCards({ people, theme = "light", className = "" }) {
         <article key={person.name} className={`team-card ${theme === "dark" ? "team-card-dark" : ""}`}>
           {person.image ? (
             <div className="team-media">
-              <img src={person.image} alt={person.alt || person.name} />
+              <img src={person.image} alt={person.alt || person.name} loading="lazy" decoding="async" />
             </div>
           ) : (
             <div className="team-initials" aria-hidden="true">
