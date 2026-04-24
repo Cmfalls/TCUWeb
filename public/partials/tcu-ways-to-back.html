@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Ways To Back The Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1f1a;
+    --bg-deep: #061411;
+    --bg-card: rgba(245, 239, 225, 0.03);
+    --bg-card-hover: rgba(245, 239, 225, 0.06);
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.7);
+    --cream-faint: rgba(245, 239, 225, 0.5);
+    --cream-ghost: rgba(245, 239, 225, 0.3);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --line: rgba(245, 239, 225, 0.12);
+    --line-strong: rgba(245, 239, 225, 0.25);
+
+    /* Pathway accent colors */
+    --path-1: #99cc33;  /* TCU — wheatgrass */
+    --path-2: #6fa3a0;  /* Edison — teal */
+    --path-3: #c9a066;  /* Partnership — warm gold */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 80% 20%, rgba(153, 204, 51, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(111, 163, 160, 0.04) 0%, transparent 55%);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 56px 24px 72px; }
+  }
+
+  /* === TOP: two-column head === */
+  .head-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 900px) {
+    .head-row { grid-template-columns: 1fr; gap: 24px; margin-bottom: 36px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.9;
+    letter-spacing: -0.005em;
+    color: var(--cream);
+    max-width: 16ch;
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--cream-dim);
+    line-height: 1.65;
+    max-width: 54ch;
+  }
+  .lede strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  /* === CARDS GRID === */
+  .pathways {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 900px) {
+    .pathways { grid-template-columns: 1fr; }
+  }
+
+  .pathway {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 0;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.4s ease,
+                border-color 0.4s ease,
+                transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.5s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .pathway:nth-child(1) { animation-delay: 0.15s; }
+  .pathway:nth-child(2) { animation-delay: 0.3s; }
+  .pathway:nth-child(3) { animation-delay: 0.45s; }
+
+  .pathway:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--line-strong);
+    transform: translateY(-6px);
+    box-shadow: 0 28px 48px -24px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Top accent strip + number */
+  .pathway-top {
+    padding: 28px 28px 0;
+    position: relative;
+  }
+  .pathway-strip {
+    height: 3px;
+    background: currentColor;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    opacity: 0.4;
+    transition: opacity 0.4s ease;
+  }
+  .pathway:hover .pathway-strip { opacity: 1; }
+
+  .pathway-index {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    line-height: 0.85;
+    color: var(--cream);
+    opacity: 0.06;
+    transition: opacity 0.4s ease;
+    letter-spacing: -0.02em;
+  }
+  .pathway:hover .pathway-index { opacity: 0.18; }
+
+  .pathway-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pathway-label::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+
+  .pathway h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1.02;
+    color: var(--cream);
+    margin-bottom: 14px;
+    max-width: 16ch;
+    letter-spacing: 0.005em;
+  }
+  .pathway-desc {
+    padding: 0 28px 18px;
+    font-size: 14px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+  }
+
+  /* "Best for" callout */
+  .best-for {
+    margin: 0 28px 24px;
+    padding: 16px 18px;
+    background: rgba(245, 239, 225, 0.03);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    position: relative;
+  }
+  .best-for-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: currentColor;
+    margin-bottom: 6px;
+    opacity: 0.85;
+  }
+  .best-for-text {
+    font-size: 12px;
+    color: var(--cream-dim);
+    line-height: 1.5;
+  }
+
+  /* CTA footer */
+  .pathway-cta {
+    margin-top: auto;
+    padding: 18px 28px;
+    background: rgba(245, 239, 225, 0.03);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+  .pathway:hover .pathway-cta {
+    background: rgba(245, 239, 225, 0.06);
+  }
+  .pathway-cta-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: gap 0.3s ease;
+  }
+  .pathway:hover .pathway-cta-label { gap: 14px; }
+  .pathway-cta-arrow {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+  .pathway:hover .pathway-cta-arrow {
+    background: currentColor;
+    transform: rotate(-45deg);
+  }
+  .pathway:hover .pathway-cta-arrow svg {
+    color: var(--ink);
+  }
+  .pathway-cta-arrow svg { width: 14px; height: 14px; transition: color 0.3s ease; }
+
+  /* Pathway-specific accent colors */
+  .pathway-1 { color: var(--path-1); }
+  .pathway-2 { color: var(--path-2); }
+  .pathway-3 { color: var(--path-3); }
+  .pathway-1:hover { border-color: var(--path-1); }
+  .pathway-2:hover { border-color: var(--path-2); }
+  .pathway-3:hover { border-color: var(--path-3); }
+  .pathway-1 .best-for { background: rgba(153, 204, 51, 0.06); border-color: rgba(153, 204, 51, 0.2); }
+  .pathway-2 .best-for { background: rgba(111, 163, 160, 0.08); border-color: rgba(111, 163, 160, 0.25); }
+  .pathway-3 .best-for { background: rgba(201, 160, 102, 0.08); border-color: rgba(201, 160, 102, 0.25); }
+
+  /* === CONTACT LINE === */
+  .contact-line {
+    margin-top: 40px;
+    padding: 22px 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .contact-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 280px;
+  }
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(153, 204, 51, 0.1);
+    border: 1.5px solid var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wheatgrass);
+    flex-shrink: 0;
+  }
+  .contact-icon svg { width: 18px; height: 18px; }
+  .contact-text {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.5;
+  }
+  .contact-text strong {
+    color: var(--cream);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 14px;
+  }
+  .contact-cta {
+    padding: 12px 22px;
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    transition: background 0.2s ease, gap 0.3s ease;
+    white-space: nowrap;
+  }
+  .contact-cta:hover {
+    background: var(--wheatgrass-bright);
+    gap: 14px;
+  }
+  .contact-cta svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <div class="head-row">
+    <div>
+      <div class="eyebrow">Ways To Back The Work</div>
+      <h1 class="headline">Different kinds of support strengthen different parts of the mission.</h1>
+    </div>
+    <p class="lede">Every dollar invested generates evidence that can be replicated across millions of acres. Every restored acre removes carbon, holds more water, and <strong>strengthens the food system that feeds us all</strong>.</p>
+  </div>
+
+  <div class="pathways">
+
+    <!-- PATHWAY 1: TCU -->
+    <div class="pathway pathway-1">
+      <div class="pathway-top">
+        <div class="pathway-strip"></div>
+        <div class="pathway-index">01</div>
+        <div class="pathway-label">Support The Carbon Underground</div>
+        <h3>Fund the public case.</h3>
+      </div>
+      <p class="pathway-desc">Back the writing, translation, outreach, and institutional work that helps this argument travel beyond specialist circles and into public understanding.</p>
+      <div class="best-for">
+        <div class="best-for-label">→ Best For</div>
+        <div class="best-for-text">Donors who want to strengthen the umbrella organization, public communication, and long-term mission capacity.</div>
+      </div>
+      <div class="pathway-cta">
+        <span class="pathway-cta-label">Support TCU</span>
+        <div class="pathway-cta-arrow">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATHWAY 2: EDISON -->
+    <div class="pathway pathway-2">
+      <div class="pathway-top">
+        <div class="pathway-strip"></div>
+        <div class="pathway-index">02</div>
+        <div class="pathway-label">Support The Edison Institute</div>
+        <h3>Back Edison field research.</h3>
+      </div>
+      <p class="pathway-desc">Help fund baseline studies, field trials, monitoring, and long-term agricultural learning in one of the country's most consequential farm regions.</p>
+      <div class="best-for">
+        <div class="best-for-label">→ Best For</div>
+        <div class="best-for-text">Funders focused on field proof, research design, Central Valley resilience, and grower-relevant implementation.</div>
+      </div>
+      <div class="pathway-cta">
+        <span class="pathway-cta-label">Visit Edison</span>
+        <div class="pathway-cta-arrow">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PATHWAY 3: PARTNERSHIP -->
+    <div class="pathway pathway-3">
+      <div class="pathway-top">
+        <div class="pathway-strip"></div>
+        <div class="pathway-index">03</div>
+        <div class="pathway-label">Partnership & Philanthropy</div>
+        <h3>Start a serious conversation.</h3>
+      </div>
+      <p class="pathway-desc">Use the work as a starting point for partnership, philanthropic support, collaborative research, or institutional alignment around climate, water, and food security.</p>
+      <div class="best-for">
+        <div class="best-for-label">→ Best For</div>
+        <div class="best-for-text">Foundations, aligned organizations, food-system partners, and major supporters exploring collaboration.</div>
+      </div>
+      <div class="pathway-cta">
+        <span class="pathway-cta-label">Contact TCU</span>
+        <div class="pathway-cta-arrow">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact line -->
+  <div class="contact-line">
+    <div class="contact-left">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div class="contact-text">
+        <strong>Not sure which path fits?</strong>
+        We'll help match your intent, timeline, and priorities to the right part of the work.
+      </div>
+    </div>
+    <a class="contact-cta" href="#contact">
+      Talk to our team
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+</body>
+</html>

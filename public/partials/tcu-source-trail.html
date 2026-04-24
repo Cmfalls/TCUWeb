@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Source Trail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.2vw, 76px);
+    line-height: 0.95;
+    color: var(--ink);
+    max-width: 16ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin-bottom: 48px;
+  }
+
+  /* Filter toolbar */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+    gap: 16px;
+  }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  .filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .filter-btn:hover {
+    border-color: var(--ink);
+  }
+  .filter-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .toolbar-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .toolbar-count strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1100px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .card {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 24px 24px 0;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, grid-column 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px -18px rgba(10, 46, 38, 0.25);
+  }
+  .card.hidden {
+    opacity: 0.15;
+    transform: scale(0.98);
+    pointer-events: none;
+  }
+  .card.expanded {
+    grid-column: span 2;
+    border-color: var(--ink);
+    background: var(--cream-card);
+  }
+  @media (min-width: 1100px) {
+    .card.expanded { grid-column: span 2; }
+  }
+  @media (max-width: 1100px) {
+    .card.expanded { grid-column: span 2; }
+  }
+  @media (max-width: 600px) {
+    .card.expanded { grid-column: span 1; }
+  }
+
+  /* Card header */
+  .card-index {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .card-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    font-size: 9px;
+    color: var(--ink);
+  }
+  .card-tag.tag-carbon { border-color: rgba(153, 204, 51, 0.5); background: rgba(153, 204, 51, 0.1); }
+  .card-tag.tag-water { border-color: rgba(111, 163, 160, 0.5); background: rgba(111, 163, 160, 0.12); }
+  .card-tag.tag-food { border-color: rgba(232, 165, 71, 0.5); background: rgba(232, 165, 71, 0.12); }
+  .card-tag.tag-soil { border-color: rgba(138, 109, 59, 0.5); background: rgba(138, 109, 59, 0.12); }
+
+  /* Big number */
+  .card-stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    line-height: 0.95;
+    color: var(--wheatgrass);
+    margin-bottom: 14px;
+    letter-spacing: 0.005em;
+  }
+  .card-claim {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* Source chain */
+  .chain {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-bottom: 14px;
+  }
+  .chain-primary {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .chain-secondary {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .chain-review {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .chain-review::before {
+    content: "";
+    width: 5px; height: 5px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* Footer action */
+  .card-footer {
+    border-top: 1px solid var(--line);
+    margin: 0 -24px;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 46, 38, 0.02);
+    transition: background 0.3s ease;
+  }
+  .card:hover .card-footer { background: rgba(153, 204, 51, 0.08); }
+  .card-footer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .card-footer-icon {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .card.expanded .card-footer-icon {
+    background: var(--wheatgrass);
+    transform: rotate(45deg);
+  }
+
+  /* Expanded detail */
+  .card-detail {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease;
+  }
+  .card.expanded .card-detail {
+    max-height: 600px;
+    opacity: 1;
+  }
+  .card-detail-inner {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 700px) {
+    .card-detail-inner { grid-template-columns: 1fr; gap: 16px; }
+  }
+  .card-detail h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--wheatgrass);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .card-detail p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .chain-list {
+    list-style: none;
+    padding: 0;
+  }
+  .chain-list li {
+    font-size: 12px;
+    color: var(--ink-soft);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .chain-list li:last-child { border-bottom: none; }
+  .chain-step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--wheatgrass);
+    font-weight: 600;
+    padding-top: 2px;
+    min-width: 24px;
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Source Trail</div>
+  <h1 class="headline">The major evidence claims now have a public trail.</h1>
+  <p class="lede">These are the highest-risk numbers used across the Evidence page. Each one points back to a source path or TCU evidence reference so the argument can be inspected.</p>
+
+  <div class="toolbar">
+    <div class="filters">
+      <span class="filter-label">Filter</span>
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="carbon">Carbon</button>
+      <button class="filter-btn" data-filter="water">Water</button>
+      <button class="filter-btn" data-filter="food">Food</button>
+      <button class="filter-btn" data-filter="soil">Soil</button>
+    </div>
+    <div class="toolbar-count"><strong id="visibleCount">7</strong> / 7 CLAIMS</div>
+  </div>
+
+  <div class="cards" id="cards">
+
+    <!-- 01 -->
+    <div class="card" data-tag="food">
+      <div class="card-index">
+        <span>01 / CLAIM</span>
+        <span class="card-tag tag-food">FOOD</span>
+      </div>
+      <div class="card-stat">31%</div>
+      <div class="card-claim">Food systems account for roughly 31% of anthropogenic greenhouse-gas emissions.</div>
+      <div class="chain">
+        <div class="chain-primary">Crippa et al., Nature Food, 2021; IPCC AR6 WGIII food-system context</div>
+        <div class="chain-secondary">TCU Stats food-system synthesis</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>The 31% figure places food and agriculture squarely inside climate strategy rather than alongside it. When food is this large a share of emissions, regenerative agriculture stops being a niche topic and becomes a core lever.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>Crippa et al., Nature Food, 2021 (primary data)</li>
+              <li><span class="chain-step">→ 02</span>IPCC AR6 WGIII Chapter 7 (corroboration)</li>
+              <li><span class="chain-step">→ 03</span>TCU Stats food-system synthesis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="card" data-tag="water">
+      <div class="card-index">
+        <span>02 / CLAIM</span>
+        <span class="card-tag tag-water">WATER</span>
+      </div>
+      <div class="card-stat">20,000 GAL</div>
+      <div class="card-claim">Each 1% gain in soil organic matter can add roughly 20,000 gallons of water-holding capacity per acre.</div>
+      <div class="chain">
+        <div class="chain-primary">USDA NRCS soil health guidance; Bryant et al. water-holding estimate; TCU SOM model</div>
+        <div class="chain-secondary">TCU Stats SOM readout</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>This reframes soil health as water infrastructure. Where drought and flood risk both apply, soil becomes the lowest-cost storage the region already has and is not using.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>USDA NRCS Soil Health Division</li>
+              <li><span class="chain-step">→ 02</span>Bryant et al. 2015 water-holding estimate</li>
+              <li><span class="chain-step">→ 03</span>TCU SOM model readout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="card" data-tag="carbon">
+      <div class="card-index">
+        <span>03 / CLAIM</span>
+        <span class="card-tag tag-carbon">CARBON</span>
+      </div>
+      <div class="card-stat">5.8 TONS C</div>
+      <div class="card-claim">A 1% soil organic matter gain in the site model corresponds to about 5.8 tons of carbon stored per acre.</div>
+      <div class="chain">
+        <div class="chain-primary">TCU SOM-to-carbon conversion; USDA NRCS soil carbon standards; Lal, Science, 2004</div>
+        <div class="chain-secondary">TCU Stats SOM model</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>This is the physical quantity of carbon actually moved out of the atmosphere and into biological storage on one acre. It's the direct climate measurement, before any conversion.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>TCU SOM-to-C conversion protocol</li>
+              <li><span class="chain-step">→ 02</span>USDA NRCS soil carbon standards</li>
+              <li><span class="chain-step">→ 03</span>Lal, Science, 2004 (foundational reference)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="card" data-tag="carbon">
+      <div class="card-index">
+        <span>04 / CLAIM</span>
+        <span class="card-tag tag-carbon">CARBON</span>
+      </div>
+      <div class="card-stat">21.3 TONS CO2e</div>
+      <div class="card-claim">The 5.8 tons of stored carbon converts to about 21.3 tons CO2e using the standard 3.67 carbon-to-CO2 ratio.</div>
+      <div class="chain">
+        <div class="chain-primary">IPCC carbon-to-CO2 conversion standard; TCU derived equivalent</div>
+        <div class="chain-secondary">TCU Stats derived equivalent</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>CO2e is the unit most climate audiences already work in. Converting soil carbon into CO2e lets the number travel into climate policy conversations without needing a translator.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>IPCC molecular weight ratio (44/12 = 3.67)</li>
+              <li><span class="chain-step">→ 02</span>Applied to TCU 5.8 tons C figure</li>
+              <li><span class="chain-step">→ 03</span>TCU Stats derived equivalent</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="card" data-tag="food">
+      <div class="card-index">
+        <span>05 / CLAIM</span>
+        <span class="card-tag tag-food">FOOD</span>
+      </div>
+      <div class="card-stat">50%</div>
+      <div class="card-claim">Climate change could put roughly half of key U.S. food crop production at risk by 2100.</div>
+      <div class="chain">
+        <div class="chain-primary">Stanford Doerr School of Sustainability food-production risk summary</div>
+        <div class="chain-secondary">TCU evidence packet: food-security risk</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>Tying climate risk directly to U.S. crop production makes the stakes concrete for a domestic audience. It is not someone else's problem in someone else's region.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>Stanford Doerr School risk summary</li>
+              <li><span class="chain-step">→ 02</span>TCU evidence packet: food-security risk</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="card" data-tag="soil">
+      <div class="card-index">
+        <span>06 / CLAIM</span>
+        <span class="card-tag tag-soil">SOIL</span>
+      </div>
+      <div class="card-stat">&lt; 60</div>
+      <div class="card-claim">Degraded soil has been publicly framed as leaving fewer than 60 harvests without restoration.</div>
+      <div class="chain">
+        <div class="chain-primary">United Nations soil degradation communications, 2013</div>
+        <div class="chain-secondary">TCU evidence packet: soil degradation urgency</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>The framing is public and widely referenced. TCU uses the figure as a communications anchor while noting it is a framing rather than a peer-reviewed threshold, so the source chain is deliberately transparent.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>UN soil degradation communications, 2013</li>
+              <li><span class="chain-step">→ 02</span>TCU evidence packet: soil degradation urgency</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+
+    <!-- 07 -->
+    <div class="card" data-tag="carbon">
+      <div class="card-index">
+        <span>07 / CLAIM</span>
+        <span class="card-tag tag-carbon">CARBON</span>
+      </div>
+      <div class="card-stat">300–1,000 YRS</div>
+      <div class="card-claim">Without active drawdown, excess atmospheric carbon can continue affecting climate for centuries after emissions stop.</div>
+      <div class="chain">
+        <div class="chain-primary">NOAA carbon-cycle and atmospheric persistence summaries</div>
+        <div class="chain-secondary">TCU evidence packet: legacy carbon</div>
+        <div class="chain-review">Reviewed April 2026</div>
+      </div>
+      <div class="card-detail">
+        <div class="card-detail-inner">
+          <div>
+            <h4>Why this number matters</h4>
+            <p>This is the core scientific basis for drawdown. Without it, cuts alone would eventually heal the climate. The persistence window is what makes drawdown unavoidable rather than optional.</p>
+          </div>
+          <div>
+            <h4>Source chain</h4>
+            <ul class="chain-list">
+              <li><span class="chain-step">→ 01</span>NOAA carbon-cycle summaries</li>
+              <li><span class="chain-step">→ 02</span>Atmospheric persistence literature</li>
+              <li><span class="chain-step">→ 03</span>TCU evidence packet: legacy carbon</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-label">Inspect</span>
+        <div class="card-footer-icon">+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const visibleCount = document.getElementById('visibleCount');
+
+  // Expand / collapse
+  cards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ignore clicks inside an already-expanded card's detail area
+      if (card.classList.contains('expanded') && e.target.closest('.card-detail')) return;
+      const wasExpanded = card.classList.contains('expanded');
+      cards.forEach(c => c.classList.remove('expanded'));
+      if (!wasExpanded) card.classList.add('expanded');
+    });
+  });
+
+  // Filter
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      let shown = 0;
+      cards.forEach(card => {
+        const tag = card.dataset.tag;
+        if (filter === 'all' || tag === filter) {
+          card.classList.remove('hidden');
+          shown++;
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('expanded');
+        }
+      });
+      visibleCount.textContent = shown;
+    });
+  });
+</script>
+</body>
+</html>

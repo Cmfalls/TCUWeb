@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Evidence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1f1a;
+    --bg-deep: #061411;
+    --bg-card: rgba(245, 239, 225, 0.03);
+    --bg-card-hover: rgba(245, 239, 225, 0.06);
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.7);
+    --cream-faint: rgba(245, 239, 225, 0.5);
+    --cream-ghost: rgba(245, 239, 225, 0.3);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --line: rgba(245, 239, 225, 0.12);
+    --line-strong: rgba(245, 239, 225, 0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at top right, rgba(153, 204, 51, 0.05) 0%, transparent 60%);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.2vw, 76px);
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+    color: var(--cream);
+    max-width: 18ch;
+    margin-bottom: 24px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--cream-dim);
+    max-width: 60ch;
+    margin-bottom: 56px;
+  }
+
+  /* Dashboard toolbar */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--wheatgrass);
+    box-shadow: 0 0 0 0 rgba(153, 204, 51, 0.6);
+    animation: statusPulse 2s ease-in-out infinite;
+  }
+  @keyframes statusPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(153, 204, 51, 0.6); }
+    50% { box-shadow: 0 0 0 6px rgba(153, 204, 51, 0); }
+  }
+  .toolbar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-faint);
+  }
+  .toolbar-right {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.05em;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 1000px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 32px 28px 28px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 0;
+    background: var(--wheatgrass);
+    transition: height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--line-strong);
+  }
+  .card:hover::before { height: 100%; }
+  .card.active {
+    border-color: rgba(153, 204, 51, 0.5);
+    background: rgba(153, 204, 51, 0.06);
+  }
+  .card.active::before { height: 100%; }
+
+  /* Card header with index */
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+  .card-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.1em;
+  }
+  .card-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+  .card:hover .card-icon, .card.active .card-icon { opacity: 1; }
+
+  /* Big number */
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 5vw, 64px);
+    line-height: 0.92;
+    color: var(--wheatgrass-bright);
+    margin-bottom: 4px;
+    letter-spacing: 0.005em;
+  }
+  .stat-unit {
+    display: inline;
+    font-size: 0.55em;
+    color: var(--wheatgrass);
+    margin-left: 4px;
+  }
+  .stat-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+  .stat-desc {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.55;
+    margin-bottom: 24px;
+    min-height: 80px;
+  }
+
+  /* Mini viz per card */
+  .mini-viz {
+    height: 32px;
+    margin-bottom: 20px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .card:hover .mini-viz, .card.active .mini-viz { opacity: 1; }
+  .mini-viz svg { width: 100%; height: 100%; }
+
+  /* Source footer */
+  .card-source {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    margin-top: auto;
+  }
+  .source-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--wheatgrass);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .expand-icon {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream-faint);
+    font-size: 14px;
+    line-height: 1;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+  .card.active .expand-icon {
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border-color: var(--wheatgrass);
+    transform: rotate(45deg);
+  }
+
+  /* Expanded methodology panel */
+  .methodology {
+    margin-top: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.4s ease, margin-top 0.4s ease;
+  }
+  .methodology.open {
+    max-height: 600px;
+    opacity: 1;
+  }
+  .methodology-inner {
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  @media (max-width: 760px) {
+    .methodology-inner { grid-template-columns: 1fr; gap: 24px; }
+  }
+  .methodology h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--wheatgrass-bright);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .methodology p {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .methodology code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(153, 204, 51, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: var(--wheatgrass-bright);
+  }
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--wheatgrass);
+    text-decoration: none;
+    padding: 6px 10px;
+    border: 1px solid rgba(153, 204, 51, 0.3);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    margin-top: 8px;
+  }
+  .source-link:hover {
+    background: rgba(153, 204, 51, 0.1);
+  }
+  .link-list { list-style: none; padding: 0; }
+  .link-list li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Evidence Dashboard</div>
+  <h1 class="headline">Four numbers make the climate case concrete.</h1>
+  <p class="lede">The public case gets stronger when climate risk, soil function, water buffering, and farm viability can be read together. Click any card to see how it is measured.</p>
+
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="status-dot"></div>
+      <div class="toolbar-label">Live metrics / peer reviewed sources</div>
+    </div>
+    <div class="toolbar-right">LAST UPDATED: APR 2026</div>
+  </div>
+
+  <div class="cards" id="cards">
+
+    <!-- CARD 1: 31% -->
+    <div class="card" data-id="1">
+      <div class="card-header">
+        <div class="card-index">01 / PROBLEM SCALE</div>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="stat-num"><span data-count="31" data-end="31">0</span><span class="stat-unit">%</span></div>
+      <div class="stat-label">Food-system emissions</div>
+      <div class="stat-desc">The food system accounts for a major share of human-made greenhouse gas emissions, so agricultural transition belongs inside climate strategy.</div>
+      <div class="mini-viz">
+        <svg viewBox="0 0 200 32">
+          <rect x="0" y="10" width="200" height="12" fill="rgba(245,239,225,0.1)" rx="2"/>
+          <rect x="0" y="10" width="62" height="12" fill="#99cc33" rx="2" class="viz-bar-1"/>
+          <text x="66" y="19" font-family="JetBrains Mono, monospace" font-size="9" fill="#b8e655">31%</text>
+        </svg>
+      </div>
+      <div class="card-source">
+        <div class="source-label">TCU STATS / FOOD-SYSTEM</div>
+        <div class="expand-icon">+</div>
+      </div>
+    </div>
+
+    <!-- CARD 2: 20K GAL -->
+    <div class="card" data-id="2">
+      <div class="card-header">
+        <div class="card-index">02 / WATER FUNCTION</div>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5s6 6 6 11a6 6 0 0 1-12 0c0-5 6-11 6-11z"/></svg>
+      </div>
+      <div class="stat-num"><span data-count="20" data-end="20">0</span>K<span class="stat-unit">GAL</span></div>
+      <div class="stat-label">Water buffered</div>
+      <div class="stat-desc">Per acre for every 1% soil organic matter gain in the SOM readout, translating soil health into water resilience.</div>
+      <div class="mini-viz">
+        <svg viewBox="0 0 200 32">
+          <g fill="#99cc33" opacity="0.8">
+            <circle cx="10" cy="20" r="3"/>
+            <circle cx="22" cy="14" r="2"/>
+            <circle cx="32" cy="22" r="2.5"/>
+            <circle cx="44" cy="16" r="2"/>
+            <circle cx="56" cy="20" r="3"/>
+            <circle cx="68" cy="14" r="2"/>
+            <circle cx="80" cy="22" r="2.5"/>
+            <circle cx="92" cy="16" r="2"/>
+            <circle cx="104" cy="20" r="3"/>
+            <circle cx="116" cy="14" r="2"/>
+            <circle cx="128" cy="22" r="2.5"/>
+            <circle cx="140" cy="16" r="2"/>
+            <circle cx="152" cy="20" r="3"/>
+            <circle cx="164" cy="14" r="2"/>
+            <circle cx="176" cy="22" r="2.5"/>
+            <circle cx="188" cy="16" r="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-source">
+        <div class="source-label">USDA-NRCS / TCU STATS</div>
+        <div class="expand-icon">+</div>
+      </div>
+    </div>
+
+    <!-- CARD 3: 5.8 TONS C -->
+    <div class="card" data-id="3">
+      <div class="card-header">
+        <div class="card-index">03 / CARBON CAPTURE</div>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M5 20V10l7-5 7 5v10"/></svg>
+      </div>
+      <div class="stat-num"><span data-count="5.8" data-end="5.8" data-decimals="1">0</span><span class="stat-unit">TONS C</span></div>
+      <div class="stat-label">Carbon stored</div>
+      <div class="stat-desc">Per acre at the same SOM example level, showing how soil condition changes the climate math on working land.</div>
+      <div class="mini-viz">
+        <svg viewBox="0 0 200 32">
+          <g stroke="#99cc33" stroke-width="1.5" fill="none" stroke-linecap="round">
+            <line x1="20" y1="28" x2="20" y2="6"/>
+            <line x1="50" y1="28" x2="50" y2="10"/>
+            <line x1="80" y1="28" x2="80" y2="4"/>
+            <line x1="110" y1="28" x2="110" y2="8"/>
+            <line x1="140" y1="28" x2="140" y2="12"/>
+            <line x1="170" y1="28" x2="170" y2="6"/>
+          </g>
+          <g fill="#b8e655">
+            <circle cx="20" cy="6" r="2"/>
+            <circle cx="50" cy="10" r="2"/>
+            <circle cx="80" cy="4" r="2"/>
+            <circle cx="110" cy="8" r="2"/>
+            <circle cx="140" cy="12" r="2"/>
+            <circle cx="170" cy="6" r="2"/>
+          </g>
+          <line x1="0" y1="28" x2="200" y2="28" stroke="rgba(245,239,225,0.2)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="card-source">
+        <div class="source-label">TCU STATS SOM MODEL</div>
+        <div class="expand-icon">+</div>
+      </div>
+    </div>
+
+    <!-- CARD 4: 21.3 TONS CO2E -->
+    <div class="card" data-id="4">
+      <div class="card-header">
+        <div class="card-index">04 / CLIMATE MATH</div>
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>
+      </div>
+      <div class="stat-num"><span data-count="21.3" data-end="21.3" data-decimals="1">0</span><span class="stat-unit">TONS CO2e</span></div>
+      <div class="stat-label">Climate equivalent</div>
+      <div class="stat-desc">A drawdown equivalent that translates soil carbon gains into climate language audiences already use.</div>
+      <div class="mini-viz">
+        <svg viewBox="0 0 200 32">
+          <rect x="5" y="8" width="40" height="20" fill="none" stroke="#99cc33" stroke-width="1" rx="2"/>
+          <text x="25" y="22" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#b8e655">C</text>
+          <line x1="50" y1="18" x2="85" y2="18" stroke="#99cc33" stroke-width="1" stroke-dasharray="2 2"/>
+          <text x="67" y="12" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#b8e655">×3.67</text>
+          <polyline points="80,15 85,18 80,21" fill="none" stroke="#99cc33" stroke-width="1"/>
+          <rect x="90" y="8" width="105" height="20" fill="rgba(153,204,51,0.15)" stroke="#99cc33" stroke-width="1" rx="2"/>
+          <text x="142" y="22" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#b8e655">CO2e</text>
+        </svg>
+      </div>
+      <div class="card-source">
+        <div class="source-label">DERIVED EQUIVALENT</div>
+        <div class="expand-icon">+</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Methodology panel -->
+  <div class="methodology" id="methodology">
+    <div class="methodology-inner" id="methodologyInner">
+      <!-- Content injected by JS -->
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const methodology = document.getElementById('methodology');
+  const methodologyInner = document.getElementById('methodologyInner');
+
+  const details = {
+    '1': {
+      method: `The 31% figure reflects the share of global anthropogenic greenhouse gas emissions attributable to food systems, including land-use change, production, processing, distribution, and waste. The number places agriculture squarely inside climate strategy rather than alongside it.`,
+      formula: `food_system_GHG / total_anthropogenic_GHG`,
+      sources: [
+        { label: 'Crippa et al. 2021 — Nature Food', url: '#' },
+        { label: 'IPCC AR6 WG3 Chapter 7', url: '#' },
+        { label: 'TCU Stats synthesis', url: '#' }
+      ]
+    },
+    '2': {
+      method: `Each 1% increase in soil organic matter on one acre, to a six-inch depth, adds roughly 20,000 gallons of water holding capacity. This reframes soil health as water infrastructure, which matters where drought and flood risk converge.`,
+      formula: `SOM_gain_1pct × 20,000 gal / acre`,
+      sources: [
+        { label: 'USDA-NRCS Soil Health Division', url: '#' },
+        { label: 'Bryant et al. 2015', url: '#' },
+        { label: 'TCU Stats SOM model', url: '#' }
+      ]
+    },
+    '3': {
+      method: `At the same 1% soil organic matter gain, one acre stores approximately 5.8 tons of carbon in the soil profile. This is the physical quantity actually moved out of the atmosphere and into biological storage on working land.`,
+      formula: `SOM_gain_1pct × acre × C_density = 5.8 tons C`,
+      sources: [
+        { label: 'TCU SOM-to-C conversion', url: '#' },
+        { label: 'USDA NRCS soil carbon standards', url: '#' },
+        { label: 'Lal 2004 — Science', url: '#' }
+      ]
+    },
+    '4': {
+      method: `Soil carbon (C) converts to CO2 equivalent using the molecular weight ratio of 3.67. That turns 5.8 tons of stored carbon into 21.3 tons of CO2 equivalent, the climate unit audiences and institutions already work in.`,
+      formula: `5.8 tons C × 3.67 = 21.3 tons CO2e`,
+      sources: [
+        { label: 'IPCC conversion standard', url: '#' },
+        { label: 'TCU derived equivalent', url: '#' }
+      ]
+    }
+  };
+
+  let activeCard = null;
+
+  function renderDetails(id) {
+    const d = details[id];
+    methodologyInner.innerHTML = `
+      <div>
+        <h4>Methodology</h4>
+        <p>${d.method}</p>
+        <p><code>${d.formula}</code></p>
+      </div>
+      <div>
+        <h4>Sources</h4>
+        <ul class="link-list">
+          ${d.sources.map(s => `<li><a class="source-link" href="${s.url}">→ ${s.label}</a></li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.dataset.id;
+      if (activeCard === card) {
+        card.classList.remove('active');
+        methodology.classList.remove('open');
+        activeCard = null;
+      } else {
+        cards.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        renderDetails(id);
+        methodology.classList.add('open');
+        activeCard = card;
+      }
+    });
+  });
+
+  // Count up animation
+  function animateCount(el) {
+    const end = parseFloat(el.dataset.end);
+    const decimals = parseInt(el.dataset.decimals || '0');
+    const duration = 1400;
+    const start = performance.now();
+    function frame(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease out
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = end * eased;
+      el.textContent = value.toFixed(decimals);
+      if (progress < 1) requestAnimationFrame(frame);
+      else el.textContent = end.toFixed(decimals);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // Trigger count on load (and when first scrolled into view)
+  const counters = document.querySelectorAll('[data-count]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCount(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  counters.forEach(c => observer.observe(c));
+</script>
+</body>
+</html>

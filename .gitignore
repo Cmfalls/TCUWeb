@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.vite/
+logs/
+*.log
+public/video/SplitGrassfield.mp4

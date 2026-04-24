@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Why Soil Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --ink-deep: #05201a;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --soil: #8a6d3b;
+    --water: #6fa3a0;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 75% 30%, rgba(153, 204, 51, 0.09) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 15% 85%, rgba(138, 109, 59, 0.07) 0%, transparent 55%);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 72px 48px 80px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 48px 24px 64px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === MAIN HERO GRID — tight packed === */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.15fr);
+    gap: 40px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* Left text column — packed tight */
+  .text-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 720px;
+  }
+  @media (max-width: 980px) {
+    .text-col { min-height: auto; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(56px, 7.5vw, 112px);
+    line-height: 0.85;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  h1.headline .accent {
+    color: var(--wheatgrass);
+    display: inline-block;
+    position: relative;
+  }
+  h1.headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.1em;
+    background: var(--wheatgrass);
+    opacity: 0.22;
+    z-index: -1;
+  }
+
+  .body-copy {
+    font-size: 16px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .body-copy strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Stat card — now fills the bottom of left column */
+  .stat-card {
+    margin-top: 28px;
+    padding: 28px 32px;
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-left: 4px solid var(--wheatgrass);
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 20px 40px -30px rgba(10, 46, 38, 0.2);
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stat-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(54px, 6.5vw, 82px);
+    line-height: 0.88;
+    color: var(--ink);
+    letter-spacing: 0.005em;
+    margin-bottom: 12px;
+  }
+  .stat-num .unit {
+    font-size: 0.48em;
+    color: var(--wheatgrass);
+    margin-left: 4px;
+  }
+  .stat-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 40ch;
+  }
+
+  /* === PACKED COLLAGE GRID === */
+  .collage {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 10px;
+    min-height: 720px;
+    position: relative;
+  }
+  @media (max-width: 980px) {
+    .collage { min-height: 560px; }
+  }
+
+  .tile {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid var(--line);
+    background: var(--cream-card);
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.4s ease,
+                box-shadow 0.5s ease,
+                z-index 0s;
+    position: relative;
+  }
+  .tile:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--wheatgrass);
+    box-shadow: 0 28px 50px -28px rgba(10, 46, 38, 0.4);
+    z-index: 10;
+  }
+
+  /* Tile grid placement — packed edge-to-edge */
+  .tile-1 { grid-column: 1 / 4; grid-row: 1 / 7; }    /* tall water bank left */
+  .tile-2 { grid-column: 4 / 7; grid-row: 1 / 5; }    /* top right cracked */
+  .tile-3 { grid-column: 4 / 7; grid-row: 5 / 8; }    /* middle right farm */
+  .tile-4 { grid-column: 1 / 7; grid-row: 7 / 11; }   /* full width bottom quote */
+  .tile-4a { grid-column: 1 / 4; grid-row: 7 / 11; }  /* alt: quote left half */
+  .tile-5 { grid-column: 4 / 7; grid-row: 8 / 11; }   /* cta card right */
+
+  @media (max-width: 980px) {
+    .collage { grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(8, 1fr); }
+    .tile-1 { grid-column: 1 / 4; grid-row: 1 / 5; }
+    .tile-2 { grid-column: 4 / 7; grid-row: 1 / 3; }
+    .tile-3 { grid-column: 4 / 7; grid-row: 3 / 5; }
+    .tile-4a { grid-column: 1 / 4; grid-row: 5 / 9; }
+    .tile-5 { grid-column: 4 / 7; grid-row: 5 / 9; }
+  }
+
+  /* Image placeholder treatments */
+  .placeholder {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+
+  .placeholder-water {
+    background:
+      radial-gradient(circle at 70% 40%, rgba(111, 163, 160, 0.45) 0%, transparent 60%),
+      linear-gradient(135deg, #1a3d34 0%, #0a2e26 50%, #05201a 100%);
+  }
+  .placeholder-water::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(184, 230, 85, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 65% 75%, rgba(111, 163, 160, 0.18) 0%, transparent 30%);
+  }
+  .placeholder-water::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245, 239, 225, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245, 239, 225, 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  .placeholder-cracked {
+    background: radial-gradient(circle at 50% 50%, #a87525 0%, #6b4a25 60%, #3d2f17 100%);
+  }
+  .placeholder-cracked::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 20px, rgba(10, 31, 26, 0.15) 20px 21px),
+      repeating-linear-gradient(-45deg, transparent 0 18px, rgba(10, 31, 26, 0.1) 18px 19px);
+  }
+  .placeholder-cracked::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(10, 31, 26, 0.3) 0%, transparent 15%),
+      radial-gradient(circle at 70% 60%, rgba(10, 31, 26, 0.3) 0%, transparent 12%),
+      radial-gradient(circle at 45% 80%, rgba(10, 31, 26, 0.25) 0%, transparent 14%);
+  }
+
+  .placeholder-farm {
+    background: linear-gradient(180deg, #9cbfd4 0%, #b8d0cc 32%, #5a7a35 33%, #3d5a2a 100%);
+  }
+  .placeholder-farm::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 40% 15% at 30% 50%, rgba(0, 0, 0, 0.1) 0%, transparent 100%),
+      radial-gradient(ellipse 35% 12% at 70% 55%, rgba(0, 0, 0, 0.08) 0%, transparent 100%);
+  }
+  .placeholder-farm::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 68%;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 24px, rgba(10, 31, 26, 0.12) 24px 25px);
+  }
+
+  /* Tile caption label */
+  .tile-label {
+    position: relative;
+    z-index: 3;
+    background: rgba(10, 46, 38, 0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(153, 204, 51, 0.4);
+    border-radius: 6px;
+    padding: 11px 13px;
+    max-width: 88%;
+  }
+  .tile-label-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass-bright);
+    margin-bottom: 4px;
+  }
+  .tile-label-text {
+    font-size: 11.5px;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  /* Drop marker */
+  .drop-marker {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    background: rgba(245, 239, 225, 0.12);
+    backdrop-filter: blur(6px);
+    border: 1px dashed rgba(245, 239, 225, 0.4);
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: rgba(245, 239, 225, 0.6);
+    text-transform: uppercase;
+    z-index: 4;
+  }
+
+  /* Tile 4a — dark pullquote */
+  .tile-4a {
+    background: var(--ink);
+    border-color: var(--ink);
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .tile-4a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1px;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 100% 0%, rgba(153, 204, 51, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .tile-4a:hover { border-color: var(--wheatgrass); }
+  .quote-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-tag::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .quote-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 2.2vw, 30px);
+    line-height: 1.1;
+    color: var(--cream);
+  }
+  .quote-text em {
+    color: var(--wheatgrass-bright);
+    font-style: normal;
+  }
+
+  /* Tile 5 — CTA card */
+  .tile-5 {
+    background:
+      linear-gradient(135deg, rgba(153, 204, 51, 0.12) 0%, rgba(153, 204, 51, 0.04) 100%),
+      var(--cream-card);
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-color: rgba(153, 204, 51, 0.4);
+  }
+  .tile-5-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .tile-5-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 12px;
+  }
+  .tile-5-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    transition: transform 0.3s ease;
+  }
+  .tile-5:hover .tile-5-icon { transform: rotate(45deg); }
+  .tile-5-icon svg { width: 14px; height: 14px; }
+  .tile-5 h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(18px, 1.8vw, 24px);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 8px;
+    max-width: 20ch;
+  }
+  .tile-5 p {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .tile-5-bottom {
+    padding-top: 12px;
+    border-top: 1px solid rgba(10, 46, 38, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .tile-5-arrow {
+    transition: transform 0.3s ease;
+  }
+  .tile-5:hover .tile-5-arrow { transform: translateX(4px); }
+
+  /* === PILLAR STRIP (compact, right under hero) === */
+  .pillars {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 820px) {
+    .pillars { grid-template-columns: 1fr; }
+  }
+
+  .pillar {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px 20px;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.3s ease,
+                box-shadow 0.4s ease;
+    overflow: hidden;
+  }
+  .pillar:hover {
+    transform: translateY(-3px);
+    border-color: var(--line-strong);
+    box-shadow: 0 18px 30px -22px rgba(10, 46, 38, 0.22);
+  }
+  .pillar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--wheatgrass);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pillar:hover::before { transform: scaleX(1); }
+
+  .pillar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .pillar-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+  }
+  .pillar-glyph {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(153, 204, 51, 0.1);
+    border: 1.5px solid var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    transition: background 0.3s ease, transform 0.4s ease;
+  }
+  .pillar:hover .pillar-glyph {
+    background: var(--wheatgrass);
+    transform: rotate(-8deg);
+  }
+  .pillar-glyph svg { width: 14px; height: 14px; }
+  .pillar h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 8px;
+    max-width: 18ch;
+  }
+  .pillar p {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Load animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .text-col > * { animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .text-col > *:nth-child(2) { animation-delay: 0.1s; }
+  .text-col > *:nth-child(3) { animation-delay: 0.2s; }
+  .text-col > *:nth-child(4) { animation-delay: 0.3s; }
+  .tile { animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .tile-1 { animation-delay: 0.2s; }
+  .tile-2 { animation-delay: 0.3s; }
+  .tile-3 { animation-delay: 0.4s; }
+  .tile-4a { animation-delay: 0.5s; }
+  .tile-5 { animation-delay: 0.6s; }
+  .pillar { animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+  .pillar:nth-child(1) { animation-delay: 0.7s; }
+  .pillar:nth-child(2) { animation-delay: 0.8s; }
+  .pillar:nth-child(3) { animation-delay: 0.9s; }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="hero">
+    <!-- LEFT: text column -->
+    <div class="text-col">
+      <div>
+        <div class="eyebrow">Why Soil Matters</div>
+        <h1 class="headline">Living soil acts like climate and water <span class="accent">infrastructure</span>.</h1>
+      </div>
+
+      <div>
+        <p class="body-copy">Healthy soil helps move carbon back into living cycles, improves infiltration, and reduces the volatility that growers face when drought and flood pressure rise together.</p>
+        <p class="body-copy">That makes <strong>soil restoration more than a symbolic climate gesture</strong>. It becomes part of the practical work of protecting farmland, water systems, and food production.</p>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Water Holding Capacity</div>
+        <div class="stat-num">20,000<span class="unit">GAL</span></div>
+        <div class="stat-desc">Of water held per acre for every 1% gain in soil organic matter. Soil becomes living infrastructure.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: collage -->
+    <div class="collage">
+
+      <div class="tile tile-1">
+        <div class="placeholder placeholder-water">
+          <div class="drop-marker">IMG / WATER BANK</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">Water Bank</div>
+            <div class="tile-label-text">Soil organic matter turns rainfall and irrigation into stored resilience.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile tile-2">
+        <div class="placeholder placeholder-cracked">
+          <div class="drop-marker">IMG / CARBON CYCLE</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">Carbon Cycle</div>
+            <div class="tile-label-text">Roots, microbes, and living cover keep carbon moving through biology.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile tile-3">
+        <div class="placeholder placeholder-farm">
+          <div class="drop-marker">IMG / FARM RESILIENCE</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">Farm Resilience</div>
+            <div class="tile-label-text">The proof has to hold up in fields, budgets, and water years.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tile tile-4a">
+        <div class="quote-tag">The Shift</div>
+        <div class="quote-text">Soil is no longer a background. It is <em>infrastructure</em> at the scale of the climate problem.</div>
+      </div>
+
+      <div class="tile tile-5">
+        <div>
+          <div class="tile-5-header">
+            <div class="tile-5-label">Go Deeper</div>
+            <div class="tile-5-icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+              </svg>
+            </div>
+          </div>
+          <h4>The full evidence case lives next door.</h4>
+          <p>See the measurements behind water buffering and carbon storage claims.</p>
+        </div>
+        <div class="tile-5-bottom">
+          <span>Explore Evidence</span>
+          <svg class="tile-5-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILLAR STRIP below -->
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-index">01 / Water Behavior</div>
+        <div class="pillar-glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.5s6 6 6 11a6 6 0 0 1-12 0c0-5 6-11 6-11z"/>
+          </svg>
+        </div>
+      </div>
+      <h3>Soil condition changes how land moves water.</h3>
+      <p>Soil condition influences how land absorbs, stores, and releases water. The difference between flood and drought often lives in the top six inches.</p>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-index">02 / Biological Function</div>
+        <div class="pillar-glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <circle cx="6" cy="8" r="1.5"/>
+            <circle cx="18" cy="8" r="1.5"/>
+            <circle cx="6" cy="16" r="1.5"/>
+            <circle cx="18" cy="16" r="1.5"/>
+            <path d="M9 12H6 M15 12h3 M12 9V6 M12 15v3"/>
+          </svg>
+        </div>
+      </div>
+      <h3>Biology does the work when conditions let it.</h3>
+      <p>Biological soil function can improve resilience across carbon, biodiversity, and crop health. Living systems compound when they are allowed to.</p>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-index">03 / Proof At Work</div>
+        <div class="pillar-glyph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 14 8 9 13 13 21 5"/>
+            <polyline points="15 5 21 5 21 11"/>
+          </svg>
+        </div>
+      </div>
+      <h3>The strongest case is operational, not rhetorical.</h3>
+      <p>The strongest case for regenerative agriculture is the one that survives real farm budgets, water years, and grower decisions.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

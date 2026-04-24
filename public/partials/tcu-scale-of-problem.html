@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — The Scale of the Problem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1f1a;
+    --bg-deep: #061411;
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.7);
+    --cream-faint: rgba(245, 239, 225, 0.5);
+    --cream-ghost: rgba(245, 239, 225, 0.3);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --warn: #e8a547;
+    --line: rgba(245, 239, 225, 0.12);
+    --line-strong: rgba(245, 239, 225, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at top right, rgba(153, 204, 51, 0.04) 0%, transparent 60%);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--warn);
+    border-radius: 50%;
+    animation: warnPulse 2s ease-in-out infinite;
+  }
+  @keyframes warnPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232, 165, 71, 0.6); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(232, 165, 71, 0); }
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.92;
+    color: var(--cream);
+    max-width: 18ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--cream-dim);
+    max-width: 62ch;
+    margin-bottom: 72px;
+  }
+
+  /* Stat rows */
+  .stats {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 48px;
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .stat-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (max-width: 880px) {
+    .stat-row { grid-template-columns: 1fr; gap: 28px; padding: 40px 0; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .stat-left { position: relative; }
+  .stat-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.14em;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 10vw, 148px);
+    line-height: 0.85;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .stat-number .unit {
+    font-size: 0.4em;
+    color: var(--wheatgrass);
+  }
+  .stat-number .prefix {
+    font-size: 0.6em;
+    color: var(--cream-faint);
+    margin-right: 4px;
+  }
+  .stat-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 10px;
+    max-width: 32ch;
+  }
+  .stat-sub {
+    font-size: 14px;
+    color: var(--cream-dim);
+    max-width: 38ch;
+    line-height: 1.55;
+  }
+
+  /* Visual column */
+  .stat-visual {
+    position: relative;
+    min-height: 180px;
+  }
+
+  /* === Row 1: 50% food crop loss === */
+  .crop-viz {
+    height: 180px;
+    position: relative;
+  }
+  .crop-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 3px;
+    height: 100%;
+    padding-bottom: 32px;
+  }
+  .crop-cell {
+    background: var(--wheatgrass);
+    border-radius: 1px;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.6s ease;
+  }
+  .stat-row.visible .crop-cell { opacity: 1; transform: scaleY(1); }
+  .crop-cell.lost {
+    background: rgba(245, 239, 225, 0.08);
+  }
+  .crop-timeline {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--line);
+    padding-top: 8px;
+  }
+  .crop-timeline .midmark {
+    color: var(--warn);
+  }
+
+  /* === Row 2: <60 harvests === */
+  .harvest-viz {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .harvest-marks {
+    display: grid;
+    grid-template-columns: repeat(60, 1fr);
+    gap: 2px;
+    height: 80px;
+  }
+  .harvest-mark {
+    background: var(--wheatgrass);
+    border-radius: 1px;
+    opacity: 0;
+    transform: scaleY(0.3);
+    transition: opacity 0.4s ease, transform 0.5s ease, background 0.4s ease;
+  }
+  .stat-row.visible .harvest-mark {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  .harvest-mark.depleted {
+    background: rgba(245, 239, 225, 0.1);
+  }
+  .harvest-legend {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.1em;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .harvest-legend .live { color: var(--wheatgrass); }
+
+  /* === Row 3: 300-1000 years timeline === */
+  .timeline-viz {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+  }
+  .timeline-track {
+    height: 3px;
+    background: linear-gradient(to right, var(--wheatgrass) 0%, var(--wheatgrass) 2%, rgba(245, 239, 225, 0.2) 2%, rgba(245, 239, 225, 0.05) 100%);
+    position: relative;
+    border-radius: 2px;
+  }
+  .timeline-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: var(--warn);
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--warn);
+  }
+  .timeline-marker::after {
+    content: "NOW";
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--warn);
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+  }
+  .timeline-range {
+    position: absolute;
+    top: -18px;
+    height: 40px;
+    background: rgba(153, 204, 51, 0.08);
+    border-left: 1px dashed var(--wheatgrass);
+    border-right: 1px dashed var(--wheatgrass);
+    opacity: 0;
+    transition: opacity 1s ease 0.5s;
+  }
+  .stat-row.visible .timeline-range { opacity: 1; }
+  .timeline-range-label {
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--wheatgrass-bright);
+    white-space: nowrap;
+  }
+  .timeline-scale {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-ghost);
+    letter-spacing: 0.1em;
+    margin-top: 20px;
+  }
+  .timeline-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream-faint);
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Closing statement */
+  .closer {
+    margin-top: 72px;
+    padding: 32px 40px;
+    border-left: 3px solid var(--warn);
+    background: rgba(232, 165, 71, 0.05);
+  }
+  .closer p {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.15;
+    color: var(--cream);
+    max-width: 40ch;
+  }
+  .closer p .accent { color: var(--warn); }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">The Scale of the Problem</div>
+  <h1 class="headline">The numbers that make inaction unthinkable.</h1>
+  <p class="lede">These are the stakes if humans cut emissions without also drawing carbon back down. The scale of damage already in the system is not something time alone will fix.</p>
+
+  <div class="stats">
+
+    <!-- ROW 1: 50% -->
+    <div class="stat-row" data-row="1">
+      <div class="stat-left">
+        <span class="stat-index">01 / FOOD SUPPLY COLLAPSE</span>
+        <div class="stat-number">50<span class="unit">%</span></div>
+        <div class="stat-label">Of key U.S. food crop production could be lost by 2100.</div>
+        <div class="stat-sub">Heat, drought, and soil degradation are projected to halve yields on crops that Americans depend on every day.</div>
+      </div>
+      <div class="stat-visual">
+        <div class="crop-viz">
+          <div class="crop-grid" id="cropGrid"></div>
+          <div class="crop-timeline">
+            <span>2026</span>
+            <span class="midmark">↓ 2063</span>
+            <span>2100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: <60 harvests -->
+    <div class="stat-row" data-row="2">
+      <div class="stat-left">
+        <span class="stat-index">02 / SOIL EXHAUSTION</span>
+        <div class="stat-number"><span class="prefix">&lt;</span>60</div>
+        <div class="stat-label">Harvests remain if we do not restore degraded soil.</div>
+        <div class="stat-sub">Sixty growing seasons. Less than a human lifetime before the land that feeds the world runs out of the biology that makes food possible.</div>
+      </div>
+      <div class="stat-visual">
+        <div class="harvest-viz">
+          <div class="harvest-marks" id="harvestMarks"></div>
+          <div class="harvest-legend">
+            <span class="live">60 HARVESTS REMAINING</span>
+            <span>REGENERATION WINDOW</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: 300-1000 years -->
+    <div class="stat-row" data-row="3">
+      <div class="stat-left">
+        <span class="stat-index">03 / RESIDUAL DAMAGE</span>
+        <div class="stat-number">300<span class="unit">–1,000</span></div>
+        <div class="stat-label">Years after carbon neutrality before the climate heals without active drawdown.</div>
+        <div class="stat-sub">Even if every smokestack stopped tomorrow, the carbon already overhead would keep degrading the climate for centuries. Cuts alone do not rewind the damage.</div>
+      </div>
+      <div class="stat-visual">
+        <div class="timeline-viz">
+          <div class="timeline-track">
+            <div class="timeline-marker"></div>
+            <div class="timeline-range" id="timelineRange">
+              <div class="timeline-range-label">HEALING WINDOW</div>
+            </div>
+          </div>
+          <div class="timeline-scale">
+            <span>2026</span>
+            <span>2326</span>
+            <span>2626</span>
+            <span>2926</span>
+            <span>3026</span>
+          </div>
+          <div class="timeline-caption">▲ The scale of damage already overhead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closer">
+    <p>Cuts alone arrive too late. <span class="accent">Drawdown is the only tool that shortens this timeline.</span></p>
+  </div>
+</section>
+
+<script>
+  // Build crop grid: 80 cells (20x4). Half are "lost" (random scattering).
+  const cropGrid = document.getElementById('cropGrid');
+  const total = 80;
+  const lostIndices = new Set();
+  // Generate 40 random lost cells
+  while (lostIndices.size < 40) {
+    lostIndices.add(Math.floor(Math.random() * total));
+  }
+  for (let i = 0; i < total; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'crop-cell' + (lostIndices.has(i) ? ' lost' : '');
+    cell.style.transitionDelay = (i * 12) + 'ms';
+    cropGrid.appendChild(cell);
+  }
+
+  // Build harvest marks: 60 total. First 60 are "remaining" — visual is all bright,
+  // nothing depleted (to emphasize this is ALL we have).
+  const harvestMarks = document.getElementById('harvestMarks');
+  for (let i = 0; i < 60; i++) {
+    const mark = document.createElement('div');
+    mark.className = 'harvest-mark';
+    mark.style.transitionDelay = (i * 20) + 'ms';
+    mark.style.height = (40 + Math.random() * 40) + '%';
+    mark.style.alignSelf = 'end';
+    harvestMarks.appendChild(mark);
+  }
+  harvestMarks.style.alignItems = 'end';
+
+  // Position the timeline healing window (300-1000 years from now)
+  // Scale: 2026 to 3026 = 1000 years. 300 years = 30%, 1000 years = 100%
+  const timelineRange = document.getElementById('timelineRange');
+  timelineRange.style.left = '30%';
+  timelineRange.style.right = '0%';
+
+  // Intersection observer to trigger animations
+  const rows = document.querySelectorAll('.stat-row');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  rows.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>

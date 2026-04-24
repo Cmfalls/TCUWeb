@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Three Crops, Three Proofs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1f1a;
+    --bg-deep: #061411;
+    --bg-card: rgba(245, 239, 225, 0.04);
+    --bg-card-hover: rgba(245, 239, 225, 0.07);
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.7);
+    --cream-faint: rgba(245, 239, 225, 0.5);
+    --cream-ghost: rgba(245, 239, 225, 0.3);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --line: rgba(245, 239, 225, 0.12);
+    --line-strong: rgba(245, 239, 225, 0.25);
+
+    /* Crop colors */
+    --citrus: #e8a547;
+    --citrus-dim: rgba(232, 165, 71, 0.15);
+    --grape: #c97dd4;
+    --grape-dim: rgba(201, 125, 212, 0.15);
+    --agave: #6fa3a0;
+    --agave-dim: rgba(111, 163, 160, 0.15);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 80% 15%, rgba(153, 204, 51, 0.05) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 15% 85%, rgba(232, 165, 71, 0.04) 0%, transparent 55%);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === HEAD ROW === */
+  .head-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 900px) {
+    .head-row { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(46px, 5.4vw, 78px);
+    line-height: 0.92;
+    letter-spacing: -0.005em;
+    color: var(--cream);
+    max-width: 22ch;
+    margin-bottom: 0;
+  }
+  .headline .accent {
+    color: var(--wheatgrass);
+    position: relative;
+    display: inline-block;
+  }
+  .headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.1em;
+    background: var(--wheatgrass);
+    opacity: 0.22;
+    z-index: -1;
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--cream-dim);
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+  .lede strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  /* === MAIN STAGE: tabs + active crop card === */
+  .stage {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* Tab strip */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.15);
+  }
+  @media (max-width: 720px) {
+    .tabs { grid-template-columns: 1fr; }
+  }
+
+  .tab {
+    padding: 24px 28px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--line);
+    cursor: pointer;
+    text-align: left;
+    color: var(--cream);
+    font-family: inherit;
+    transition: background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .tab:last-child { border-right: none; }
+  @media (max-width: 720px) {
+    .tab { border-right: none; border-bottom: 1px solid var(--line); }
+    .tab:last-child { border-bottom: none; }
+  }
+  .tab::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 0;
+    height: 3px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .tab:hover { background: rgba(245, 239, 225, 0.04); }
+  .tab.active { background: rgba(245, 239, 225, 0.06); }
+  .tab.active::before { transform: scaleX(1); }
+
+  .tab-1 { color: var(--citrus); }
+  .tab-2 { color: var(--grape); }
+  .tab-3 { color: var(--agave); }
+
+  .tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .tab-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--cream-faint);
+    transition: color 0.3s ease;
+  }
+  .tab.active .tab-index { color: currentColor; }
+  .tab-glyph {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(245, 239, 225, 0.05);
+    border: 1.5px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+    transition: background 0.3s ease, transform 0.4s ease;
+  }
+  .tab.active .tab-glyph,
+  .tab:hover .tab-glyph {
+    background: currentColor;
+    transform: rotate(-6deg);
+  }
+  .tab.active .tab-glyph svg,
+  .tab:hover .tab-glyph svg {
+    color: var(--ink);
+  }
+  .tab-glyph svg { width: 18px; height: 18px; transition: color 0.3s ease; }
+
+  .tab-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 6px;
+    letter-spacing: 0.005em;
+  }
+  .tab-challenge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: currentColor;
+    opacity: 0.85;
+  }
+
+  /* === ACTIVE CROP DETAIL === */
+  .detail {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    min-height: 460px;
+  }
+  @media (max-width: 900px) {
+    .detail { grid-template-columns: 1fr; }
+  }
+
+  .detail-content {
+    padding: 40px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  @media (max-width: 720px) {
+    .detail-content { padding: 28px 24px; }
+  }
+
+  .detail-step {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+  }
+  .detail-step.active { display: flex; animation: detailIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  @keyframes detailIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .detail-tag::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+  .detail-tag.citrus { color: var(--citrus); }
+  .detail-tag.grape { color: var(--grape); }
+  .detail-tag.agave { color: var(--agave); }
+
+  .detail-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 4.5vw, 60px);
+    line-height: 0.92;
+    color: var(--cream);
+    margin-bottom: 18px;
+    max-width: 14ch;
+  }
+  .detail-desc {
+    font-size: 15px;
+    color: var(--cream-dim);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    max-width: 50ch;
+  }
+  .detail-desc strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  /* Stat row inside the detail panel */
+  .detail-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 540px) {
+    .detail-stats { grid-template-columns: 1fr; }
+  }
+  .detail-stat {
+    padding: 0 18px;
+    border-right: 1px solid var(--line);
+  }
+  .detail-stat:first-child { padding-left: 0; }
+  .detail-stat:last-child { padding-right: 0; border-right: none; }
+  @media (max-width: 540px) {
+    .detail-stat {
+      padding: 12px 0;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+    .detail-stat:last-child { border-bottom: none; }
+  }
+  .detail-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--cream-faint);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .detail-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--cream);
+  }
+  .detail-stat-value.accent-citrus { color: var(--citrus); }
+  .detail-stat-value.accent-grape { color: var(--grape); }
+  .detail-stat-value.accent-agave { color: var(--agave); }
+
+  /* === RIGHT VISUAL PANEL === */
+  .detail-visual {
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+  }
+  .visual-step {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .visual-step.active { opacity: 1; }
+
+  /* Citrus visual: warm orange grove */
+  .visual-citrus {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 18, 16, 0.18) 0%,
+        rgba(8, 18, 16, 0.56) 70%,
+        rgba(8, 18, 16, 0.82) 100%
+      ),
+      url('/images/visuals/edison/lemons-dgpe3ee3q-0008.jpg') center 36% / cover no-repeat;
+  }
+  .visual-citrus::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 24% 18%, rgba(255, 205, 105, 0.26) 0%, transparent 34%),
+      linear-gradient(135deg, rgba(232, 165, 71, 0.12) 0%, transparent 46%);
+  }
+  /* Citrus fruits */
+  .visual-citrus::after {
+    content: none;
+  }
+
+  /* Grape visual: vineyard purple */
+  .visual-grape {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 18, 16, 0.16) 0%,
+        rgba(8, 18, 16, 0.52) 72%,
+        rgba(8, 18, 16, 0.8) 100%
+      ),
+      url('/images/visuals/edison/jc-grapes-dgpe3ee3q-0001.jpg') center 46% / cover no-repeat;
+  }
+  .visual-grape::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 16%, rgba(211, 144, 224, 0.22) 0%, transparent 34%),
+      linear-gradient(140deg, rgba(140, 82, 171, 0.12) 0%, transparent 46%);
+  }
+  /* Vineyard rows */
+  .visual-grape::after {
+    content: none;
+  }
+
+  /* Agave visual: arid blue-green */
+  .visual-agave {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(8, 18, 16, 0.12) 0%,
+        rgba(8, 18, 16, 0.48) 72%,
+        rgba(8, 18, 16, 0.78) 100%
+      ),
+      url('/images/visuals/edison/agave-127071-245674.jpg') center 42% / cover no-repeat;
+  }
+  .visual-agave::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 74% 16%, rgba(255, 247, 210, 0.22) 0%, transparent 30%),
+      linear-gradient(145deg, rgba(111, 163, 160, 0.12) 0%, transparent 46%);
+  }
+  /* Agave rosettes (radial spike patterns) */
+  .visual-agave::after {
+    content: none;
+  }
+
+  /* Visual overlay tag */
+  .visual-tag {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px 14px;
+    background: rgba(10, 31, 26, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(245, 239, 225, 0.2);
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--cream);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    z-index: 5;
+  }
+  .visual-tag strong {
+    color: var(--wheatgrass-bright);
+    font-weight: 700;
+  }
+
+  /* Page-load animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .head-row > *,
+  .stage {
+    animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .head-row > *:nth-child(2) { animation-delay: 0.1s; }
+  .stage { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <!-- HEAD -->
+  <div class="head-row">
+    <div>
+      <div class="eyebrow">Three Crops. Three Proofs. One Model.</div>
+      <h1 class="headline">Each crop was chosen because it represents a real and distinct challenge facing American <span class="accent">agriculture</span>.</h1>
+    </div>
+    <p class="lede">Together, these three programs form a single coherent proof. Regenerative agriculture works <strong>not just for one crop or one farm type</strong>, but across the conditions that define American agriculture. What we prove at Edison can apply across millions of acres.</p>
+  </div>
+
+  <!-- MAIN STAGE -->
+  <div class="stage">
+
+    <!-- TABS -->
+    <div class="tabs">
+
+      <button class="tab tab-1 active" data-crop="1">
+        <div class="tab-header">
+          <div class="tab-index">Crop 01 / Permanent</div>
+          <div class="tab-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="14" r="6"/>
+              <path d="M12 8V4M10 5l2-1 2 1M9 12c0-1.5 1.5-3 3-3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="tab-name">Citrus</div>
+        <div class="tab-challenge">Climate stress &amp; disease pressure</div>
+      </button>
+
+      <button class="tab tab-2" data-crop="2">
+        <div class="tab-header">
+          <div class="tab-index">Crop 02 / Vineyard</div>
+          <div class="tab-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="14" r="2"/>
+              <circle cx="13" cy="14" r="2"/>
+              <circle cx="11" cy="17" r="2"/>
+              <circle cx="15" cy="17" r="2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <path d="M11 12V8M9 8l4-4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="tab-name">Grapes</div>
+        <div class="tab-challenge">Water efficiency &amp; resilience</div>
+      </button>
+
+      <button class="tab tab-3" data-crop="3">
+        <div class="tab-header">
+          <div class="tab-index">Crop 03 / Future</div>
+          <div class="tab-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22V14"/>
+              <path d="M12 14L6 8M12 14l6-6M12 14l-3-9M12 14l3-9M12 14l8-2M12 14l-8-2"/>
+            </svg>
+          </div>
+        </div>
+        <div class="tab-name">Agave</div>
+        <div class="tab-challenge">Drought tolerance &amp; future crops</div>
+      </button>
+    </div>
+
+    <!-- DETAIL ROW -->
+    <div class="detail">
+      <!-- LEFT: copy panel -->
+      <div class="detail-content">
+
+        <!-- Crop 1: Citrus -->
+        <div class="detail-step active" data-step="1">
+          <div>
+            <div class="detail-tag citrus">→ The Climate Stress Test</div>
+            <div class="detail-title">Citrus is the canary for a Valley under pressure.</div>
+            <div class="detail-desc">A major Central Valley crop under <strong>severe climate stress and disease pressure</strong>. Edison's citrus program tests soil health improvements for productivity and long-term orchard resilience, with measurable outcomes growers can adopt.</div>
+          </div>
+          <div class="detail-stats">
+            <div class="detail-stat">
+              <div class="detail-stat-label">Acreage</div>
+              <div class="detail-stat-value accent-citrus">~80 AC</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Trial Cycle</div>
+              <div class="detail-stat-value">5–7 YRS</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Key Risk</div>
+              <div class="detail-stat-value">HEAT + HLB</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 2: Grapes -->
+        <div class="detail-step" data-step="2">
+          <div>
+            <div class="detail-tag grape">→ The Water Efficiency Test</div>
+            <div class="detail-title">Grapes prove water can do more with less.</div>
+            <div class="detail-desc">Vineyards face <strong>critical water efficiency challenges</strong>. Edison's grape program demonstrates how regenerative practices can dramatically improve water conservation and vineyard resilience without sacrificing yield or quality.</div>
+          </div>
+          <div class="detail-stats">
+            <div class="detail-stat">
+              <div class="detail-stat-label">Acreage</div>
+              <div class="detail-stat-value accent-grape">~60 AC</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Trial Cycle</div>
+              <div class="detail-stat-value">3–5 YRS</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Key Risk</div>
+              <div class="detail-stat-value">DROUGHT</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop 3: Agave -->
+        <div class="detail-step" data-step="3">
+          <div>
+            <div class="detail-tag agave">→ The Future Crops Test</div>
+            <div class="detail-title">Agave previews the crops the future demands.</div>
+            <div class="detail-desc">An emerging <strong>drought- and heat-tolerant crop for climate adaptation</strong>. Edison tests resilience strategies in regions facing extreme temperatures, exploring the crops that will thrive when the conditions current crops were bred for no longer exist.</div>
+          </div>
+          <div class="detail-stats">
+            <div class="detail-stat">
+              <div class="detail-stat-label">Acreage</div>
+              <div class="detail-stat-value accent-agave">~40 AC</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Trial Cycle</div>
+              <div class="detail-stat-value">7–10 YRS</div>
+            </div>
+            <div class="detail-stat">
+              <div class="detail-stat-label">Key Risk</div>
+              <div class="detail-stat-value">HEAT + WATER</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: visual panel -->
+      <div class="detail-visual">
+        <div class="visual-step visual-citrus active" data-visual="1">
+          <div class="visual-tag">Edison Plot — <strong>Citrus</strong> / Climate Resilience Trial</div>
+        </div>
+        <div class="visual-step visual-grape" data-visual="2">
+          <div class="visual-tag">Edison Plot — <strong>Grapes</strong> / Water Efficiency Trial</div>
+        </div>
+        <div class="visual-step visual-agave" data-visual="3">
+          <div class="visual-tag">Edison Plot — <strong>Agave</strong> / Drought Adaptation Trial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const steps = document.querySelectorAll('.detail-step');
+  const visuals = document.querySelectorAll('.visual-step');
+
+  function setActive(crop) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.crop === crop));
+    steps.forEach(s => s.classList.toggle('active', s.dataset.step === crop));
+    visuals.forEach(v => v.classList.toggle('active', v.dataset.visual === crop));
+  }
+
+  tabs.forEach(t => {
+    t.addEventListener('click', () => setActive(t.dataset.crop));
+    t.addEventListener('mouseenter', () => setActive(t.dataset.crop));
+  });
+</script>
+</body>
+</html>

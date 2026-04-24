@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Why It Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.2vw, 76px);
+    line-height: 0.92;
+    color: var(--ink);
+    max-width: 14ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin-bottom: 80px;
+  }
+
+  /* === Progression arrow at top === */
+  .progression {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 0;
+    margin-bottom: 40px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .progression-word {
+    transition: color 0.4s ease, font-weight 0.4s ease;
+  }
+  .progression-word.lit {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .progression-arrow {
+    color: var(--wheatgrass);
+    font-size: 14px;
+  }
+
+  /* === Cards === */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  /* Connecting line behind cards (desktop only) */
+  .cards::before {
+    content: "";
+    position: absolute;
+    top: 44px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: repeating-linear-gradient(to right, var(--line-strong) 0, var(--line-strong) 3px, transparent 3px, transparent 8px);
+    z-index: 0;
+  }
+  @media (max-width: 900px) {
+    .cards::before { display: none; }
+  }
+
+  .card {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 32px 28px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.4s ease, box-shadow 0.5s ease;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 0;
+    background: var(--wheatgrass);
+    transition: height 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--line-strong);
+    box-shadow: 0 24px 40px -24px rgba(10, 46, 38, 0.22);
+  }
+  .card:hover::before { height: 100%; }
+
+  /* Step number in the background */
+  .card-step {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    line-height: 0.85;
+    color: rgba(10, 46, 38, 0.04);
+    letter-spacing: -0.02em;
+    pointer-events: none;
+    transition: color 0.4s ease;
+  }
+  .card:hover .card-step {
+    color: rgba(153, 204, 51, 0.2);
+  }
+
+  /* Phase marker */
+  .phase-marker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--cream-card);
+    border: 2px solid var(--wheatgrass);
+    border-radius: 50%;
+    position: relative;
+  }
+  .phase-dot::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.4s ease;
+  }
+  .card:hover .phase-dot::after { transform: scale(1); }
+  .phase-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* Card content */
+  .card-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.02;
+    color: var(--ink);
+    margin-bottom: 18px;
+    max-width: 16ch;
+    position: relative;
+    z-index: 2;
+  }
+  .card-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .card-pullquote {
+    margin-top: auto;
+    padding: 16px 18px;
+    background: rgba(153, 204, 51, 0.14);
+    border-left: 3px solid var(--wheatgrass);
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Bottom meta strip */
+  .meta-strip {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .meta-left { display: flex; align-items: center; gap: 10px; }
+  .meta-left::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Why It Matters</div>
+  <h1 class="headline">Edison helps turn conviction into something institutions can examine.</h1>
+  <p class="lede">The case for regenerative agriculture gets stronger when public language, scientific framing, and working-land evidence reinforce one another over time.</p>
+
+  <!-- Progression arrow -->
+  <div class="progression">
+    <span class="progression-word" data-word="1">Conviction</span>
+    <span class="progression-arrow">→</span>
+    <span class="progression-word" data-word="2">Design</span>
+    <span class="progression-arrow">→</span>
+    <span class="progression-word" data-word="3">Measurement</span>
+    <span class="progression-arrow">→</span>
+    <span class="progression-word" data-word="4">Institutional Trust</span>
+  </div>
+
+  <div class="cards">
+
+    <!-- CARD 01 -->
+    <div class="card" data-word="1">
+      <div class="card-step">01</div>
+      <div class="phase-marker">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Long-Horizon Research</div>
+      </div>
+      <h3 class="card-headline">The point is continuity, not a short pilot cycle.</h3>
+      <p class="card-body">Edison is valuable because it is designed for sustained observation, management control, and long-term study rather than one-season demonstration plots.</p>
+      <div class="card-pullquote">Confidence compounds when the evidence is allowed to stay on the ground long enough.</div>
+    </div>
+
+    <!-- CARD 02 -->
+    <div class="card" data-word="2">
+      <div class="card-step">02</div>
+      <div class="phase-marker">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase-One Discipline</div>
+      </div>
+      <h3 class="card-headline">The first job is design before declaration.</h3>
+      <p class="card-body">Baseline, measurement, farm management, and research coherence all come before claims about what the institute can prove.</p>
+      <div class="card-pullquote">If the initial design is weak, the rest of the institution inherits that weakness.</div>
+    </div>
+
+    <!-- CARD 03 -->
+    <div class="card" data-word="4">
+      <div class="card-step">03</div>
+      <div class="phase-marker">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Institutional Role</div>
+      </div>
+      <h3 class="card-headline">Field proof can steady the broader climate case.</h3>
+      <p class="card-body">Edison gives growers, funders, and public institutions a place where serious evidence can accumulate instead of remaining symbolic or anecdotal.</p>
+      <div class="card-pullquote">This is how bold public claims become durable institutions.</div>
+    </div>
+  </div>
+
+  <div class="meta-strip">
+    <div class="meta-left">The Edison Institute / Phase One</div>
+    <div>325 ACRES · CENTRAL VALLEY, CA</div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+  const words = document.querySelectorAll('.progression-word');
+
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const wordId = card.dataset.word;
+      words.forEach(w => {
+        w.classList.toggle('lit', w.dataset.word === wordId);
+      });
+    });
+  });
+
+  document.querySelector('.cards').addEventListener('mouseleave', () => {
+    words.forEach(w => w.classList.remove('lit'));
+  });
+</script>
+</body>
+</html>

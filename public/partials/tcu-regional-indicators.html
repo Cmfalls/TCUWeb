@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Selected Regional Indicators</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --soil: #8a6d3b;
+    --water: #6fa3a0;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.2vw, 76px);
+    line-height: 0.95;
+    color: var(--ink);
+    max-width: 15ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin-bottom: 64px;
+  }
+
+  /* Main layout: map + detail panel */
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: stretch;
+  }
+  @media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; gap: 32px; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  /* Map side */
+  .map-wrap {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .map-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .map-compass {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .map-svg-wrap {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    width: 100%;
+  }
+  .map-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Map elements */
+  .ca-outline {
+    fill: none;
+    stroke: rgba(10, 46, 38, 0.15);
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+  }
+  .valley {
+    fill: rgba(153, 204, 51, 0.12);
+    stroke: var(--wheatgrass);
+    stroke-width: 1.5;
+    transition: fill 0.4s ease;
+  }
+  .valley-detail {
+    fill: none;
+    stroke: rgba(153, 204, 51, 0.4);
+    stroke-width: 0.8;
+  }
+  .mountain {
+    fill: none;
+    stroke: rgba(138, 109, 59, 0.4);
+    stroke-width: 0.8;
+  }
+  .city {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    fill: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .city-dot {
+    fill: var(--ink);
+  }
+
+  /* Hotspots */
+  .hotspot {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .hotspot-bg {
+    fill: var(--cream-card);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    transition: fill 0.3s ease, stroke 0.3s ease;
+  }
+  .hotspot-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    transition: fill 0.3s ease;
+  }
+  .hotspot:hover .hotspot-bg,
+  .hotspot.active .hotspot-bg {
+    fill: var(--wheatgrass);
+    stroke: var(--ink);
+  }
+  .hotspot-pulse {
+    fill: none;
+    stroke: var(--wheatgrass);
+    stroke-width: 1.5;
+    opacity: 0;
+  }
+  .hotspot.active .hotspot-pulse {
+    animation: ping 2s ease-out infinite;
+  }
+  @keyframes ping {
+    0% { r: 14; opacity: 0.8; }
+    100% { r: 28; opacity: 0; }
+  }
+
+  /* Detail panel */
+  .detail {
+    display: flex;
+    flex-direction: column;
+  }
+  .detail-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 360px;
+    position: relative;
+  }
+  .detail-step {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .detail-step.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .detail-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .detail-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 9vw, 128px);
+    line-height: 0.88;
+    color: var(--wheatgrass);
+    letter-spacing: 0.005em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .detail-num .suffix {
+    font-size: 0.38em;
+    color: var(--ink-soft);
+  }
+  .detail-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 14px;
+    max-width: 30ch;
+  }
+  .detail-desc {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 40ch;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .detail-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    max-width: 40ch;
+  }
+  .detail-source::before {
+    content: "SOURCE";
+    color: var(--wheatgrass);
+    font-weight: 600;
+  }
+
+  /* Selector tabs */
+  .selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .tab {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 12px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: border-color 0.3s ease, background 0.3s ease;
+    position: relative;
+  }
+  .tab:hover {
+    border-color: var(--line-strong);
+  }
+  .tab.active {
+    border-color: var(--ink);
+    background: rgba(10, 46, 38, 0.04);
+  }
+  .tab-index {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .tab.active .tab-index { color: var(--wheatgrass); font-weight: 600; }
+  .tab-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  @media (max-width: 600px) {
+    .selector { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Selected Regional Indicators</div>
+  <h1 class="headline">The Valley already shows why field proof cannot stay abstract.</h1>
+  <p class="lede">These are operating conditions, not distant climate signals. Edison sits inside a landscape where food concentration, water stress, and land-use pressure are already colliding.</p>
+
+  <div class="stage">
+    <!-- MAP SIDE -->
+    <div class="map-wrap">
+      <div class="map-header">
+        <div class="map-title">CA / Central Valley</div>
+        <div class="map-compass">N ↑</div>
+      </div>
+      <div class="map-svg-wrap">
+        <svg class="map-svg" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+          <!-- California state outline (simplified) -->
+          <path class="ca-outline" d="M 80 30 L 120 25 L 160 35 L 200 50 L 240 80 L 260 140 L 275 200 L 280 260 L 270 320 L 250 380 L 220 420 L 180 430 L 140 420 L 100 400 L 70 360 L 50 300 L 40 240 L 45 180 L 55 120 L 70 70 Z"/>
+
+          <!-- Mountain ridges (Sierra on the east, Coast range on west) -->
+          <g class="mountain">
+            <!-- Sierra Nevada (east) -->
+            <path d="M 200 60 Q 210 120 215 180 Q 220 240 215 300 Q 208 350 195 390"/>
+            <path d="M 210 80 Q 220 140 225 200 Q 228 260 220 320"/>
+            <!-- Coast Range (west) -->
+            <path d="M 100 80 Q 95 140 90 200 Q 88 260 95 320 Q 102 370 115 400"/>
+            <path d="M 88 100 Q 82 160 78 220 Q 78 280 85 340"/>
+          </g>
+
+          <!-- Central Valley shape (long narrow oval running N-S) -->
+          <path class="valley" d="M 130 70 Q 165 75 180 120 Q 188 180 185 240 Q 180 300 170 360 Q 160 400 135 395 Q 115 390 115 350 Q 118 280 125 210 Q 128 140 130 70 Z"/>
+
+          <!-- Valley internal detail (rivers) -->
+          <g class="valley-detail">
+            <path d="M 150 85 Q 158 140 160 200 Q 162 260 158 320 Q 155 370 148 390"/>
+            <path d="M 140 100 Q 135 160 138 220"/>
+            <path d="M 165 150 Q 170 210 168 270"/>
+          </g>
+
+          <!-- Cities -->
+          <g>
+            <circle class="city-dot" cx="148" cy="90" r="1.5"/>
+            <text class="city" x="156" y="93">REDDING</text>
+
+            <circle class="city-dot" cx="152" cy="155" r="1.5"/>
+            <text class="city" x="160" y="158">SACRAMENTO</text>
+
+            <circle class="city-dot" cx="155" cy="220" r="1.5"/>
+            <text class="city" x="163" y="223">FRESNO</text>
+
+            <circle class="city-dot" cx="150" cy="320" r="1.5"/>
+            <text class="city" x="158" y="323">BAKERSFIELD</text>
+          </g>
+
+          <!-- Edison marker -->
+          <g>
+            <circle cx="158" cy="245" r="4" fill="none" stroke="#0a2e26" stroke-width="1.5" stroke-dasharray="1 1"/>
+            <text x="166" y="248" font-family="Inter, sans-serif" font-size="7" font-weight="600" fill="#0a2e26" letter-spacing="0.5">EDISON</text>
+          </g>
+
+          <!-- HOTSPOTS -->
+          <!-- Hotspot 1: 1% of US farmland (upper valley) -->
+          <g class="hotspot" data-id="1" transform="translate(145, 130)">
+            <circle class="hotspot-pulse" r="14"/>
+            <circle class="hotspot-bg" r="14"/>
+            <text class="hotspot-num" x="0" y="1">01</text>
+          </g>
+
+          <!-- Hotspot 2: 17K acres removed (mid valley) -->
+          <g class="hotspot" data-id="2" transform="translate(160, 195)">
+            <circle class="hotspot-pulse" r="14"/>
+            <circle class="hotspot-bg" r="14"/>
+            <text class="hotspot-num" x="0" y="1">02</text>
+          </g>
+
+          <!-- Hotspot 3: 28 FT subsidence (south-central) -->
+          <g class="hotspot" data-id="3" transform="translate(150, 275)">
+            <circle class="hotspot-pulse" r="14"/>
+            <circle class="hotspot-bg" r="14"/>
+            <text class="hotspot-num" x="0" y="1">03</text>
+          </g>
+
+          <!-- Hotspot 4: $50B ag economy (southern valley) -->
+          <g class="hotspot" data-id="4" transform="translate(148, 350)">
+            <circle class="hotspot-pulse" r="14"/>
+            <circle class="hotspot-bg" r="14"/>
+            <text class="hotspot-num" x="0" y="1">04</text>
+          </g>
+
+          <!-- Legend -->
+          <g transform="translate(20, 415)">
+            <rect width="10" height="3" fill="rgba(153, 204, 51, 0.5)" stroke="#99cc33" stroke-width="0.8"/>
+            <text x="14" y="4" font-family="JetBrains Mono, monospace" font-size="6" fill="#6b6558" letter-spacing="0.5">CENTRAL VALLEY</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- DETAIL SIDE -->
+    <div class="detail">
+      <div class="detail-content">
+
+        <div class="detail-step active" data-step="1">
+          <div class="detail-index">01 / FOOD CONCENTRATION</div>
+          <div class="detail-num">1<span class="suffix">%</span></div>
+          <div class="detail-label">Of U.S. farmland.</div>
+          <div class="detail-desc">A very small share of national farmland carries outsized food-system importance here. The Valley produces a quarter of the food Americans eat on one percent of the country's arable land.</div>
+          <div class="detail-source">USDA farmland statistics</div>
+        </div>
+
+        <div class="detail-step" data-step="2">
+          <div class="detail-index">02 / LAND-USE PRESSURE</div>
+          <div class="detail-num">17<span class="suffix">K ACRES</span></div>
+          <div class="detail-label">Permanently removed in 2024.</div>
+          <div class="detail-desc">SGMA is already forcing land-use change rather than merely threatening it in the future. Growers are retiring fields now because the groundwater math no longer works.</div>
+          <div class="detail-source">California SGMA reporting</div>
+        </div>
+
+        <div class="detail-step" data-step="3">
+          <div class="detail-index">03 / PHYSICAL SUBSIDENCE</div>
+          <div class="detail-num">28<span class="suffix">FT</span></div>
+          <div class="detail-label">Max land subsidence since the 1920s.</div>
+          <div class="detail-desc">Water stress is also an infrastructure problem with physical consequences that accumulate over time. Parts of the Valley floor have dropped by the height of a two-story building.</div>
+          <div class="detail-source">USGS / DWR</div>
+        </div>
+
+        <div class="detail-step" data-step="4">
+          <div class="detail-index">04 / ECONOMIC EXPOSURE</div>
+          <div class="detail-num">$50<span class="suffix">B</span></div>
+          <div class="detail-label">Agricultural economy under pressure.</div>
+          <div class="detail-desc">Regional water decline threatens jobs, land value, supply chains, and food availability at national scale. What happens in the Valley does not stay in the Valley.</div>
+          <div class="detail-source">CDFA / regional ag economy</div>
+        </div>
+
+      </div>
+
+      <!-- Tab selector -->
+      <div class="selector" id="selector">
+        <button class="tab active" data-id="1">
+          <span class="tab-index">01</span>
+          <span class="tab-num">1%</span>
+        </button>
+        <button class="tab" data-id="2">
+          <span class="tab-index">02</span>
+          <span class="tab-num">17K</span>
+        </button>
+        <button class="tab" data-id="3">
+          <span class="tab-index">03</span>
+          <span class="tab-num">28 FT</span>
+        </button>
+        <button class="tab" data-id="4">
+          <span class="tab-index">04</span>
+          <span class="tab-num">$50B</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const hotspots = document.querySelectorAll('.hotspot');
+  const tabs = document.querySelectorAll('.tab');
+  const steps = document.querySelectorAll('.detail-step');
+
+  function setActive(id) {
+    hotspots.forEach(h => h.classList.toggle('active', h.dataset.id === id));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.id === id));
+    steps.forEach(s => s.classList.toggle('active', s.dataset.step === id));
+  }
+
+  hotspots.forEach(h => {
+    h.addEventListener('click', () => setActive(h.dataset.id));
+    h.addEventListener('mouseenter', () => setActive(h.dataset.id));
+  });
+  tabs.forEach(t => {
+    t.addEventListener('click', () => setActive(t.dataset.id));
+  });
+
+  // Set first hotspot as active on load
+  setActive('1');
+
+  // Auto-cycle on load
+  let current = 1;
+  let auto = setInterval(() => {
+    current = current >= 4 ? 1 : current + 1;
+    setActive(String(current));
+  }, 3500);
+
+  // Stop auto-cycle on any interaction
+  [...hotspots, ...tabs].forEach(el => {
+    el.addEventListener('click', () => clearInterval(auto));
+    el.addEventListener('mouseenter', () => clearInterval(auto));
+  });
+</script>
+</body>
+</html>

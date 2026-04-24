@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Giving Opportunities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a1f1a;
+    --bg-deep: #061411;
+    --bg-card: rgba(245, 239, 225, 0.03);
+    --bg-card-hover: rgba(245, 239, 225, 0.06);
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.7);
+    --cream-faint: rgba(245, 239, 225, 0.5);
+    --cream-ghost: rgba(245, 239, 225, 0.3);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --line: rgba(245, 239, 225, 0.12);
+    --line-strong: rgba(245, 239, 225, 0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at top right, rgba(153, 204, 51, 0.04) 0%, transparent 60%);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 0.95;
+    color: var(--cream);
+    max-width: 22ch;
+    margin-bottom: 72px;
+  }
+
+  /* === Tier cards === */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 1000px) {
+    .tiers { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .tiers { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .tier {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: background 0.3s ease,
+                border-color 0.3s ease,
+                transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .tier.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .tier:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--line-strong);
+    transform: translateY(-6px);
+  }
+
+  /* Flagship tier — wheatgrass treatment */
+  .tier.flagship {
+    border-color: rgba(153, 204, 51, 0.5);
+    background: rgba(153, 204, 51, 0.06);
+    box-shadow: 0 0 0 1px rgba(153, 204, 51, 0.2), 0 30px 60px -40px rgba(153, 204, 51, 0.4);
+  }
+  .tier.flagship:hover {
+    border-color: var(--wheatgrass);
+    background: rgba(153, 204, 51, 0.09);
+  }
+  .flagship-tag {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--wheatgrass);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* Tier header */
+  .tier-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cream-faint);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tier-label::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .tier.flagship .tier-label { color: var(--wheatgrass-bright); }
+
+  .tier-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 10px;
+    letter-spacing: 0.005em;
+  }
+
+  .tier-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 0.9;
+    color: var(--wheatgrass-bright);
+    margin-bottom: 24px;
+    letter-spacing: 0.005em;
+  }
+  .tier-amount .plus { color: var(--wheatgrass); }
+
+  .tier-desc {
+    font-size: 13px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* Unlocks callout */
+  .tier-unlocks {
+    padding: 14px 16px;
+    background: rgba(245, 239, 225, 0.04);
+    border-left: 2px solid var(--wheatgrass);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 28px;
+  }
+  .tier.flagship .tier-unlocks {
+    background: rgba(153, 204, 51, 0.08);
+  }
+  .unlocks-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 4px;
+  }
+  .unlocks-text {
+    font-size: 12px;
+    color: var(--cream);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  /* CTA */
+  .tier-cta {
+    margin-top: auto;
+    width: 100%;
+    padding: 14px 16px;
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, gap 0.3s ease;
+  }
+  .tier-cta:hover {
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border-color: var(--wheatgrass);
+    gap: 14px;
+  }
+  .tier-cta svg {
+    width: 14px;
+    height: 14px;
+  }
+  .tier.flagship .tier-cta {
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border-color: var(--wheatgrass);
+  }
+  .tier.flagship .tier-cta:hover {
+    background: var(--wheatgrass-bright);
+    border-color: var(--wheatgrass-bright);
+  }
+
+  /* === Flexible giving strip === */
+  .flexible {
+    padding: 28px 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .flexible-left {
+    flex: 1;
+    min-width: 280px;
+  }
+  .flexible-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .flexible-text {
+    font-size: 14px;
+    color: var(--cream);
+    line-height: 1.55;
+  }
+  .flexible-text strong { font-weight: 600; }
+  .flexible-cta {
+    padding: 14px 22px;
+    background: transparent;
+    color: var(--cream);
+    border: 1.5px solid var(--cream);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s ease, color 0.2s ease, gap 0.3s ease;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .flexible-cta:hover {
+    background: var(--cream);
+    color: var(--ink);
+    gap: 14px;
+  }
+  .flexible-cta svg { width: 14px; height: 14px; }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Giving Opportunities</div>
+  <h1 class="headline">We are building a founding community of supporters who share our belief in the power of agriculture to address climate change.</h1>
+
+  <div class="tiers" id="tiers">
+
+    <!-- FLAGSHIP -->
+    <div class="tier flagship">
+      <div class="flagship-tag">Flagship</div>
+      <div class="tier-label">Tier 01</div>
+      <div class="tier-name">Founding Partner</div>
+      <div class="tier-amount">$500K<span class="plus">+</span></div>
+      <div class="tier-desc">Your early commitment makes everything else possible. Founding Partners are the backbone of the Institute's operating stability and long-term research capacity.</div>
+      <div class="tier-unlocks">
+        <div class="unlocks-label">→ Unlocks</div>
+        <div class="unlocks-text">Operating stability and long-term research capacity</div>
+      </div>
+      <button class="tier-cta">
+        Become a Founding Partner
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- RESEARCH CHAMPION -->
+    <div class="tier">
+      <div class="tier-label">Tier 02</div>
+      <div class="tier-name">Research Champion</div>
+      <div class="tier-amount">$250K–$499K</div>
+      <div class="tier-desc">Supports a major research initiative. A crop program, a measurement campaign, or a full season of farmer engagement.</div>
+      <div class="tier-unlocks">
+        <div class="unlocks-label">→ Unlocks</div>
+        <div class="unlocks-text">A major research initiative or full measurement campaign</div>
+      </div>
+      <button class="tier-cta">
+        Support research
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- PROGRAM PARTNER -->
+    <div class="tier">
+      <div class="tier-label">Tier 03</div>
+      <div class="tier-name">Program Partner</div>
+      <div class="tier-amount">$100K–$249K</div>
+      <div class="tier-desc">Support the daily work of running demonstrations, engaging farmers, and producing evidence that moves the field forward.</div>
+      <div class="tier-unlocks">
+        <div class="unlocks-label">→ Unlocks</div>
+        <div class="unlocks-text">Daily operations, demonstrations, and farmer engagement</div>
+      </div>
+      <button class="tier-cta">
+        Partner with us
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- INSTITUTE SUPPORTER -->
+    <div class="tier">
+      <div class="tier-label">Tier 04</div>
+      <div class="tier-name">Institute Supporter</div>
+      <div class="tier-amount">$25K–$99K</div>
+      <div class="tier-desc">Provide essential operating support that keeps the Institute running. Supporters receive regular updates and invitations to field events.</div>
+      <div class="tier-unlocks">
+        <div class="unlocks-label">→ Unlocks</div>
+        <div class="unlocks-text">Operating support, updates, and field event access</div>
+      </div>
+      <button class="tier-cta">
+        Become a supporter
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- FLEXIBLE GIVING STRIP -->
+  <div class="flexible">
+    <div class="flexible-left">
+      <div class="flexible-label">Flexible Giving</div>
+      <div class="flexible-text"><strong>Multi-year pledges, gifts of appreciated stock, and donor-advised fund contributions are welcomed.</strong> We work with partners to structure the gift that fits.</div>
+    </div>
+    <a class="flexible-cta" href="#contact">
+      Talk to our team
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<script>
+  const tiers = document.querySelectorAll('.tier');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tiers.forEach((tier, i) => {
+          setTimeout(() => tier.classList.add('visible'), i * 120);
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.15 });
+  observer.observe(document.getElementById('tiers'));
+</script>
+</body>
+</html>

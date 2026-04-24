@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Soil Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --soil-1: #6b4a25;
+    --soil-2: #4a3218;
+    --soil-3: #2e1f0e;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.5vw, 78px);
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+    max-width: 14ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin-bottom: 56px;
+  }
+
+  /* Main grid */
+  .stage {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+    align-items: stretch;
+  }
+  @media (max-width: 920px) {
+    .stage { grid-template-columns: 1fr; gap: 40px; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  /* Soil visual */
+  .soil-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #e8dfc8 0%, #e8dfc8 22%, var(--soil-1) 26%, var(--soil-2) 55%, var(--soil-3) 100%);
+  }
+  .soil-wrap svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Layer labels */
+  .layer-label {
+    position: absolute;
+    right: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245, 239, 225, 0.6);
+    padding: 4px 8px;
+    border: 1px solid rgba(245, 239, 225, 0.25);
+    border-radius: 3px;
+    transition: color 0.4s, border-color 0.4s, background 0.4s;
+  }
+  .layer-label.sky { color: rgba(10, 46, 38, 0.55); border-color: rgba(10, 46, 38, 0.2); }
+  .layer-label.l-sky { top: 4%; }
+  .layer-label.l-topsoil { top: 30%; }
+  .layer-label.l-root { top: 52%; }
+  .layer-label.l-deep { top: 78%; }
+
+  .soil-wrap.active-1 .l-sky,
+  .soil-wrap.active-1 .l-topsoil {
+    color: var(--wheatgrass-bright);
+    border-color: var(--wheatgrass);
+    background: rgba(153, 204, 51, 0.12);
+  }
+  .soil-wrap.active-2 .l-root {
+    color: var(--wheatgrass-bright);
+    border-color: var(--wheatgrass);
+    background: rgba(153, 204, 51, 0.12);
+  }
+  .soil-wrap.active-3 .l-deep {
+    color: var(--wheatgrass-bright);
+    border-color: var(--wheatgrass);
+    background: rgba(153, 204, 51, 0.12);
+  }
+
+  /* SVG element states */
+  .sun, .plant, .carbon-flow { opacity: 0.4; transition: opacity 0.6s ease; }
+  .water-drop, .root-system, .crop-ring { opacity: 0.4; transition: opacity 0.6s ease; }
+  .probe, .data-node, .deep-layer { opacity: 0.4; transition: opacity 0.6s ease; }
+
+  .soil-wrap.active-1 .sun,
+  .soil-wrap.active-1 .plant,
+  .soil-wrap.active-1 .carbon-flow { opacity: 1; }
+  .soil-wrap.active-2 .water-drop,
+  .soil-wrap.active-2 .root-system,
+  .soil-wrap.active-2 .crop-ring { opacity: 1; }
+  .soil-wrap.active-3 .probe,
+  .soil-wrap.active-3 .data-node,
+  .soil-wrap.active-3 .deep-layer { opacity: 1; }
+
+  /* Carbon flow animation */
+  @keyframes flowDown {
+    0% { stroke-dashoffset: 40; }
+    100% { stroke-dashoffset: 0; }
+  }
+  .soil-wrap.active-1 .carbon-flow {
+    stroke-dasharray: 4 6;
+    animation: flowDown 1.2s linear infinite;
+  }
+
+  @keyframes drop {
+    0% { transform: translateY(-10px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(30px); opacity: 0; }
+  }
+  .soil-wrap.active-2 .water-drop { animation: drop 2.2s ease-in infinite; }
+  .soil-wrap.active-2 .water-drop.d2 { animation-delay: 0.7s; }
+  .soil-wrap.active-2 .water-drop.d3 { animation-delay: 1.4s; }
+
+  @keyframes pulse {
+    0%, 100% { r: 4; opacity: 1; }
+    50% { r: 7; opacity: 0.6; }
+  }
+  .soil-wrap.active-3 .data-node { animation: pulse 1.8s ease-in-out infinite; }
+  .soil-wrap.active-3 .data-node.n2 { animation-delay: 0.4s; }
+  .soil-wrap.active-3 .data-node.n3 { animation-delay: 0.8s; }
+  .soil-wrap.active-3 .data-node.n4 { animation-delay: 1.2s; }
+
+  /* Content side */
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .pillar {
+    background: transparent;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 24px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--wheatgrass);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s ease;
+  }
+  .pillar:hover {
+    border-color: rgba(10, 46, 38, 0.3);
+  }
+  .pillar.active {
+    border-color: var(--ink);
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .pillar.active::before { transform: scaleY(1); }
+
+  .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .pillar.active .pillar-num { color: var(--ink); }
+  .pillar h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .pillar p {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, margin-top 0.5s ease, opacity 0.4s ease;
+    opacity: 0;
+  }
+  .pillar.active p {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 2px;
+  }
+
+  .pillar-preview {
+    font-size: 14px;
+    color: var(--muted);
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+  }
+  .pillar.active .pillar-preview {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Soil Intelligence</div>
+  <h1 class="headline">The missing climate technology is also the oldest one.</h1>
+  <p class="lede">Soil Intelligence is TCU's practical frame for the science of living soil. How carbon, water, microbes, roots, crops, and farm decisions behave together when land is managed for regeneration.</p>
+
+  <div class="stage">
+    <!-- SOIL VISUAL -->
+    <div class="soil-wrap active-1" id="soilWrap">
+      <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <!-- Sky section ends around y=110 -->
+
+        <!-- Sun -->
+        <g class="sun">
+          <circle cx="320" cy="60" r="22" fill="#99cc33"/>
+          <g stroke="#99cc33" stroke-width="2" stroke-linecap="round">
+            <line x1="320" y1="22" x2="320" y2="32"/>
+            <line x1="320" y1="88" x2="320" y2="98"/>
+            <line x1="282" y1="60" x2="292" y2="60"/>
+            <line x1="348" y1="60" x2="358" y2="60"/>
+            <line x1="293" y1="33" x2="300" y2="40"/>
+            <line x1="340" y1="80" x2="347" y2="87"/>
+            <line x1="293" y1="87" x2="300" y2="80"/>
+            <line x1="340" y1="40" x2="347" y2="33"/>
+          </g>
+        </g>
+
+        <!-- Plants above ground -->
+        <g class="plant">
+          <!-- Plant 1 -->
+          <path d="M 100 110 L 100 70" stroke="#1a3d34" stroke-width="2.5" fill="none"/>
+          <ellipse cx="90" cy="78" rx="10" ry="5" fill="#99cc33" transform="rotate(-25 90 78)"/>
+          <ellipse cx="110" cy="72" rx="10" ry="5" fill="#99cc33" transform="rotate(25 110 72)"/>
+          <ellipse cx="100" cy="62" rx="9" ry="5" fill="#b8e655"/>
+          <!-- Plant 2 -->
+          <path d="M 200 110 L 200 55" stroke="#1a3d34" stroke-width="2.5" fill="none"/>
+          <ellipse cx="188" cy="68" rx="11" ry="5" fill="#99cc33" transform="rotate(-20 188 68)"/>
+          <ellipse cx="212" cy="60" rx="11" ry="5" fill="#99cc33" transform="rotate(20 212 60)"/>
+          <ellipse cx="200" cy="48" rx="10" ry="5" fill="#b8e655"/>
+          <!-- Plant 3 -->
+          <path d="M 280 110 L 280 72" stroke="#1a3d34" stroke-width="2.5" fill="none"/>
+          <ellipse cx="270" cy="80" rx="9" ry="4.5" fill="#99cc33" transform="rotate(-25 270 80)"/>
+          <ellipse cx="290" cy="75" rx="9" ry="4.5" fill="#99cc33" transform="rotate(25 290 75)"/>
+          <ellipse cx="280" cy="65" rx="8" ry="4.5" fill="#b8e655"/>
+        </g>
+
+        <!-- Carbon flow (photosynthesis arrows into soil) -->
+        <g class="carbon-flow" stroke="#b8e655" stroke-width="2.5" fill="none" stroke-linecap="round">
+          <line x1="100" y1="85" x2="100" y2="200"/>
+          <line x1="200" y1="70" x2="200" y2="200"/>
+          <line x1="280" y1="88" x2="280" y2="200"/>
+        </g>
+
+        <!-- Soil surface line -->
+        <line x1="0" y1="110" x2="400" y2="110" stroke="#3d2f17" stroke-width="2"/>
+
+        <!-- Root systems -->
+        <g class="root-system" stroke="#d4c28a" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.4">
+          <!-- Root 1 -->
+          <path d="M 100 110 Q 95 160 85 200 Q 75 240 70 280"/>
+          <path d="M 100 110 Q 110 150 115 190 Q 120 230 125 260"/>
+          <path d="M 100 130 Q 85 150 75 170"/>
+          <path d="M 100 150 Q 115 170 125 185"/>
+          <!-- Root 2 (main central, deepest) -->
+          <path d="M 200 110 Q 195 170 190 230 Q 185 290 180 340"/>
+          <path d="M 200 110 Q 210 160 215 220 Q 220 280 225 330"/>
+          <path d="M 200 140 Q 180 165 165 180"/>
+          <path d="M 200 170 Q 225 195 240 210"/>
+          <path d="M 195 220 Q 175 240 160 255"/>
+          <path d="M 215 250 Q 240 270 250 285"/>
+          <!-- Root 3 -->
+          <path d="M 280 110 Q 275 160 270 210 Q 265 260 260 300"/>
+          <path d="M 280 110 Q 290 150 295 200 Q 300 250 305 290"/>
+          <path d="M 280 140 Q 265 160 255 175"/>
+          <path d="M 280 180 Q 300 200 310 215"/>
+        </g>
+
+        <!-- Water drops -->
+        <g class="water-drop">
+          <path d="M 140 180 Q 134 188 140 196 Q 146 188 140 180 Z" fill="#99cc33"/>
+        </g>
+        <g class="water-drop d2">
+          <path d="M 230 220 Q 224 228 230 236 Q 236 228 230 220 Z" fill="#99cc33"/>
+        </g>
+        <g class="water-drop d3">
+          <path d="M 175 260 Q 169 268 175 276 Q 181 268 175 260 Z" fill="#99cc33"/>
+        </g>
+
+        <!-- Crop ring (showing resilience — circle around main plant) -->
+        <g class="crop-ring">
+          <circle cx="200" cy="85" r="30" fill="none" stroke="#99cc33" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.7"/>
+        </g>
+
+        <!-- Deep layer: microbes / carbon storage -->
+        <g class="deep-layer">
+          <!-- Microbe clusters -->
+          <circle cx="60" cy="380" r="3" fill="#99cc33"/>
+          <circle cx="68" cy="385" r="2" fill="#99cc33"/>
+          <circle cx="55" cy="388" r="2.5" fill="#99cc33"/>
+          <circle cx="150" cy="420" r="3" fill="#99cc33"/>
+          <circle cx="158" cy="425" r="2" fill="#99cc33"/>
+          <circle cx="145" cy="428" r="2.5" fill="#99cc33"/>
+          <circle cx="260" cy="400" r="3" fill="#99cc33"/>
+          <circle cx="268" cy="405" r="2" fill="#99cc33"/>
+          <circle cx="255" cy="408" r="2.5" fill="#99cc33"/>
+          <circle cx="330" cy="440" r="3" fill="#99cc33"/>
+          <circle cx="338" cy="445" r="2" fill="#99cc33"/>
+          <circle cx="325" cy="448" r="2.5" fill="#99cc33"/>
+        </g>
+
+        <!-- Measurement probe (goes through all layers) -->
+        <g class="probe">
+          <line x1="340" y1="100" x2="340" y2="470" stroke="#b8e655" stroke-width="2"/>
+          <rect x="335" y="92" width="10" height="14" fill="#b8e655" rx="1"/>
+          <polygon points="337,470 343,470 340,480" fill="#b8e655"/>
+        </g>
+
+        <!-- Data nodes (measurement points) -->
+        <circle class="data-node" cx="340" cy="160" r="4" fill="#b8e655"/>
+        <circle class="data-node n2" cx="340" cy="240" r="4" fill="#b8e655"/>
+        <circle class="data-node n3" cx="340" cy="330" r="4" fill="#b8e655"/>
+        <circle class="data-node n4" cx="340" cy="420" r="4" fill="#b8e655"/>
+      </svg>
+
+      <div class="layer-label sky l-sky">Atmosphere</div>
+      <div class="layer-label l-topsoil">Topsoil</div>
+      <div class="layer-label l-root">Root Zone</div>
+      <div class="layer-label l-deep">Deep Carbon</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <div class="pillars" id="pillars">
+
+        <button class="pillar active" data-id="1">
+          <span class="pillar-num">01</span>
+          <h3>Nature as a working partner</h3>
+          <div class="pillar-preview">Photosynthesis is already doing the work.</div>
+          <p>Photosynthesis already moves atmospheric carbon into plants and soil. The job is to restore the conditions that let that biological work continue at scale.</p>
+        </button>
+
+        <button class="pillar" data-id="2">
+          <span class="pillar-num">02</span>
+          <h3>Food security inside climate repair</h3>
+          <div class="pillar-preview">The same soil that stores carbon grows better food.</div>
+          <p>The living soil functions that store carbon also improve water holding, crop resilience, biodiversity, and farmer viability. One set of practices. Many returns.</p>
+        </button>
+
+        <button class="pillar" data-id="3">
+          <span class="pillar-num">03</span>
+          <h3>Proof before scale</h3>
+          <div class="pillar-preview">Measured on real working land. Not in theory.</div>
+          <p>Soil Intelligence becomes persuasive when it is measured on working land, translated clearly, and connected to adoption decisions growers and funders trust.</p>
+        </button>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const pillars = document.querySelectorAll('.pillar');
+  const soilWrap = document.getElementById('soilWrap');
+
+  pillars.forEach(p => {
+    p.addEventListener('click', () => {
+      pillars.forEach(x => x.classList.remove('active'));
+      p.classList.add('active');
+      const id = p.dataset.id;
+      soilWrap.classList.remove('active-1', 'active-2', 'active-3');
+      soilWrap.classList.add('active-' + id);
+    });
+    p.addEventListener('mouseenter', () => {
+      const id = p.dataset.id;
+      soilWrap.classList.remove('active-1', 'active-2', 'active-3');
+      soilWrap.classList.add('active-' + id);
+    });
+  });
+
+  // Restore active pillar state on mouse leave
+  document.getElementById('pillars').addEventListener('mouseleave', () => {
+    const active = document.querySelector('.pillar.active');
+    if (active) {
+      const id = active.dataset.id;
+      soilWrap.classList.remove('active-1', 'active-2', 'active-3');
+      soilWrap.classList.add('active-' + id);
+    }
+  });
+</script>
+</body>
+</html>

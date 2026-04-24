@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Why Backing This Now Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --warn: #e8a547;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 0.92;
+    color: var(--ink);
+    max-width: 20ch;
+    margin-bottom: 32px;
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    line-height: 1.65;
+    margin-bottom: 64px;
+  }
+  .lede strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* === Foundation proof strip === */
+  .foundation {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .foundation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .foundation-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .foundation-label::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(153, 204, 51, 0.2);
+  }
+  .foundation-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .foundation-status strong {
+    color: var(--wheatgrass);
+    font-weight: 600;
+  }
+
+  .foundation-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+  }
+  @media (max-width: 1000px) {
+    .foundation-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .foundation-grid { grid-template-columns: 1fr; }
+    .foundation { padding: 24px 22px; }
+  }
+
+  .foundation-item {
+    padding: 4px 20px;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .foundation-item:last-child { border-right: none; }
+  .foundation-item:first-child { padding-left: 0; }
+  @media (max-width: 1000px) {
+    .foundation-item {
+      padding: 16px 20px;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+    .foundation-item:nth-last-child(-n+2) { border-bottom: none; }
+    .foundation-item:nth-child(odd) { padding-left: 0; }
+  }
+  @media (max-width: 560px) {
+    .foundation-item {
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+    }
+    .foundation-item:last-child { border-bottom: none; }
+  }
+
+  .foundation-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--wheatgrass);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .foundation-check svg {
+    width: 12px;
+    height: 12px;
+  }
+  .foundation-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 0.92;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: 0.005em;
+  }
+  .foundation-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.45;
+    max-width: 22ch;
+  }
+
+  /* === Transition marker === */
+  .transition {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 0 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .transition::before,
+  .transition::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .transition-text {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .transition-text::before {
+    content: "↓ ";
+    color: var(--warn);
+  }
+
+  /* === Urgency cards === */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .card {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 32px 28px;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.3s ease,
+                box-shadow 0.4s ease;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--line-strong);
+    box-shadow: 0 22px 40px -24px rgba(10, 46, 38, 0.22);
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--warn);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover::before { transform: scaleX(1); }
+
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warn);
+    margin-bottom: 20px;
+  }
+  .card-tag::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--warn);
+    border-radius: 50%;
+    animation: cardPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes cardPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(232, 165, 71, 0.5); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(232, 165, 71, 0); }
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 16px;
+    max-width: 18ch;
+  }
+  .card-body {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .card-footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Why Backing This Now Matters</div>
+  <h1 class="headline">The climate case is strong. The missing piece is trusted proof under real conditions.</h1>
+  <p class="lede">We are not starting from zero. <strong>The Schuman Family Foundation has committed more than seven million dollars in land and operating support.</strong> The 320-acre Edison Farm is ours, secured by a permanent restrictive covenant. Our research partnership with CRARS is in place. The work has begun. What we need now is stability — the operating support that lets us do this work right, attract the best people, and deliver results at the speed and scale this moment demands.</p>
+
+  <!-- FOUNDATION STRIP -->
+  <div class="foundation">
+    <div class="foundation-header">
+      <div class="foundation-label">Foundation In Place</div>
+      <div class="foundation-status">STATUS / <strong>ACTIVE</strong></div>
+    </div>
+    <div class="foundation-grid">
+
+      <div class="foundation-item">
+        <div class="foundation-check">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,8 7,12 13,4"/>
+          </svg>
+          Secured
+        </div>
+        <div class="foundation-num">$7M+</div>
+        <div class="foundation-desc">Committed by Schuman Family Foundation in land and operating support</div>
+      </div>
+
+      <div class="foundation-item">
+        <div class="foundation-check">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,8 7,12 13,4"/>
+          </svg>
+          Owned
+        </div>
+        <div class="foundation-num">320 AC</div>
+        <div class="foundation-desc">Edison Farm, Central Valley, California</div>
+      </div>
+
+      <div class="foundation-item">
+        <div class="foundation-check">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,8 7,12 13,4"/>
+          </svg>
+          Locked
+        </div>
+        <div class="foundation-num">PERM</div>
+        <div class="foundation-desc">Permanent restrictive covenant on the land</div>
+      </div>
+
+      <div class="foundation-item">
+        <div class="foundation-check">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,8 7,12 13,4"/>
+          </svg>
+          Partnered
+        </div>
+        <div class="foundation-num">CRARS</div>
+        <div class="foundation-desc">Research partnership with CSU Chico in place</div>
+      </div>
+
+      <div class="foundation-item">
+        <div class="foundation-check">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,8 7,12 13,4"/>
+          </svg>
+          Running
+        </div>
+        <div class="foundation-num">LIVE</div>
+        <div class="foundation-desc">Phase-one research is already on the ground</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSITION -->
+  <div class="transition">
+    <span class="transition-text">What Needs Support Now</span>
+  </div>
+
+  <!-- URGENCY CARDS -->
+  <div class="cards" id="cards">
+
+    <div class="card">
+      <div class="card-tag">Pressure Point 01</div>
+      <div class="card-title">The stakes are immediate.</div>
+      <div class="card-body">Heat, drought, disappearing aquifers, and degraded soil are already changing how farms operate in one of the most important agricultural regions in the country.</div>
+      <div class="card-footer">Conditions / Real-time</div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Pressure Point 02</div>
+      <div class="card-title">The proof gap is still real.</div>
+      <div class="card-body">Growers do not change practice on theory alone. They need locally relevant evidence, technical support, credible measurement, and confidence about operational tradeoffs.</div>
+      <div class="card-footer">Adoption / Evidence</div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Pressure Point 03</div>
+      <div class="card-title">This is the build phase.</div>
+      <div class="card-body">Early support does not just sustain existing work. It helps define the research agenda, the measurement systems, and the institutional footing of Edison itself.</div>
+      <div class="card-footer">Timing / Phase One</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll('.card');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        cards.forEach((card, i) => {
+          setTimeout(() => card.classList.add('visible'), i * 140);
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  observer.observe(document.getElementById('cards'));
+</script>
+</body>
+</html>

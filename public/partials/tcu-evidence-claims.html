@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — The Major Evidence Claims</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --warn: #e8a547;
+    --water: #6fa3a0;
+    --soil: #8a6d3b;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.10);
+    --line-strong: rgba(10, 46, 38, 0.22);
+    --cat-food:    #e8a547;
+    --cat-water:   #6fa3a0;
+    --cat-carbon:  #99cc33;
+    --cat-time:    #8a6d3b;
+    --cat-contest: #c97dd4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 48px 80px;
+  }
+  @media (max-width: 900px) { .section { padding: 48px 24px 56px; } }
+
+  /* ===== HEADER ===== */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: end;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 820px) { .header { grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; } }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .eyebrow::before { content: ""; width: 7px; height: 7px; background: var(--wheatgrass); border-radius: 50%; }
+
+  h2.headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 0.92;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+  }
+  h2.headline em { color: var(--wheatgrass); font-style: normal; }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+  .body-copy {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 50ch;
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 2px;
+  }
+  .filter-btn {
+    padding: 4px 11px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1.5px solid var(--line-strong);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--cream); }
+
+  /* Count pill */
+  .count-pill {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ===== TABLE ===== */
+  .evidence-table {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  /* Column header */
+  .table-head {
+    display: grid;
+    grid-template-columns: 88px 1fr 72px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    background: rgba(10,46,38,0.025);
+  }
+  @media (max-width: 680px) { .table-head { display: none; } }
+
+  .th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 18px;
+  }
+  .th:first-child { padding-left: 22px; }
+  .th:last-child { text-align: center; }
+
+  /* ===== CLAIM ROW ===== */
+  .claim-row {
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s ease;
+  }
+  .claim-row:last-child { border-bottom: none; }
+  .claim-row:hover { background: rgba(10,46,38,0.016); }
+
+  .claim-row::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--row-color, var(--wheatgrass));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .claim-row:hover::before,
+  .claim-row.open::before { transform: scaleY(1); }
+
+  /* Main row */
+  .row-main {
+    display: grid;
+    grid-template-columns: 88px 1fr 72px;
+    align-items: center;
+    padding: 16px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  @media (max-width: 680px) {
+    .row-main { grid-template-columns: 72px 1fr 52px; }
+  }
+
+  /* Stat */
+  .row-stat {
+    padding: 0 14px 0 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 0.9;
+    color: var(--row-color, var(--wheatgrass));
+    letter-spacing: 0.005em;
+  }
+  .stat-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* Claim */
+  .row-claim { padding: 0 18px; }
+  .claim-category {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--row-color, var(--wheatgrass));
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+  .claim-category::before { content: ""; width: 3.5px; height: 3.5px; border-radius: 50%; background: currentColor; }
+  .claim-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.38;
+  }
+  .claim-source {
+    margin-top: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    opacity: 0.8;
+  }
+
+  /* Toggle */
+  .row-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px 0 8px;
+  }
+  .toggle-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(10,46,38,0.04);
+    border: 1px solid var(--line-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .toggle-icon {
+    width: 9px; height: 9px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .toggle-icon::before, .toggle-icon::after {
+    content: "";
+    position: absolute;
+    background: var(--ink-soft);
+    border-radius: 1px;
+    transition: all 0.25s ease;
+  }
+  .toggle-icon::before { width: 9px; height: 1.5px; top: 3.75px; left: 0; }
+  .toggle-icon::after  { width: 1.5px; height: 9px; top: 0; left: 3.75px; }
+
+  .claim-row.open .toggle-icon::after { transform: scaleY(0); }
+  .claim-row.open .toggle-btn {
+    background: var(--row-color, var(--wheatgrass));
+    border-color: var(--row-color, var(--wheatgrass));
+  }
+  .claim-row.open .toggle-btn .toggle-icon::before { background: var(--cream); }
+  .claim-row.open .toggle-btn .toggle-icon::after  { background: var(--cream); }
+
+  /* ===== DETAIL PANEL ===== */
+  .row-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .claim-row.open .row-detail { max-height: 360px; }
+
+  .detail-inner {
+    margin: 0 22px 18px;
+    padding: 16px 18px;
+    background: rgba(10,46,38,0.025);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 640px) { .detail-inner { grid-template-columns: 1fr; } }
+
+  .detail-block { display: flex; flex-direction: column; gap: 5px; }
+  .detail-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--row-color, var(--wheatgrass));
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .detail-label::before { content: "→"; font-size: 8px; }
+  .detail-text { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .detail-text strong { color: var(--ink); font-weight: 600; }
+
+  .detail-sources { display: flex; flex-direction: column; gap: 4px; }
+  .detail-source-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-left: 9px;
+    border-left: 2px solid var(--row-color, var(--wheatgrass));
+  }
+
+  /* Category colors */
+  .cat-food    { --row-color: var(--cat-food); }
+  .cat-water   { --row-color: var(--cat-water); }
+  .cat-carbon  { --row-color: var(--cat-carbon); }
+  .cat-time    { --row-color: var(--cat-time); }
+  .cat-contest { --row-color: var(--cat-contest); }
+
+  .claim-row.hidden { display: none; }
+
+  /* ===== TABLE FOOTER ===== */
+  .table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 22px;
+    border-top: 1px solid var(--line);
+    background: rgba(10,46,38,0.02);
+  }
+  .footer-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .footer-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s ease;
+  }
+  .footer-link:hover { gap: 9px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .header { animation: fadeUp 0.8s cubic-bezier(0.2,0.8,0.2,1) both; }
+  .evidence-table { animation: fadeUp 0.8s cubic-bezier(0.2,0.8,0.2,1) 0.1s both; }
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <div class="header">
+    <div>
+      <div class="eyebrow">The Other Half</div>
+      <h2 class="headline">The key claims now have a <em>public trail.</em></h2>
+    </div>
+    <div class="header-right">
+      <p class="body-copy">The highest-stakes numbers used on this site — each traceable to a source note or TCU evidence reference.</p>
+      <div class="filter-bar">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="food">Food</button>
+        <button class="filter-btn" data-filter="water">Water</button>
+        <button class="filter-btn" data-filter="carbon">Carbon</button>
+        <button class="filter-btn" data-filter="time">Time</button>
+        <button class="filter-btn" data-filter="contest">Contested</button>
+        <span class="count-pill" id="countPill">6 / 6</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="evidence-table">
+
+    <div class="table-head">
+      <div class="th">Stat</div>
+      <div class="th">Claim</div>
+      <div class="th" style="text-align:center;">Detail</div>
+    </div>
+
+    <!-- ROW 1: ~1/3 Food -->
+    <div class="claim-row cat-food" data-category="food">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num">~1/3</div>
+          <div class="stat-unit">Of all GHG</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Food System</div>
+          <div class="claim-title">Agricultural systems account for about one-third of all human-made greenhouse gas emissions.</div>
+          <div class="claim-source">Crippa et al., Nature Food 2021 · IPCC AR6 WGIII</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Claim</div>
+            <div class="detail-text">Food systems — production, land use change, and supply chains — contribute roughly <strong>one-third of global greenhouse gas emissions</strong>, making agriculture both a major source and a key lever.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Why It Matters</div>
+            <div class="detail-text">Agricultural transition is not a peripheral issue but a <strong>central requirement</strong> for any serious climate strategy. The same land that emits can sequester.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">Crippa et al., Nature Food 2021</div>
+              <div class="detail-source-item">IPCC AR6 Working Group III</div>
+              <div class="detail-source-item">TCU evidence synthesis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: 20K GAL Water -->
+    <div class="claim-row cat-water" data-category="water">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num">20K</div>
+          <div class="stat-unit">Gal / acre</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Water Buffering</div>
+          <div class="claim-title">Each 1% gain in soil organic matter adds roughly 20,000 gallons of water-holding capacity per acre.</div>
+          <div class="claim-source">USDA NRCS Soil Health · Bryant et al. · TCU SOM model</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Claim</div>
+            <div class="detail-text">Each percentage point increase in soil organic matter allows the soil to hold approximately <strong>20,000 additional gallons of water per acre</strong> — reducing runoff, improving drought resilience, and lowering irrigation demand.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Why It Matters</div>
+            <div class="detail-text">This makes <strong>soil health a water infrastructure question</strong>, not just an agricultural one. In drought-prone regions, SOM improvement is a direct climate adaptation tool.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">USDA NRCS Soil Health Guidelines</div>
+              <div class="detail-source-item">Bryant et al. — water retention research</div>
+              <div class="detail-source-item">TCU SOM model derivation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: 5.8 Tons C + CO2e note -->
+    <div class="claim-row cat-carbon" data-category="carbon">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num">5.8</div>
+          <div class="stat-unit">Tons C / acre</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Carbon Storage</div>
+          <div class="claim-title">A 1% soil organic matter gain stores 5.8 tons of carbon per acre — equal to 21.3 tons CO₂e at the IPCC conversion rate.</div>
+          <div class="claim-source">TCU SOM-to-C conversion · USDA NRCS · Lal, Science 2004 · IPCC C×3.67 standard</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Claim</div>
+            <div class="detail-text">A 1% SOM gain stores approximately <strong>5.8 tons of carbon per acre</strong>. Using the IPCC atomic weight ratio (C × 3.67 = CO₂e), this equals <strong>21.3 tons CO₂ equivalent</strong> — measurable, persistent, and scalable.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Why It Matters</div>
+            <div class="detail-text">Expressing gains in CO₂e <strong>makes the comparison legible</strong> to funders, policymakers, and the public without inflating the underlying science. At scale across millions of acres, the sequestration potential is significant.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">TCU SOM-to-C conversion model</div>
+              <div class="detail-source-item">USDA NRCS carbon guidelines</div>
+              <div class="detail-source-item">Lal, Science 2004</div>
+              <div class="detail-source-item">IPCC C-to-CO₂ standard (×3.67)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 4: 24% Food/Land -->
+    <div class="claim-row cat-food" data-category="food">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num">24%</div>
+          <div class="stat-unit">Of global GHG</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Food System</div>
+          <div class="claim-title">Some estimates place food and land-use emissions closer to 24%, making agriculture the hardest sector to decarbonize.</div>
+          <div class="claim-source">Food &amp; Land-Use Coalition · Shukla et al., IPCC 2019</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Range</div>
+            <div class="detail-text">Estimates range from ~21% to 37% depending on scope — production only, full supply chain, land-use change, or food waste. TCU uses <strong>~1/3 as a conservative synthesis</strong>, with 24% as the production-focused lower bound.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Why It Matters</div>
+            <div class="detail-text">Agriculture is uniquely difficult to decarbonize through technology substitution alone. <strong>Biological regeneration is the primary available tool</strong> — making soil health a climate imperative, not a niche practice.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">Food and Land-Use Coalition (FOLU)</div>
+              <div class="detail-source-item">Shukla et al., IPCC 2019 SRCCL</div>
+              <div class="detail-source-item">TCU synthesis note</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 5: CONTESTED -->
+    <div class="claim-row cat-contest" data-category="contest">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num" style="font-size:clamp(14px,1.4vw,18px); line-height:1.15; font-family:'Inter',sans-serif; font-weight:700; letter-spacing:-0.01em;">CON-<br>TESTED</div>
+          <div class="stat-unit">See notes</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Contested Claim</div>
+          <div class="claim-title">The "1% solution" is a consequential public framing — directionally supported by TCU, but it requires careful context.</div>
+          <div class="claim-source">4 per mille initiative · Minasny et al., GCB 2017</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Claim</div>
+            <div class="detail-text">The 4 per mille initiative proposes that a <strong>0.4% annual increase in soil carbon</strong> globally would theoretically offset all annual fossil fuel CO₂ emissions. TCU supports this as directionally important.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">The Contest</div>
+            <div class="detail-text">Critics note that global uniformity is unrealistic and not all soils sequester at that rate. TCU treats this as <strong>an aspirational framing</strong> that highlights scale — not a site-specific target.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">4 per mille initiative (2015)</div>
+              <div class="detail-source-item">Minasny et al., Global Change Biology 2017</div>
+              <div class="detail-source-item">TCU position note</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 6: 300-1000 years -->
+    <div class="claim-row cat-time" data-category="time">
+      <div class="row-main">
+        <div class="row-stat">
+          <div class="stat-num" style="font-size:clamp(18px,1.8vw,26px); line-height:1.0;">300–<br>1,000</div>
+          <div class="stat-unit">Years in sky</div>
+        </div>
+        <div class="row-claim">
+          <div class="claim-category">Time Scale</div>
+          <div class="claim-title">Without active drawdown, excess atmospheric carbon will continue affecting climate for hundreds to thousands of years.</div>
+          <div class="claim-source">NOAA Carbon Cycle Research · Archer et al., 2009</div>
+        </div>
+        <div class="row-toggle"><div class="toggle-btn"><div class="toggle-icon"></div></div></div>
+      </div>
+      <div class="row-detail">
+        <div class="detail-inner">
+          <div class="detail-block">
+            <div class="detail-label">The Claim</div>
+            <div class="detail-text">NOAA carbon cycle research indicates a <strong>significant fraction of CO₂ persists for 300–1,000 years</strong>, meaning emissions today affect climate centuries from now even if we stop emitting tomorrow.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">The Implication</div>
+            <div class="detail-text">Stopping emissions alone does not remove existing damage. <strong>Active drawdown is a separate and necessary task</strong> — the atmosphere will not self-correct on any policy-relevant timescale.</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Sources</div>
+            <div class="detail-sources">
+              <div class="detail-source-item">NOAA carbon cycle research</div>
+              <div class="detail-source-item">Archer et al., 2009 — atmospheric lifetime</div>
+              <div class="detail-source-item">TCU evidence synthesis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-footer">
+      <div class="footer-note" id="footerNote">6 claims · tap any row to inspect sources</div>
+      <a href="#" class="footer-link">Full evidence page <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h8M7 3l4 4-4 4"/></svg></a>
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  const rows = document.querySelectorAll('.claim-row');
+  const countPill = document.getElementById('countPill');
+  const footerNote = document.getElementById('footerNote');
+  const TOTAL = rows.length;
+
+  rows.forEach(row => {
+    row.querySelector('.row-main').addEventListener('click', () => {
+      const isOpen = row.classList.contains('open');
+      document.querySelectorAll('.claim-row.open').forEach(r => r.classList.remove('open'));
+      if (!isOpen) row.classList.add('open');
+    });
+  });
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      let visible = 0;
+      rows.forEach(row => {
+        if (filter === 'all' || row.dataset.category === filter) {
+          row.classList.remove('hidden');
+          visible++;
+        } else {
+          row.classList.add('hidden');
+          row.classList.remove('open');
+        }
+      });
+      countPill.textContent = visible + ' / ' + TOTAL;
+      footerNote.textContent = visible + ' claim' + (visible !== 1 ? 's' : '') + ' · tap any row to inspect sources';
+    });
+  });
+</script>
+
+</body>
+</html>

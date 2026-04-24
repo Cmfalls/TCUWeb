@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #061411;
+    --bg-soft: #0a1f1a;
+    --bg-card: rgba(245, 239, 225, 0.03);
+    --cream: #f5efe1;
+    --cream-dim: rgba(245, 239, 225, 0.6);
+    --cream-faint: rgba(245, 239, 225, 0.4);
+    --cream-ghost: rgba(245, 239, 225, 0.2);
+    --ink: #0a2e26;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --line: rgba(245, 239, 225, 0.1);
+    --line-strong: rgba(245, 239, 225, 0.2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  footer {
+    position: relative;
+    overflow: hidden;
+  }
+  /* Subtle ambient glow */
+  footer::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(153, 204, 51, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* === TOP BAND: CTA row === */
+  .footer-cta {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-card);
+  }
+  .footer-cta-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  @media (max-width: 800px) {
+    .footer-cta-inner { grid-template-columns: 1fr; gap: 28px; padding: 32px 24px; }
+  }
+
+  .cta-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+  .cta-text p {
+    font-size: 14px;
+    color: var(--cream-dim);
+    max-width: 44ch;
+  }
+
+  .cta-form {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+  }
+  @media (max-width: 540px) {
+    .cta-form { flex-direction: column; }
+  }
+  .cta-input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    background: rgba(245, 239, 225, 0.06);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+  .cta-input::placeholder { color: var(--cream-faint); }
+  .cta-input:focus {
+    border-color: var(--wheatgrass);
+    background: rgba(245, 239, 225, 0.08);
+  }
+  .cta-btn {
+    padding: 14px 24px;
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s ease, gap 0.3s ease;
+    white-space: nowrap;
+  }
+  .cta-btn:hover {
+    background: var(--wheatgrass-bright);
+    gap: 14px;
+  }
+  .cta-btn svg { width: 14px; height: 14px; }
+
+  /* === MAIN FOOTER GRID === */
+  .footer-main {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 56px 48px 40px;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 64px;
+  }
+  @media (max-width: 900px) {
+    .footer-main {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 32px;
+      padding: 40px 24px 32px;
+    }
+  }
+  @media (max-width: 540px) {
+    .footer-main { grid-template-columns: 1fr; gap: 36px; }
+  }
+
+  /* Brand column */
+  .footer-brand {}
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .brand-logo img {
+    width: min(100%, 256px);
+    height: auto;
+    display: block;
+  }
+
+  .brand-desc {
+    font-size: 14px;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    max-width: 36ch;
+  }
+  .brand-tagline {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    padding: 10px 14px;
+    background: rgba(153, 204, 51, 0.08);
+    border: 1px solid rgba(153, 204, 51, 0.2);
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+
+  /* Legal block under brand */
+  .brand-legal {
+    font-size: 12px;
+    color: var(--cream-faint);
+    line-height: 1.6;
+  }
+  .brand-legal strong {
+    color: var(--cream-dim);
+    font-weight: 600;
+  }
+
+  /* Link columns */
+  .footer-col {}
+  .col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .col-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-links a {
+    color: var(--cream-faint);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease, padding-left 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: 0;
+  }
+  .footer-links a:hover {
+    color: var(--cream);
+    padding-left: 6px;
+  }
+  .footer-links a::before {
+    content: "";
+    width: 0;
+    height: 1.5px;
+    background: var(--wheatgrass);
+    transition: width 0.3s ease;
+    flex-shrink: 0;
+  }
+  .footer-links a:hover::before { width: 12px; }
+
+  /* === BOTTOM BAR === */
+  .footer-bottom {
+    border-top: 1px solid var(--line);
+  }
+  .footer-bottom-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 800px) {
+    .footer-bottom-inner { padding: 20px 24px; }
+  }
+  .footer-copy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--cream-faint);
+  }
+  .footer-copy a {
+    color: var(--cream-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .footer-copy a:hover { color: var(--wheatgrass); }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream-faint);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .back-to-top:hover {
+    color: var(--cream);
+    border-color: var(--wheatgrass);
+    background: rgba(153, 204, 51, 0.06);
+  }
+  .back-to-top svg { width: 12px; height: 12px; }
+</style>
+</head>
+<body>
+
+<footer>
+
+  <!-- CTA BAND -->
+  <div class="footer-cta">
+    <div class="footer-cta-inner">
+      <div class="cta-text">
+        <h2>Stay close to the work.</h2>
+        <p>Field updates, research milestones, and Edison progress delivered to your inbox.</p>
+      </div>
+      <form class="cta-form" id="footer-updates-form">
+        <input class="cta-input" type="email" id="footer-updates-email" placeholder="your@email.com" aria-label="Email address" required />
+        <button class="cta-btn" type="submit">
+          Join Updates
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="footer-main">
+
+    <!-- BRAND -->
+    <div class="footer-brand">
+      <a class="brand-logo" href="/" target="_top" aria-label="The Carbon Underground home">
+        <img src="/images/brand/tcu-logo-white.png" alt="The Carbon Underground" />
+      </a>
+      <div class="brand-tagline">Field proof for climate recovery</div>
+      <p class="brand-desc">The Carbon Underground connects field research, public evidence, leadership, and support around the case for restoring living soil.</p>
+      <div class="brand-legal">
+        <strong>501(c)(3) nonprofit</strong><br/>
+        Tax ID #46-5582094<br/>
+        8800 Venice Blvd., Suite 322<br/>
+        Los Angeles, CA 90034
+      </div>
+    </div>
+
+    <!-- DESTINATIONS -->
+    <div class="footer-col">
+      <div class="col-label">Pages</div>
+      <ul class="footer-links">
+        <li><a href="/" target="_top">Home</a></li>
+        <li><a href="/why" target="_top">The Other Half</a></li>
+        <li><a href="/evidence" target="_top">Evidence</a></li>
+        <li><a href="/edison" target="_top">Edison</a></li>
+        <li><a href="/about" target="_top">About</a></li>
+        <li><a href="/support" target="_top">Support</a></li>
+      </ul>
+    </div>
+
+    <!-- MORE -->
+    <div class="footer-col">
+      <div class="col-label">Explore</div>
+      <ul class="footer-links">
+        <li><a href="/projects" target="_top">Projects</a></li>
+        <li><a href="/learn" target="_top">Learn</a></li>
+        <li><a href="/projects/adopt-a-meter" target="_top">Adopt-A-Meter</a></li>
+        <li><a href="/larrys-message" target="_top">Larry's Message</a></li>
+        <li><a href="/evidence-hub/index.html" target="_top">TCU Stats</a></li>
+      </ul>
+    </div>
+
+    <!-- CONNECT -->
+    <div class="footer-col">
+      <div class="col-label">Connect</div>
+      <ul class="footer-links">
+        <li><a href="mailto:info@thecarbonunderground.org?subject=Join%20the%20TCU%20newsletter" target="_top">Join Updates</a></li>
+        <li><a href="mailto:info@thecarbonunderground.org?subject=Contact%20The%20Carbon%20Underground" target="_top">Contact Us</a></li>
+        <li><a href="/support" target="_top">Support the Work</a></li>
+        <li><a href="/edison" target="_top">Visit Edison</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <div class="footer-copy">
+        &copy; 2026 The Carbon Underground &nbsp;/&nbsp; <a href="/privacy" target="_top">Privacy</a> &nbsp;/&nbsp; <a href="/terms" target="_top">Terms</a>
+      </div>
+      <a class="back-to-top" href="#" id="footer-back-to-top">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 13 V3 M4 7 L8 3 L12 7"/>
+        </svg>
+        Back to top
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    const updatesForm = document.getElementById('footer-updates-form');
+    const emailInput = document.getElementById('footer-updates-email');
+    const backToTop = document.getElementById('footer-back-to-top');
+
+    if (updatesForm && emailInput) {
+      updatesForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const email = String(emailInput.value || '').trim();
+        if (!email) {
+          emailInput.focus();
+          return;
+        }
+        const subject = encodeURIComponent('Join the TCU newsletter');
+        const body = encodeURIComponent('Please add me to updates: ' + email);
+        const mailto = 'mailto:info@thecarbonunderground.org?subject=' + subject + '&body=' + body;
+        if (window.top && window.top.location) {
+          window.top.location.href = mailto;
+        } else {
+          window.location.href = mailto;
+        }
+      });
+    }
+
+    if (backToTop) {
+      backToTop.addEventListener('click', function (event) {
+        event.preventDefault();
+        const targetWindow = window.top || window;
+        targetWindow.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

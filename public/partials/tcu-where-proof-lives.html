@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Where Proof Lives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --wheatgrass-soft: #d4e89c;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.2vw, 76px);
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+    max-width: 18ch;
+    margin-bottom: 28px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin-bottom: 64px;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 920px) {
+    .cards { grid-template-columns: 1fr; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .card {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.3s ease,
+                box-shadow 0.4s ease;
+    position: relative;
+  }
+  .card::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    background: var(--wheatgrass);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    border-color: var(--line-strong);
+    box-shadow: 0 20px 40px -20px rgba(10, 46, 38, 0.18);
+  }
+  .card:hover::after { transform: scaleX(1); }
+
+  /* Visual header strip */
+  .card-visual {
+    height: 140px;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .card-visual svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .card-visual-label {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass-bright);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 2;
+  }
+  .card-visual-label::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .card-visual-index {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: rgba(245, 239, 225, 0.4);
+    letter-spacing: 0.12em;
+    z-index: 2;
+  }
+
+  /* Card body */
+  .card-body {
+    padding: 28px 28px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-body h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 14px;
+    max-width: 16ch;
+  }
+  .card-body .desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .pullquote {
+    background: rgba(153, 204, 51, 0.18);
+    border-left: 2px solid var(--wheatgrass);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 22px;
+    line-height: 1.45;
+  }
+  .deeper {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    margin-bottom: 20px;
+  }
+  .deeper-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .deeper p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding: 12px 20px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.2s ease, gap 0.3s ease;
+  }
+  .cta svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+  }
+  .card:hover .cta {
+    background: var(--wheatgrass);
+    color: var(--ink);
+    gap: 14px;
+  }
+  .card:hover .cta svg { transform: translateX(3px); }
+
+  /* === EVIDENCE card visual: data bars === */
+  .card:hover .bar {
+    animation: barGrow 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite alternate;
+  }
+  @keyframes barGrow {
+    0% { transform: scaleY(0.6); }
+    100% { transform: scaleY(1); }
+  }
+  .bar { transform-origin: bottom; transition: transform 0.3s ease; }
+  .bar:nth-child(1) { animation-delay: 0s !important; }
+  .bar:nth-child(2) { animation-delay: 0.15s !important; }
+  .bar:nth-child(3) { animation-delay: 0.3s !important; }
+  .bar:nth-child(4) { animation-delay: 0.45s !important; }
+  .bar:nth-child(5) { animation-delay: 0.6s !important; }
+  .bar:nth-child(6) { animation-delay: 0.75s !important; }
+  .bar:nth-child(7) { animation-delay: 0.9s !important; }
+
+  /* === FIELD PROOF card visual: pulsing location === */
+  .pulse-ring {
+    transform-origin: 200px 70px;
+    transform-box: fill-box;
+  }
+  .card:hover .pulse-ring {
+    animation: pulseRing 2s ease-out infinite;
+  }
+  .card:hover .pulse-ring.r2 { animation-delay: 0.7s; }
+  @keyframes pulseRing {
+    0% { transform: scale(0.4); opacity: 0.9; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* === RESOURCE CENTER card visual: stacked papers === */
+  .paper { transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .card:hover .paper-1 { transform: translate(-14px, -2px) rotate(-6deg); }
+  .card:hover .paper-2 { transform: translate(0, -4px) rotate(-1deg); }
+  .card:hover .paper-3 { transform: translate(14px, -2px) rotate(5deg); }
+
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">Where Proof Lives</div>
+  <h1 class="headline">Follow the argument into evidence, field research, and further reading.</h1>
+  <p class="lede">The case for living soil gets stronger the closer you look. Pick the level of depth you want and follow the argument into the layer below.</p>
+
+  <div class="cards">
+
+    <!-- EVIDENCE CARD -->
+    <article class="card" data-href="#evidence">
+      <div class="card-visual">
+        <div class="card-visual-label">Evidence</div>
+        <div class="card-visual-index">01</div>
+        <svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Axis line -->
+          <line x1="40" y1="115" x2="380" y2="115" stroke="rgba(245,239,225,0.2)" stroke-width="1"/>
+          <!-- Grid lines -->
+          <line x1="40" y1="90" x2="380" y2="90" stroke="rgba(245,239,225,0.08)" stroke-width="1" stroke-dasharray="2 3"/>
+          <line x1="40" y1="65" x2="380" y2="65" stroke="rgba(245,239,225,0.08)" stroke-width="1" stroke-dasharray="2 3"/>
+          <!-- Bars -->
+          <g fill="#99cc33">
+            <rect class="bar" x="60" y="75" width="28" height="40" rx="2"/>
+            <rect class="bar" x="100" y="58" width="28" height="57" rx="2"/>
+            <rect class="bar" x="140" y="68" width="28" height="47" rx="2"/>
+            <rect class="bar" x="180" y="45" width="28" height="70" rx="2"/>
+            <rect class="bar" x="220" y="52" width="28" height="63" rx="2"/>
+            <rect class="bar" x="260" y="38" width="28" height="77" rx="2"/>
+            <rect class="bar" x="300" y="48" width="28" height="67" rx="2"/>
+          </g>
+          <!-- Trend line -->
+          <polyline points="74,85 114,72 154,78 194,62 234,68 274,55 314,63"
+                    fill="none" stroke="#b8e655" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <g fill="#b8e655">
+            <circle cx="74" cy="85" r="2.5"/>
+            <circle cx="114" cy="72" r="2.5"/>
+            <circle cx="154" cy="78" r="2.5"/>
+            <circle cx="194" cy="62" r="2.5"/>
+            <circle cx="234" cy="68" r="2.5"/>
+            <circle cx="274" cy="55" r="2.5"/>
+            <circle cx="314" cy="63" r="2.5"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>See the measurements behind the claim.</h3>
+        <p class="desc">The case for living soil grows stronger when water buffering, carbon storage, and farm resilience are visible and measurable.</p>
+        <div class="pullquote">That is where evidence becomes more than persuasion.</div>
+        <div class="deeper">
+          <div class="deeper-label">▼ Go deeper</div>
+          <p>The evidence work helps visitors inspect the strongest metrics, visuals, and references without losing the larger argument.</p>
+        </div>
+        <button class="cta">
+          See the evidence
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+    <!-- FIELD PROOF CARD -->
+    <article class="card" data-href="#edison">
+      <div class="card-visual">
+        <div class="card-visual-label">Field Proof</div>
+        <div class="card-visual-index">02</div>
+        <svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Topographic contour lines -->
+          <g fill="none" stroke="rgba(245,239,225,0.1)" stroke-width="1">
+            <path d="M 0 40 Q 80 30 160 45 T 320 35 T 400 50"/>
+            <path d="M 0 60 Q 80 50 160 65 T 320 55 T 400 70"/>
+            <path d="M 0 80 Q 80 70 160 85 T 320 75 T 400 90"/>
+            <path d="M 0 100 Q 80 90 160 105 T 320 95 T 400 110"/>
+            <path d="M 0 120 Q 80 110 160 125 T 320 115 T 400 130"/>
+          </g>
+          <!-- Field grid pattern -->
+          <g stroke="rgba(153,204,51,0.15)" stroke-width="0.5">
+            <line x1="100" y1="20" x2="300" y2="20"/>
+            <line x1="100" y1="40" x2="300" y2="40"/>
+            <line x1="100" y1="60" x2="300" y2="60"/>
+            <line x1="100" y1="80" x2="300" y2="80"/>
+            <line x1="100" y1="100" x2="300" y2="100"/>
+            <line x1="120" y1="10" x2="120" y2="120"/>
+            <line x1="160" y1="10" x2="160" y2="120"/>
+            <line x1="200" y1="10" x2="200" y2="120"/>
+            <line x1="240" y1="10" x2="240" y2="120"/>
+            <line x1="280" y1="10" x2="280" y2="120"/>
+          </g>
+          <!-- Pulse rings -->
+          <circle class="pulse-ring" cx="200" cy="70" r="14" fill="none" stroke="#99cc33" stroke-width="1.5" opacity="0"/>
+          <circle class="pulse-ring r2" cx="200" cy="70" r="14" fill="none" stroke="#99cc33" stroke-width="1.5" opacity="0"/>
+          <!-- Location pin -->
+          <g transform="translate(200, 70)">
+            <circle r="8" fill="#99cc33"/>
+            <circle r="3" fill="#0a2e26"/>
+          </g>
+          <!-- Pin stem -->
+          <line x1="200" y1="70" x2="200" y2="90" stroke="#99cc33" stroke-width="2"/>
+          <!-- Label -->
+          <text x="200" y="108" text-anchor="middle" font-family="Inter, sans-serif" font-size="8" font-weight="600" fill="rgba(245,239,225,0.55)" letter-spacing="1">
+            THE EDISON INSTITUTE
+          </text>
+          <text x="200" y="120" text-anchor="middle" font-family="Inter, sans-serif" font-size="7" fill="rgba(245,239,225,0.35)">
+            Central Valley, CA
+          </text>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>See where the theory meets the field.</h3>
+        <p class="desc">Edison is where climate, water, soil, and economics are studied together on working land in California's Central Valley.</p>
+        <div class="pullquote">This is the kind of proof that institutions can examine seriously.</div>
+        <div class="deeper">
+          <div class="deeper-label">▼ Go deeper</div>
+          <p>The field matters because it is where adoption becomes a real decision rather than a broad aspiration.</p>
+        </div>
+        <button class="cta">
+          Explore Edison
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+    <!-- RESOURCE CENTER CARD -->
+    <article class="card" data-href="#learn">
+      <div class="card-visual">
+        <div class="card-visual-label">Resource Center</div>
+        <div class="card-visual-index">03</div>
+        <svg viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Paper 1 (back) -->
+          <g class="paper paper-1">
+            <rect x="160" y="30" width="80" height="90" rx="3" fill="#f5efe1" stroke="#0a2e26" stroke-width="1"/>
+            <line x1="172" y1="48" x2="228" y2="48" stroke="#0a2e26" stroke-width="2"/>
+            <line x1="172" y1="60" x2="228" y2="60" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="68" x2="220" y2="68" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="76" x2="228" y2="76" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="84" x2="215" y2="84" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="96" x2="228" y2="96" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="104" x2="220" y2="104" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+          </g>
+          <!-- Paper 2 (middle) -->
+          <g class="paper paper-2">
+            <rect x="160" y="30" width="80" height="90" rx="3" fill="#fdfaf0" stroke="#0a2e26" stroke-width="1"/>
+            <circle cx="200" cy="58" r="10" fill="#99cc33" opacity="0.3"/>
+            <rect x="172" y="76" width="56" height="3" rx="1" fill="#0a2e26"/>
+            <rect x="172" y="84" width="48" height="2" rx="1" fill="#0a2e26" opacity="0.4"/>
+            <rect x="172" y="90" width="56" height="2" rx="1" fill="#0a2e26" opacity="0.4"/>
+            <rect x="172" y="96" width="44" height="2" rx="1" fill="#0a2e26" opacity="0.4"/>
+            <rect x="172" y="104" width="52" height="2" rx="1" fill="#0a2e26" opacity="0.4"/>
+          </g>
+          <!-- Paper 3 (front) -->
+          <g class="paper paper-3">
+            <rect x="160" y="30" width="80" height="90" rx="3" fill="#f5efe1" stroke="#0a2e26" stroke-width="1"/>
+            <rect x="172" y="44" width="56" height="4" rx="1" fill="#99cc33"/>
+            <rect x="172" y="54" width="40" height="3" rx="1" fill="#0a2e26"/>
+            <line x1="172" y1="68" x2="228" y2="68" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="76" x2="220" y2="76" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="84" x2="228" y2="84" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="92" x2="215" y2="92" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="100" x2="228" y2="100" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+            <line x1="172" y1="108" x2="215" y2="108" stroke="#0a2e26" stroke-width="1" opacity="0.4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-body">
+        <h3>Keep going if you need the basics explained clearly.</h3>
+        <p class="desc">Some readers need the argument first. Others need the science, the FAQs, or the connection to agriculture made more explicit.</p>
+        <div class="pullquote">Clear explanation still matters if the work is going to travel.</div>
+        <div class="deeper">
+          <div class="deeper-label">▼ Go deeper</div>
+          <p>Learn collects the core ideas in a more compact form for readers who are not yet ready to live in the evidence layer.</p>
+        </div>
+        <button class="cta">
+          Open Learn
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const href = card.dataset.href;
+      if (href) {
+        // window.location.href = href;
+        console.log('Navigate to:', href);
+      }
+    });
+  });
+</script>
+</body>
+</html>

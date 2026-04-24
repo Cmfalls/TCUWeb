@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — How It Works / Legacy Carbon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --warn: #e8a547;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+    --soil-1: #6b4a25;
+    --soil-2: #4a3218;
+    --soil-3: #2e1f0e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  @media (max-width: 900px) {
+    .wrap { padding: 56px 24px 72px; }
+  }
+
+  /* === Chapter spine running down the left === */
+  .chapters {
+    position: relative;
+  }
+  .chapters::before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 40px;
+    bottom: 40px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, var(--line-strong) 0, var(--line-strong) 4px, transparent 4px, transparent 10px);
+  }
+  @media (max-width: 900px) {
+    .chapters::before { display: none; }
+  }
+
+  /* === Chapter block === */
+  .chapter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding: 80px 0;
+    position: relative;
+  }
+  .chapter + .chapter {
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 900px) {
+    .chapter {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 60px 0;
+    }
+  }
+
+  /* Chapter dot on the spine */
+  .chapter::before {
+    content: "";
+    position: absolute;
+    left: -25px;
+    top: 110px;
+    width: 12px;
+    height: 12px;
+    background: var(--cream);
+    border: 2px solid var(--wheatgrass);
+    border-radius: 50%;
+    z-index: 2;
+  }
+  .chapter::after {
+    content: "";
+    position: absolute;
+    left: -21px;
+    top: 114px;
+    width: 4px;
+    height: 4px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+    z-index: 3;
+  }
+  @media (max-width: 900px) {
+    .chapter::before, .chapter::after { display: none; }
+  }
+
+  /* Alternating layout: second chapter flips */
+  .chapter.reverse .chapter-text { order: 2; }
+  .chapter.reverse .chapter-visual { order: 1; }
+  @media (max-width: 900px) {
+    .chapter.reverse .chapter-text { order: 1; }
+    .chapter.reverse .chapter-visual { order: 2; }
+  }
+
+  /* === Text column === */
+  .chapter-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .chapter.reverse .eyebrow::before { background: var(--warn); }
+
+  h2.chapter-head {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(38px, 4.5vw, 62px);
+    line-height: 0.92;
+    color: var(--ink);
+    max-width: 15ch;
+    margin-bottom: 24px;
+  }
+  .chapter-body {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 50ch;
+    margin-bottom: 14px;
+  }
+  .chapter-body strong {
+    color: var(--ink);
+    font-weight: 600;
+    background: linear-gradient(transparent 60%, rgba(153, 204, 51, 0.45) 60%);
+    padding: 0 2px;
+  }
+
+  /* === Visual column === */
+  .chapter-visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .chapter-visual svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Caption pill on the visual */
+  .visual-caption {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    padding: 8px 12px;
+    background: rgba(10, 46, 38, 0.85);
+    border: 1px solid rgba(153, 204, 51, 0.4);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--wheatgrass-bright);
+    z-index: 3;
+  }
+
+  /* === ROOT VISUAL animation (Chapter 01) === */
+  .root-main { transform-origin: center top; }
+  .root-fiber {
+    opacity: 0;
+    animation: fiberIn 1.8s ease forwards;
+  }
+  @keyframes fiberIn {
+    0% { opacity: 0; stroke-dashoffset: 200; }
+    100% { opacity: 0.6; stroke-dashoffset: 0; }
+  }
+  .carbon-particle {
+    animation: carbonFlow 3s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes carbonFlow {
+    0% { transform: translateY(-80px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(30px); opacity: 0; }
+  }
+  .soil-microbe {
+    animation: microbePulse 2.5s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes microbePulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.4); opacity: 1; }
+  }
+
+  /* === DROUGHT VISUAL animation (Chapter 02) === */
+  .heat-cell {
+    opacity: 0;
+    animation: heatFade 2s ease forwards;
+  }
+  @keyframes heatFade {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .heat-cell-pulse {
+    animation: heatPulse 3s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes heatPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  .legacy-wisp {
+    animation: wispDrift 4s ease-in-out infinite;
+  }
+  @keyframes wispDrift {
+    0%, 100% { opacity: 0.2; transform: translateY(0); }
+    50% { opacity: 0.5; transform: translateY(-4px); }
+  }
+
+  /* Handoff line between chapters */
+  .handoff {
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .handoff::before,
+  .handoff::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .handoff-text {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .handoff-text::before {
+    content: "↓ ";
+    color: var(--wheatgrass);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="chapters">
+
+    <!-- CHAPTER 01: HOW IT WORKS -->
+    <section class="chapter">
+      <div class="chapter-text">
+        <span class="chapter-number">Chapter 01 / The Mechanism</span>
+        <div class="eyebrow">How It Works</div>
+        <h2 class="chapter-head">We don't draw the carbon down. Nature does.</h2>
+        <p class="chapter-body">Nature uses photosynthesis to draw excess carbon, our old emissions, back down into the soil to feed the <strong>billions of hungry organisms in every teaspoon of healthy soil</strong>.</p>
+        <p class="chapter-body">But after two centuries of Industrial Agriculture, our soil is not healthy, and not drawing the excess carbon back down, causing climate change.</p>
+        <p class="chapter-body">The good news is that we can restore soil health with Regenerative Agriculture.</p>
+      </div>
+
+      <!-- Root visual -->
+      <div class="chapter-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Sky/surface -->
+          <rect width="400" height="40" fill="#1a3d34"/>
+          <!-- Soil gradient -->
+          <defs>
+            <linearGradient id="soilGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#6b4a25"/>
+              <stop offset="50%" stop-color="#4a3218"/>
+              <stop offset="100%" stop-color="#2e1f0e"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="40" width="400" height="260" fill="url(#soilGrad)"/>
+
+          <!-- Soil texture dots -->
+          <g fill="#1a0f05" opacity="0.4">
+            <circle cx="50" cy="80" r="1.5"/>
+            <circle cx="120" cy="95" r="1"/>
+            <circle cx="180" cy="75" r="1.5"/>
+            <circle cx="240" cy="100" r="1"/>
+            <circle cx="320" cy="85" r="1.5"/>
+            <circle cx="80" cy="150" r="1"/>
+            <circle cx="160" cy="170" r="1.5"/>
+            <circle cx="280" cy="155" r="1"/>
+            <circle cx="350" cy="165" r="1.5"/>
+            <circle cx="60" cy="220" r="1"/>
+            <circle cx="200" cy="240" r="1.5"/>
+            <circle cx="300" cy="225" r="1"/>
+          </g>
+
+          <!-- Surface line -->
+          <line x1="0" y1="40" x2="400" y2="40" stroke="#3d2f17" stroke-width="2"/>
+
+          <!-- Main tap root -->
+          <g stroke="#d4c28a" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.9">
+            <path d="M 200 40 Q 195 100 200 160 Q 205 220 200 290"/>
+          </g>
+          <!-- Secondary roots -->
+          <g class="root-fiber" stroke="#d4c28a" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-dasharray="200">
+            <path d="M 200 70 Q 170 95 140 115 Q 110 135 80 150" style="animation-delay: 0.2s"/>
+            <path d="M 200 75 Q 230 100 260 120 Q 290 140 320 155" style="animation-delay: 0.4s"/>
+            <path d="M 200 110 Q 175 135 150 160 Q 125 185 100 210" style="animation-delay: 0.6s"/>
+            <path d="M 200 115 Q 225 140 250 165 Q 275 190 300 215" style="animation-delay: 0.8s"/>
+            <path d="M 200 160 Q 180 190 160 220 Q 140 250 120 280" style="animation-delay: 1s"/>
+            <path d="M 200 165 Q 220 195 240 225 Q 260 255 280 285" style="animation-delay: 1.2s"/>
+          </g>
+          <!-- Fine root hairs -->
+          <g class="root-fiber" stroke="#d4c28a" stroke-width="0.8" fill="none" stroke-linecap="round" stroke-dasharray="200" opacity="0.6">
+            <path d="M 140 115 L 130 125" style="animation-delay: 1.4s"/>
+            <path d="M 140 115 L 145 130" style="animation-delay: 1.5s"/>
+            <path d="M 260 120 L 270 130" style="animation-delay: 1.5s"/>
+            <path d="M 260 120 L 255 135" style="animation-delay: 1.6s"/>
+            <path d="M 150 160 L 140 175" style="animation-delay: 1.6s"/>
+            <path d="M 250 165 L 260 180" style="animation-delay: 1.7s"/>
+            <path d="M 160 220 L 150 235" style="animation-delay: 1.8s"/>
+            <path d="M 240 225 L 250 240" style="animation-delay: 1.9s"/>
+          </g>
+
+          <!-- Carbon particles falling -->
+          <g fill="#b8e655">
+            <circle class="carbon-particle" cx="120" cy="60" r="2.5" style="animation-delay: 0s"/>
+            <circle class="carbon-particle" cx="180" cy="50" r="2" style="animation-delay: 0.3s"/>
+            <circle class="carbon-particle" cx="240" cy="55" r="2.5" style="animation-delay: 0.6s"/>
+            <circle class="carbon-particle" cx="300" cy="48" r="2" style="animation-delay: 0.9s"/>
+            <circle class="carbon-particle" cx="80" cy="45" r="2" style="animation-delay: 1.2s"/>
+            <circle class="carbon-particle" cx="160" cy="52" r="2.5" style="animation-delay: 1.5s"/>
+            <circle class="carbon-particle" cx="260" cy="58" r="2" style="animation-delay: 1.8s"/>
+            <circle class="carbon-particle" cx="340" cy="50" r="2.5" style="animation-delay: 2.1s"/>
+          </g>
+
+          <!-- Soil microbes (clustered around roots) -->
+          <g fill="#99cc33">
+            <circle class="soil-microbe" cx="135" cy="120" r="2" style="animation-delay: 0s"/>
+            <circle class="soil-microbe" cx="142" cy="118" r="1.5" style="animation-delay: 0.3s"/>
+            <circle class="soil-microbe" cx="265" cy="125" r="2" style="animation-delay: 0.5s"/>
+            <circle class="soil-microbe" cx="270" cy="130" r="1.5" style="animation-delay: 0.8s"/>
+            <circle class="soil-microbe" cx="155" cy="165" r="2" style="animation-delay: 1s"/>
+            <circle class="soil-microbe" cx="248" cy="170" r="1.5" style="animation-delay: 1.2s"/>
+            <circle class="soil-microbe" cx="165" cy="225" r="2" style="animation-delay: 1.4s"/>
+            <circle class="soil-microbe" cx="235" cy="228" r="1.5" style="animation-delay: 1.6s"/>
+          </g>
+
+          <!-- Small "1 tsp" callout -->
+          <g>
+            <circle cx="320" cy="240" r="22" fill="none" stroke="#99cc33" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+            <text x="320" y="238" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#b8e655" font-weight="600">1 TSP</text>
+            <text x="320" y="250" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#b8e655" opacity="0.8">BILLIONS</text>
+          </g>
+        </svg>
+
+        <div class="visual-caption">PHOTOSYNTHESIS → SOIL → LIFE</div>
+      </div>
+    </section>
+
+    <!-- CHAPTER 02: LEGACY CARBON (reversed layout) -->
+    <section class="chapter reverse">
+      <div class="chapter-text">
+        <span class="chapter-number">Chapter 02 / The Consequence</span>
+        <div class="eyebrow">Legacy Carbon</div>
+        <h2 class="chapter-head">Legacy carbon is already shaping farm and water decisions.</h2>
+        <p class="chapter-body">The climate conversation often stops at emissions cuts, but the atmosphere is already <strong>carrying the carbon load that is intensifying drought, heat, flood risk, and ecological disruption</strong>.</p>
+        <p class="chapter-body">Some of that burden can remain in the system for centuries. Restoring living systems will not replace the energy transition, but it does address part of the damage that is already overhead and already affecting land.</p>
+      </div>
+
+      <!-- Drought stress visual -->
+      <div class="chapter-visual">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <!-- Dark atmospheric background -->
+          <defs>
+            <linearGradient id="atmosGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0a1f1a"/>
+              <stop offset="100%" stop-color="#1a3d34"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#atmosGrad)"/>
+
+          <!-- US-shaped stress grid -->
+          <g>
+            <!-- Row 1 (north) -->
+            <rect class="heat-cell heat-cell-pulse" x="60" y="60" width="22" height="22" rx="2" fill="#e8a547" opacity="0.5" style="animation-delay: 0.1s"/>
+            <rect class="heat-cell heat-cell-pulse" x="86" y="60" width="22" height="22" rx="2" fill="#d4a640" opacity="0.4" style="animation-delay: 0.15s"/>
+            <rect class="heat-cell heat-cell-pulse" x="112" y="60" width="22" height="22" rx="2" fill="#c9972f" opacity="0.45" style="animation-delay: 0.2s"/>
+            <rect class="heat-cell heat-cell-pulse" x="138" y="60" width="22" height="22" rx="2" fill="#b8862a" opacity="0.35" style="animation-delay: 0.25s"/>
+            <rect class="heat-cell heat-cell-pulse" x="164" y="60" width="22" height="22" rx="2" fill="#a87525" opacity="0.4" style="animation-delay: 0.3s"/>
+            <rect class="heat-cell heat-cell-pulse" x="190" y="60" width="22" height="22" rx="2" fill="#99cc33" opacity="0.25" style="animation-delay: 0.35s"/>
+            <rect class="heat-cell heat-cell-pulse" x="216" y="60" width="22" height="22" rx="2" fill="#7ba822" opacity="0.3" style="animation-delay: 0.4s"/>
+            <rect class="heat-cell heat-cell-pulse" x="242" y="60" width="22" height="22" rx="2" fill="#5a6b3a" opacity="0.35" style="animation-delay: 0.45s"/>
+            <rect class="heat-cell heat-cell-pulse" x="268" y="60" width="22" height="22" rx="2" fill="#8aa847" opacity="0.3" style="animation-delay: 0.5s"/>
+            <rect class="heat-cell heat-cell-pulse" x="294" y="60" width="22" height="22" rx="2" fill="#99cc33" opacity="0.25" style="animation-delay: 0.55s"/>
+
+            <!-- Row 2 -->
+            <rect class="heat-cell heat-cell-pulse" x="60" y="86" width="22" height="22" rx="2" fill="#d4a640" opacity="0.55" style="animation-delay: 0.2s"/>
+            <rect class="heat-cell heat-cell-pulse" x="86" y="86" width="22" height="22" rx="2" fill="#c9972f" opacity="0.6" style="animation-delay: 0.25s"/>
+            <rect class="heat-cell heat-cell-pulse" x="112" y="86" width="22" height="22" rx="2" fill="#e8a547" opacity="0.7" style="animation-delay: 0.3s"/>
+            <rect class="heat-cell heat-cell-pulse" x="138" y="86" width="22" height="22" rx="2" fill="#d84a30" opacity="0.5" style="animation-delay: 0.35s"/>
+            <rect class="heat-cell heat-cell-pulse" x="164" y="86" width="22" height="22" rx="2" fill="#b8862a" opacity="0.6" style="animation-delay: 0.4s"/>
+            <rect class="heat-cell heat-cell-pulse" x="190" y="86" width="22" height="22" rx="2" fill="#a87525" opacity="0.5" style="animation-delay: 0.45s"/>
+            <rect class="heat-cell heat-cell-pulse" x="216" y="86" width="22" height="22" rx="2" fill="#99cc33" opacity="0.35" style="animation-delay: 0.5s"/>
+            <rect class="heat-cell heat-cell-pulse" x="242" y="86" width="22" height="22" rx="2" fill="#8aa847" opacity="0.4" style="animation-delay: 0.55s"/>
+            <rect class="heat-cell heat-cell-pulse" x="268" y="86" width="22" height="22" rx="2" fill="#5a6b3a" opacity="0.45" style="animation-delay: 0.6s"/>
+            <rect class="heat-cell heat-cell-pulse" x="294" y="86" width="22" height="22" rx="2" fill="#7ba822" opacity="0.35" style="animation-delay: 0.65s"/>
+            <rect class="heat-cell heat-cell-pulse" x="320" y="86" width="22" height="22" rx="2" fill="#8aa847" opacity="0.3" style="animation-delay: 0.7s"/>
+
+            <!-- Row 3 (middle - hottest) -->
+            <rect class="heat-cell heat-cell-pulse" x="60" y="112" width="22" height="22" rx="2" fill="#d84a30" opacity="0.75" style="animation-delay: 0.3s"/>
+            <rect class="heat-cell heat-cell-pulse" x="86" y="112" width="22" height="22" rx="2" fill="#e8a547" opacity="0.85" style="animation-delay: 0.35s"/>
+            <rect class="heat-cell heat-cell-pulse" x="112" y="112" width="22" height="22" rx="2" fill="#d84a30" opacity="0.9" style="animation-delay: 0.4s"/>
+            <rect class="heat-cell heat-cell-pulse" x="138" y="112" width="22" height="22" rx="2" fill="#b83020" opacity="0.85" style="animation-delay: 0.45s"/>
+            <rect class="heat-cell heat-cell-pulse" x="164" y="112" width="22" height="22" rx="2" fill="#d84a30" opacity="0.7" style="animation-delay: 0.5s"/>
+            <rect class="heat-cell heat-cell-pulse" x="190" y="112" width="22" height="22" rx="2" fill="#e8a547" opacity="0.65" style="animation-delay: 0.55s"/>
+            <rect class="heat-cell heat-cell-pulse" x="216" y="112" width="22" height="22" rx="2" fill="#b8862a" opacity="0.55" style="animation-delay: 0.6s"/>
+            <rect class="heat-cell heat-cell-pulse" x="242" y="112" width="22" height="22" rx="2" fill="#a87525" opacity="0.5" style="animation-delay: 0.65s"/>
+            <rect class="heat-cell heat-cell-pulse" x="268" y="112" width="22" height="22" rx="2" fill="#c9972f" opacity="0.55" style="animation-delay: 0.7s"/>
+            <rect class="heat-cell heat-cell-pulse" x="294" y="112" width="22" height="22" rx="2" fill="#d4a640" opacity="0.5" style="animation-delay: 0.75s"/>
+            <rect class="heat-cell heat-cell-pulse" x="320" y="112" width="22" height="22" rx="2" fill="#b8862a" opacity="0.4" style="animation-delay: 0.8s"/>
+
+            <!-- Row 4 (south - very hot) -->
+            <rect class="heat-cell heat-cell-pulse" x="86" y="138" width="22" height="22" rx="2" fill="#b83020" opacity="0.7" style="animation-delay: 0.4s"/>
+            <rect class="heat-cell heat-cell-pulse" x="112" y="138" width="22" height="22" rx="2" fill="#b83020" opacity="0.85" style="animation-delay: 0.45s"/>
+            <rect class="heat-cell heat-cell-pulse" x="138" y="138" width="22" height="22" rx="2" fill="#d84a30" opacity="0.9" style="animation-delay: 0.5s"/>
+            <rect class="heat-cell heat-cell-pulse" x="164" y="138" width="22" height="22" rx="2" fill="#b83020" opacity="0.95" style="animation-delay: 0.55s"/>
+            <rect class="heat-cell heat-cell-pulse" x="190" y="138" width="22" height="22" rx="2" fill="#d84a30" opacity="0.9" style="animation-delay: 0.6s"/>
+            <rect class="heat-cell heat-cell-pulse" x="216" y="138" width="22" height="22" rx="2" fill="#e8a547" opacity="0.8" style="animation-delay: 0.65s"/>
+            <rect class="heat-cell heat-cell-pulse" x="242" y="138" width="22" height="22" rx="2" fill="#d4a640" opacity="0.7" style="animation-delay: 0.7s"/>
+            <rect class="heat-cell heat-cell-pulse" x="268" y="138" width="22" height="22" rx="2" fill="#c9972f" opacity="0.6" style="animation-delay: 0.75s"/>
+            <rect class="heat-cell heat-cell-pulse" x="294" y="138" width="22" height="22" rx="2" fill="#a87525" opacity="0.5" style="animation-delay: 0.8s"/>
+
+            <!-- Row 5 (southernmost) -->
+            <rect class="heat-cell heat-cell-pulse" x="112" y="164" width="22" height="22" rx="2" fill="#b83020" opacity="0.7" style="animation-delay: 0.5s"/>
+            <rect class="heat-cell heat-cell-pulse" x="138" y="164" width="22" height="22" rx="2" fill="#d84a30" opacity="0.85" style="animation-delay: 0.55s"/>
+            <rect class="heat-cell heat-cell-pulse" x="164" y="164" width="22" height="22" rx="2" fill="#b83020" opacity="0.9" style="animation-delay: 0.6s"/>
+            <rect class="heat-cell heat-cell-pulse" x="190" y="164" width="22" height="22" rx="2" fill="#d84a30" opacity="0.85" style="animation-delay: 0.65s"/>
+            <rect class="heat-cell heat-cell-pulse" x="216" y="164" width="22" height="22" rx="2" fill="#e8a547" opacity="0.7" style="animation-delay: 0.7s"/>
+            <rect class="heat-cell heat-cell-pulse" x="242" y="164" width="22" height="22" rx="2" fill="#d4a640" opacity="0.6" style="animation-delay: 0.75s"/>
+            <rect class="heat-cell heat-cell-pulse" x="268" y="164" width="22" height="22" rx="2" fill="#b8862a" opacity="0.5" style="animation-delay: 0.8s"/>
+          </g>
+
+          <!-- Legend card -->
+          <g transform="translate(24, 220)">
+            <rect width="160" height="56" rx="4" fill="rgba(10, 31, 26, 0.85)" stroke="rgba(153, 204, 51, 0.3)" stroke-width="1"/>
+            <text x="12" y="16" font-family="JetBrains Mono, monospace" font-size="7" fill="#b8e655" letter-spacing="1" font-weight="600">DROUGHT STRESS / US</text>
+            <g transform="translate(12, 24)">
+              <rect width="8" height="8" fill="#b83020"/>
+              <text x="14" y="7" font-family="JetBrains Mono, monospace" font-size="6" fill="#f5efe1" opacity="0.7">EXTREME</text>
+              <rect x="58" width="8" height="8" fill="#e8a547"/>
+              <text x="72" y="7" font-family="JetBrains Mono, monospace" font-size="6" fill="#f5efe1" opacity="0.7">SEVERE</text>
+            </g>
+            <g transform="translate(12, 38)">
+              <rect width="8" height="8" fill="#b8862a"/>
+              <text x="14" y="7" font-family="JetBrains Mono, monospace" font-size="6" fill="#f5efe1" opacity="0.7">MODERATE</text>
+              <rect x="58" width="8" height="8" fill="#99cc33" opacity="0.4"/>
+              <text x="72" y="7" font-family="JetBrains Mono, monospace" font-size="6" fill="#f5efe1" opacity="0.7">STABLE</text>
+            </g>
+          </g>
+
+          <!-- Atmospheric wisps at top -->
+          <g class="legacy-wisp" stroke="#6b6558" stroke-width="1" fill="none" opacity="0.3">
+            <path d="M 50 20 Q 100 15 150 25 T 250 18 T 350 22"/>
+            <path d="M 50 32 Q 100 28 150 36 T 250 30 T 350 34"/>
+          </g>
+        </svg>
+
+        <div class="visual-caption">LEGACY CO₂ → HEAT → DROUGHT</div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</body>
+</html>

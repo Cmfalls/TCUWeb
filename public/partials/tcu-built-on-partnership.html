@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Built On A Partnership</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+
+    /* Org colors */
+    --org-tcu: #99cc33;
+    --org-crars: #6fa3a0;
+    --org-schuman: #c9a066;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 80% 15%, rgba(153, 204, 51, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 15% 85%, rgba(201, 160, 102, 0.05) 0%, transparent 55%);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === HEAD ROW === */
+  .head-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 900px) {
+    .head-row { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5.4vw, 72px);
+    line-height: 0.92;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    max-width: 22ch;
+    margin-bottom: 18px;
+  }
+  h1.headline .accent {
+    color: var(--wheatgrass);
+    position: relative;
+    display: inline-block;
+  }
+  h1.headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.1em;
+    background: var(--wheatgrass);
+    opacity: 0.22;
+    z-index: -1;
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+  .lede em {
+    color: var(--ink);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* Stats summary panel (right of headline) */
+  .summary {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 16px;
+  }
+  .summary-item {
+    border-left: 2px solid var(--wheatgrass);
+    padding-left: 14px;
+  }
+  .summary-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 3.5vw, 48px);
+    line-height: 0.9;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .summary-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* === ORG CARDS === */
+  .orgs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .orgs { grid-template-columns: 1fr; gap: 16px; }
+  }
+
+  /* Connecting line behind org cards (desktop only) */
+  .orgs::before {
+    content: "";
+    position: absolute;
+    top: 56px;
+    left: 16%;
+    right: 16%;
+    height: 1px;
+    background: repeating-linear-gradient(to right, var(--line-strong) 0, var(--line-strong) 4px, transparent 4px, transparent 10px);
+    z-index: 0;
+  }
+  @media (max-width: 900px) {
+    .orgs::before { display: none; }
+  }
+
+  .org {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 32px 28px 28px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    z-index: 1;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.4s ease,
+                box-shadow 0.5s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .org:hover {
+    transform: translateY(-6px);
+    border-color: var(--line-strong);
+    box-shadow: 0 24px 40px -24px rgba(10, 46, 38, 0.22);
+  }
+  .org::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 3px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .org:hover::before { transform: scaleX(1); }
+
+  /* Org-specific colors */
+  .org-1 { color: var(--org-tcu); }
+  .org-2 { color: var(--org-crars); }
+  .org-3 { color: var(--org-schuman); }
+
+  .org-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .org-brand {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    min-height: 44px;
+    margin-top: 0;
+    opacity: 0.8;
+  }
+
+  .org-brand img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: saturate(0.88) contrast(1.02);
+    mix-blend-mode: multiply;
+  }
+
+  .org-1 .org-brand {
+    width: 58px;
+    min-height: 58px;
+    opacity: 1;
+  }
+
+  .org-1 .org-brand img {
+    width: 46px;
+    height: 46px;
+    filter: none;
+    mix-blend-mode: normal;
+  }
+
+  .org-2 .org-brand img {
+    width: 92px;
+  }
+
+  .org-3 .org-brand {
+    width: 92px;
+    min-height: 64px;
+    opacity: 0.84;
+  }
+
+  .org-3 .org-brand img {
+    width: 58px;
+    height: 58px;
+  }
+
+  .org-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: currentColor;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .org-tag::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: currentColor;
+    border-radius: 50%;
+  }
+  .org-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 0;
+    letter-spacing: 0.005em;
+    max-width: 9ch;
+    flex: 1 1 auto;
+  }
+  .org-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .org-desc strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Org footer with year/role */
+  .org-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .org-footer strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* === RESEARCH LEADERSHIP === */
+  .leadership {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 36px 40px;
+    position: relative;
+  }
+  @media (max-width: 720px) {
+    .leadership { padding: 28px 24px; }
+  }
+
+  .leadership-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .leadership-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .leadership-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .leadership-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1;
+    color: var(--ink);
+    max-width: 22ch;
+  }
+  .leadership-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .leadership-meta strong { color: var(--ink); font-weight: 600; }
+
+  /* Leader cards */
+  .leaders {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 720px) {
+    .leaders { grid-template-columns: 1fr; }
+  }
+
+  .leader {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 20px;
+    padding: 20px 22px;
+    background: rgba(245, 239, 225, 0.5);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .leader:hover {
+    background: rgba(245, 239, 225, 0.85);
+    border-color: var(--line-strong);
+  }
+
+  .leader-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(153, 204, 51, 0.18) 0%, rgba(10, 46, 38, 0.15) 100%);
+    border: 2px solid var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .leader-photo::before {
+    content: none;
+  }
+  .leader-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 24%;
+    display: block;
+  }
+
+  .leader-photo-cynthia img {
+    object-position: center 22%;
+    transform: scale(1.04);
+  }
+
+  .leader-photo-tim img {
+    object-position: center 18%;
+    transform: scale(1.1);
+  }
+  .leader-photo-tag {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+    border: 2px solid var(--cream-card);
+    z-index: 3;
+  }
+
+  .leader-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .leader-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 6px;
+  }
+  .leader-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .leader-role {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .leader-bio {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Load animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .head-row > *,
+  .org,
+  .leadership {
+    animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .head-row > *:nth-child(2) { animation-delay: 0.1s; }
+  .org:nth-child(1) { animation-delay: 0.2s; }
+  .org:nth-child(2) { animation-delay: 0.3s; }
+  .org:nth-child(3) { animation-delay: 0.4s; }
+  .leadership { animation-delay: 0.55s; }
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <!-- HEAD -->
+  <div class="head-row">
+    <div>
+      <div class="eyebrow">Built On A Partnership</div>
+      <h1 class="headline">Three founding organizations. Over 80 years combined in agricultural innovation, research, and <span class="accent">mission</span>.</h1>
+    </div>
+    <div class="summary">
+      <div class="summary-item">
+        <div class="summary-num">3</div>
+        <div class="summary-label">Founding<br/>Organizations</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">80<span style="font-size: 0.6em;">+</span></div>
+        <div class="summary-label">Years<br/>Combined</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">$7M<span style="font-size: 0.6em;">+</span></div>
+        <div class="summary-label">Land &amp; Operating<br/>Support</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-num">320</div>
+        <div class="summary-label">Acres<br/>Permanent</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="lede" style="margin-bottom: 40px;">The Edison Institute is a project of <em>The Carbon Underground</em>, the <em>Center for Regenerative Agriculture and Resilient Systems at California State University</em>, and the <em>Schuman Family Foundation</em>.</p>
+
+  <!-- ORG CARDS -->
+  <div class="orgs">
+
+    <!-- ORG 1 -->
+    <div class="org org-1">
+      <div class="org-tag">Lead Partner / Strategic Anchor</div>
+      <div class="org-head">
+        <div class="org-name">The Carbon Underground</div>
+        <div class="org-brand"><img src="/images/brand/brand-tcu-logo-mark.png" alt="The Carbon Underground logo" /></div>
+      </div>
+      <p class="org-desc">Since 2014, TCU has been a leader at the intersection of <strong>climate change and agriculture</strong>, connecting farmers, food companies, researchers, and governments to advance soil health and draw down legacy carbon.</p>
+      <div class="org-footer">
+        <span>Est. <strong>2014</strong></span>
+        <span>Role / Strategy</span>
+      </div>
+    </div>
+
+    <!-- ORG 2 -->
+    <div class="org org-2">
+      <div class="org-tag">Research / Data / Analysis</div>
+      <div class="org-head">
+        <div class="org-name">CRARS at CSU Chico</div>
+        <div class="org-brand"><img src="/images/partners/partner-crars-logo.png" alt="CRARS at CSU Chico logo" /></div>
+      </div>
+      <p class="org-desc">The Center for Regenerative Agriculture and Resilient Systems is among the most respected institutional experts on soil health and its foundational importance for climate resilience. Their team are <strong>"farmers who are also scientists"</strong>, ensuring every finding is grounded in practical reality.</p>
+      <div class="org-footer">
+        <span>Est. <strong>1887</strong></span>
+        <span>Role / Research</span>
+      </div>
+    </div>
+
+    <!-- ORG 3 -->
+    <div class="org org-3">
+      <div class="org-tag">Founding Philanthropic Partner</div>
+      <div class="org-head">
+        <div class="org-name">Schuman Family Foundation</div>
+        <div class="org-brand"><img src="/images/partners/partner-schuman-foundation.png" alt="Schuman Family Foundation logo" /></div>
+      </div>
+      <p class="org-desc">Their extraordinary commitment, more than seven million dollars in land and operating support, created the physical and financial foundation for the Edison Institute. Their <strong>donation of the 320-acre Edison Farm</strong>, secured by a permanent restrictive covenant, ensures this land will serve scientific research and regenerative agriculture in perpetuity.</p>
+      <div class="org-footer">
+        <span>Gift <strong>$7M+</strong></span>
+        <span>Role / Foundation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESEARCH LEADERSHIP -->
+  <div class="leadership">
+    <div class="leadership-header">
+      <div>
+        <div class="leadership-label">Research Leadership</div>
+        <div class="leadership-title">Led by scientists who are also farmers.</div>
+      </div>
+      <div class="leadership-meta">
+        BASED AT / <strong>CSU CHICO + EDISON FARM</strong>
+      </div>
+    </div>
+
+    <div class="leaders">
+
+      <!-- LEADER 1 -->
+      <div class="leader">
+        <div class="leader-photo leader-photo-cynthia">
+          <img src="/images/people/cynthia-daley.jpg" alt="Dr. Cynthia Daley" />
+          <div class="leader-photo-tag"></div>
+        </div>
+        <div class="leader-info">
+          <div class="leader-tag">Research</div>
+          <div class="leader-name">Dr. Cynthia Daley</div>
+          <div class="leader-role">Director and Co-Founder, CRARS — Professor at CSU Chico</div>
+          <p class="leader-bio">Established the Regenerative/Organic Dairy Program and co-founded the Regenerative Agriculture Initiative. A leading voice in applied research on soil health, water conservation, and carbon sequestration. Leads all Edison Institute research design, data collection, and analysis.</p>
+        </div>
+      </div>
+
+      <!-- LEADER 2 -->
+      <div class="leader">
+        <div class="leader-photo leader-photo-tim">
+          <img src="/images/people/tim-lasalle.jpg" alt="Dr. Tim LaSalle" />
+          <div class="leader-photo-tag"></div>
+        </div>
+        <div class="leader-info">
+          <div class="leader-tag">Research</div>
+          <div class="leader-name">Dr. Tim LaSalle</div>
+          <div class="leader-role">Co-Founder, CRARS — First CEO of the Rodale Institute</div>
+          <p class="leader-bio">Research coordinator for the Howard Buffett Foundation on soils and food security. Professor Emeritus of California Polytechnic State University. Has organized educational programs in more than 80 countries.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

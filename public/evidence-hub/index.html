@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TCU Evidence Hub</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap");
+
+      :root {
+        color-scheme: light;
+        font-family: "Bricolage Grotesque", sans-serif;
+        --bg: #f5ecdf;
+        --text: #162116;
+        --muted: #5d675d;
+        --moss: #456731;
+        --wheat: #d8eb4e;
+        --line: rgba(22, 33, 22, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top right, rgba(216, 235, 78, 0.16), transparent 20%),
+          linear-gradient(180deg, #faf4ea 0%, var(--bg) 100%);
+      }
+
+      .wrap {
+        width: min(1080px, calc(100vw - 2rem));
+        margin: 0 auto;
+        padding: 3rem 0 4rem;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--wheat), #f0a245);
+      }
+
+      h1 {
+        margin: 1rem 0 0.75rem;
+        font-size: clamp(2.75rem, 6vw, 5.5rem);
+        line-height: 0.92;
+        letter-spacing: -0.05em;
+      }
+
+      p {
+        line-height: 1.75;
+        color: var(--muted);
+        margin: 0 0 1rem;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 2rem;
+        align-items: center;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 1.5rem;
+        background: rgba(255, 250, 244, 0.86);
+        box-shadow: 0 22px 60px rgba(17, 28, 17, 0.1);
+      }
+
+      .hero-copy,
+      .notes {
+        padding: 1.4rem;
+      }
+
+      .hero-media {
+        overflow: hidden;
+      }
+
+      .hero-media img {
+        width: 100%;
+        display: block;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1.5rem;
+      }
+
+      .actions a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.95rem 1.25rem;
+        border-radius: 999px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .primary {
+        background: linear-gradient(135deg, var(--wheat), #f7ffaf);
+        color: #162116;
+      }
+
+      .secondary {
+        border: 1px solid var(--line);
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.58);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .grid article {
+        padding: 1.2rem;
+      }
+
+      .grid h2 {
+        margin: 0 0 0.65rem;
+        font-size: 1.15rem;
+      }
+
+      @media (max-width: 860px) {
+        .hero,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <div class="hero-copy card">
+          <div class="eyebrow">TCU Evidence Hub</div>
+          <h1>Evidence belongs beside the story, not in front of it.</h1>
+          <p>
+            This page is the v1 handoff for TCU's separate evidence experience. The main TCU site now treats evidence
+            as a distinct destination so the umbrella homepage can stay focused on messaging, Edison, Adopt-A-Meter,
+            and thought leadership.
+          </p>
+          <p>
+            The deeper interactive stats work remains in the sibling <strong>`TCUSoilStats`</strong> project in this
+            workspace. This page gives the rebuild a clean, working bridge without collapsing the main site into a data
+            dashboard.
+          </p>
+          <div class="actions">
+            <a class="primary" href="/">Return to TCU</a>
+            <a class="secondary" href="/images/evidence-preview.webp" target="_blank" rel="noreferrer">Open Preview Image</a>
+          </div>
+        </div>
+
+        <div class="hero-media card">
+          <img src="/images/evidence-preview.webp" alt="Preview of the evidence hub experience" />
+        </div>
+      </section>
+
+      <section class="notes card" style="margin-top: 1.5rem;">
+        <div class="eyebrow">What This Holds</div>
+        <div class="grid">
+          <article>
+            <h2>Carbon</h2>
+            <p>The evidence story ties atmospheric warming to soil carbon loss and the case for biological drawdown.</p>
+          </article>
+          <article>
+            <h2>Economics</h2>
+            <p>Farm resilience, cost pressure, and profitability are treated as part of the same system as soil health.</p>
+          </article>
+          <article>
+            <h2>Water</h2>
+            <p>Water security is framed as a soil-and-climate problem, not a disconnected resource problem.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

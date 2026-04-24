@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — One Half Without The Other</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --soil: #3d2f17;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(48px, 6.5vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+    color: var(--ink);
+    max-width: 14ch;
+    margin-bottom: 32px;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin-bottom: 56px;
+  }
+
+  /* Main interactive grid */
+  .stage {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 880px) {
+    .stage { grid-template-columns: 1fr; gap: 40px; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  /* Visual side */
+  .visual-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+  .visual-wrap svg { width: 100%; height: 100%; display: block; }
+
+  .half {
+    cursor: pointer;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform-origin: center;
+  }
+  .half-bg { transition: fill 0.5s ease; }
+  .half-label {
+    font-family: 'Bebas Neue', sans-serif;
+    fill: var(--cream);
+    pointer-events: none;
+    transition: opacity 0.4s ease, fill 0.4s ease;
+  }
+  .half.dim { opacity: 0.28; }
+  .half.dim .arrow-line, .half.dim .arrow-head { opacity: 0.5; }
+
+  .arrow-line, .arrow-head {
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .center-divider {
+    stroke: var(--cream);
+    stroke-width: 6;
+  }
+
+  /* Content side */
+  .panel {
+    position: relative;
+    min-height: 380px;
+  }
+  .step {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+  }
+  .step.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: var(--wheatgrass);
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+  .step h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 3.5vw, 46px);
+    line-height: 1.0;
+    color: var(--ink);
+    margin-bottom: 20px;
+    max-width: 18ch;
+  }
+  .step p {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 50ch;
+    margin-bottom: 14px;
+  }
+  .step p strong {
+    color: var(--ink);
+    font-weight: 600;
+    background: linear-gradient(transparent 60%, rgba(153, 204, 51, 0.45) 60%);
+    padding: 0 2px;
+  }
+
+  /* Stat comparison */
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 24px;
+    align-items: flex-end;
+  }
+  .stat {
+    flex: 1;
+    border-top: 2px solid var(--ink);
+    padding-top: 14px;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-num.big { font-size: 56px; color: var(--ink); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 6px;
+  }
+  .stat-bar {
+    height: 6px;
+    background: var(--cream-soft);
+    margin-top: 10px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    background: var(--ink);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .step.active .stat-bar-fill { transform: scaleX(var(--scale, 1)); }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 48px;
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 14px 22px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+  .btn:hover { background: var(--ink-soft); }
+  .btn:active { transform: translateY(1px); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn.ghost:hover { background: var(--ink); color: var(--cream); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-left: 8px;
+  }
+  .dot {
+    width: 28px;
+    height: 3px;
+    background: var(--line);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.3s ease;
+  }
+  .dot.active { background: var(--ink); }
+
+  /* Footer message */
+  .closer {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 880px) {
+    .closer { grid-template-columns: 1fr; gap: 24px; }
+  }
+  .closer h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .closer p {
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .closer .focus h3 { color: var(--ink); }
+  .closer .focus { padding: 24px; background: var(--ink); border-radius: 8px; margin: -24px; }
+  .closer .focus h3, .closer .focus p { color: var(--cream); }
+  .closer .focus h3 .accent { color: var(--wheatgrass); }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="eyebrow">The Other Half</div>
+  <h1 class="headline">One half without<br/>the other will<br/>not work.</h1>
+  <p class="lede">There are two parts to solving climate change. Most of the world focuses on one. The Carbon Underground works on the other. Click through to see why both matter.</p>
+
+  <div class="stage">
+    <!-- VISUAL -->
+    <div class="visual-wrap">
+      <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="leftHalf"><rect x="0" y="0" width="250" height="500"/></clipPath>
+          <clipPath id="rightHalf"><rect x="250" y="0" width="250" height="500"/></clipPath>
+        </defs>
+
+        <!-- Left half: Cut future emissions -->
+        <g class="half" id="halfLeft" data-step="1">
+          <circle class="half-bg" cx="250" cy="250" r="220" fill="#0a2e26" clip-path="url(#leftHalf)"/>
+          <!-- Upward arrows being stopped -->
+          <g id="leftArrows" stroke="#99cc33" stroke-width="3" fill="none" stroke-linecap="round">
+            <g class="arrow">
+              <line class="arrow-line" x1="120" y1="340" x2="120" y2="200"/>
+              <polyline class="arrow-head" points="105,215 120,200 135,215" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="170" y1="360" x2="170" y2="180"/>
+              <polyline class="arrow-head" points="155,195 170,180 185,195" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="80" y1="320" x2="80" y2="220"/>
+              <polyline class="arrow-head" points="65,235 80,220 95,235" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="215" y1="340" x2="215" y2="210"/>
+              <polyline class="arrow-head" points="200,225 215,210 230,225" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <text class="half-label" x="125" y="430" text-anchor="middle" font-size="22">CUT NEW</text>
+          <text class="half-label" x="125" y="455" text-anchor="middle" font-size="22">EMISSIONS</text>
+        </g>
+
+        <!-- Right half: Draw down legacy carbon -->
+        <g class="half" id="halfRight" data-step="3">
+          <circle class="half-bg" cx="250" cy="250" r="220" fill="#0a2e26" clip-path="url(#rightHalf)"/>
+          <!-- Downward arrows drawing carbon back -->
+          <g id="rightArrows" stroke="#99cc33" stroke-width="3" fill="none" stroke-linecap="round">
+            <g class="arrow">
+              <line class="arrow-line" x1="285" y1="180" x2="285" y2="320"/>
+              <polyline class="arrow-head" points="270,305 285,320 300,305" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="335" y1="160" x2="335" y2="340"/>
+              <polyline class="arrow-head" points="320,325 335,340 350,325" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="385" y1="200" x2="385" y2="300"/>
+              <polyline class="arrow-head" points="370,285 385,300 400,285" stroke-linejoin="round"/>
+            </g>
+            <g class="arrow">
+              <line class="arrow-line" x1="425" y1="220" x2="425" y2="290"/>
+              <polyline class="arrow-head" points="410,275 425,290 440,275" stroke-linejoin="round"/>
+            </g>
+          </g>
+          <text class="half-label" x="375" y="430" text-anchor="middle" font-size="22">DRAW DOWN</text>
+          <text class="half-label" x="375" y="455" text-anchor="middle" font-size="22">LEGACY CARBON</text>
+        </g>
+
+        <!-- Center divider -->
+        <line class="center-divider" x1="250" y1="40" x2="250" y2="460"/>
+      </svg>
+    </div>
+
+    <!-- CONTENT -->
+    <div>
+      <div class="panel" id="panel">
+
+        <div class="step active" data-step="0">
+          <div class="step-num">01 / THE COMMON STORY</div>
+          <h2>Reducing emissions will not solve climate change.</h2>
+          <p>This year the world will add roughly <strong>37 billion tons</strong> of new emissions to the atmosphere. Stopping that flow is essential.</p>
+          <p>But it is only half of the solution.</p>
+        </div>
+
+        <div class="step" data-step="1">
+          <div class="step-num">02 / THE FUTURE HALF</div>
+          <h2>Cutting new emissions slows the damage.</h2>
+          <p>Every new ton makes climate change one ton harder to stop. Humans need to stop adding emissions to the atmosphere. Full stop.</p>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="stat-num">37B</div>
+              <div class="stat-label">Tons added per year</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="--scale: 0.04;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" data-step="2">
+          <div class="step-num">03 / THE PROBLEM</div>
+          <h2>The damage is already done.</h2>
+          <p>Today's climate change comes from the <strong>trillion tons</strong> humans have already emitted. Scientists say it will keep degrading the climate for hundreds of years if left in the sky.</p>
+          <div class="stat-row">
+            <div class="stat">
+              <div class="stat-num">37B</div>
+              <div class="stat-label">Future, per year</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="--scale: 0.037;"></div></div>
+            </div>
+            <div class="stat">
+              <div class="stat-num big">1T</div>
+              <div class="stat-label">Already in the atmosphere</div>
+              <div class="stat-bar"><div class="stat-bar-fill" style="--scale: 1;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" data-step="3">
+          <div class="step-num">04 / THE OTHER HALF</div>
+          <h2>Drawing carbon back down completes the work.</h2>
+          <p>Past emissions need to come out of the atmosphere and back into living systems. Healthy soil, plants, and photosynthesis do this at the scale climate change demands.</p>
+          <p><strong>The Carbon Underground works on this half.</strong></p>
+        </div>
+
+        <div class="step" data-step="4">
+          <div class="step-num">05 / TOGETHER</div>
+          <h2>Two halves. One solution.</h2>
+          <p>Cutting emissions and drawing them down are interdependent. One without the other will not work.</p>
+          <p>Most of the world is focused on the first half. We focus on the second.</p>
+        </div>
+
+      </div>
+
+      <div class="controls">
+        <button class="btn ghost" id="prevBtn">Back</button>
+        <button class="btn" id="nextBtn">Next</button>
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closer">
+    <div>
+      <h3>The emissions half</h3>
+      <p>Reducing new greenhouse gases slows the damage still being added. Necessary, urgent, and incomplete on its own.</p>
+    </div>
+    <div class="focus">
+      <h3>Our half<span class="accent"> →</span></h3>
+      <p>Drawing down the carbon already overhead and returning it to soil that holds it. The work the rest of the world is missing.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  const totalSteps = 5;
+  let current = 0;
+
+  const steps = document.querySelectorAll('.step');
+  const dotsContainer = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const halfLeft = document.getElementById('halfLeft');
+  const halfRight = document.getElementById('halfRight');
+
+  // Build dots
+  for (let i = 0; i < totalSteps; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  }
+  const dots = document.querySelectorAll('.dot');
+
+  function update() {
+    steps.forEach((s, i) => s.classList.toggle('active', i === current));
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === totalSteps - 1 ? 'Restart' : 'Next';
+
+    // Visual state per step
+    halfLeft.classList.remove('dim');
+    halfRight.classList.remove('dim');
+
+    if (current === 0) {
+      halfLeft.classList.add('dim');
+      halfRight.classList.add('dim');
+    } else if (current === 1) {
+      halfRight.classList.add('dim');
+    } else if (current === 2) {
+      halfLeft.classList.add('dim');
+      halfRight.classList.add('dim');
+    } else if (current === 3) {
+      halfLeft.classList.add('dim');
+    }
+    // step 4: both fully on
+  }
+
+  function goTo(i) {
+    current = i;
+    update();
+  }
+
+  nextBtn.addEventListener('click', () => {
+    current = (current + 1) % totalSteps;
+    update();
+  });
+  prevBtn.addEventListener('click', () => {
+    if (current > 0) { current--; update(); }
+  });
+
+  // Click halves to jump to their explanation
+  halfLeft.addEventListener('click', () => goTo(1));
+  halfRight.addEventListener('click', () => goTo(3));
+
+  update();
+</script>
+</body>
+</html>

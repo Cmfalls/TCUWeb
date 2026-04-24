@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — What Support Makes Visible</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --ink-deep: #05201a;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --soil: #8a6d3b;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 15% 20%, rgba(153, 204, 51, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 85% 80%, rgba(138, 109, 59, 0.05) 0%, transparent 55%);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === HERO === */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.2fr);
+    gap: 48px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .hero { grid-template-columns: 1fr; gap: 36px; }
+  }
+
+  .text-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 580px;
+  }
+  @media (max-width: 980px) {
+    .text-col { min-height: auto; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(52px, 6.5vw, 96px);
+    line-height: 0.88;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin-bottom: 24px;
+    max-width: 12ch;
+  }
+  h1.headline .accent {
+    color: var(--wheatgrass);
+    display: inline-block;
+    position: relative;
+  }
+  h1.headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.1em;
+    background: var(--wheatgrass);
+    opacity: 0.22;
+    z-index: -1;
+  }
+
+  .body-copy {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 46ch;
+    margin-bottom: 14px;
+  }
+  .body-copy strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Discipline list */
+  .disciplines {
+    margin-top: 24px;
+    padding: 22px 24px;
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-left: 4px solid var(--wheatgrass);
+    border-radius: 10px;
+  }
+  .disciplines-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .disciplines-label::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .disciplines-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 20px;
+  }
+  .discipline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .discipline svg {
+    width: 14px;
+    height: 14px;
+    color: var(--wheatgrass);
+    flex-shrink: 0;
+  }
+
+  /* === PHOTO COLLAGE === */
+  .collage {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 10px;
+    min-height: 580px;
+  }
+  @media (max-width: 980px) {
+    .collage { min-height: 520px; }
+  }
+
+  .tile {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--line);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.4s ease,
+                box-shadow 0.5s ease,
+                z-index 0s;
+  }
+  .tile:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--wheatgrass);
+    box-shadow: 0 28px 48px -26px rgba(10, 46, 38, 0.4);
+    z-index: 10;
+  }
+
+  /* Grid placement — packed mosaic */
+  .tile-1 { grid-column: 1 / 4; grid-row: 1 / 6; }     /* tall left: field */
+  .tile-2 { grid-column: 4 / 7; grid-row: 1 / 4; }     /* top right: sunrise */
+  .tile-3 { grid-column: 4 / 7; grid-row: 4 / 6; }     /* middle right: irrigation */
+  .tile-4 { grid-column: 1 / 4; grid-row: 6 / 9; }     /* bottom left: caption card */
+  .tile-5 { grid-column: 4 / 7; grid-row: 6 / 9; }     /* bottom right: stat card */
+
+  @media (max-width: 640px) {
+    .collage {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+    }
+    .tile-1 { grid-column: 1 / 7; grid-row: 1 / 4; }
+    .tile-2 { grid-column: 1 / 4; grid-row: 4 / 6; }
+    .tile-3 { grid-column: 4 / 7; grid-row: 4 / 6; }
+    .tile-4 { grid-column: 1 / 7; grid-row: 6 / 8; }
+    .tile-5 { grid-column: 1 / 7; grid-row: 8 / 11; }
+  }
+
+  /* Image placeholder backgrounds */
+  .placeholder {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+  }
+
+  /* Tile 1 — dawn field */
+  .placeholder-dawn {
+    background:
+      linear-gradient(180deg,
+        #e8a547 0%,
+        #d4874a 20%,
+        #8a5a3a 45%,
+        #3d2f17 70%,
+        #1f1508 100%);
+  }
+  .placeholder-dawn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 30% at 50% 18%, rgba(255, 220, 150, 0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 35% 18% at 45% 22%, rgba(255, 240, 200, 0.6) 0%, transparent 50%);
+  }
+  .placeholder-dawn::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 52%;
+    background-image:
+      repeating-linear-gradient(90deg,
+        transparent 0 14px,
+        rgba(10, 15, 5, 0.35) 14px 15px),
+      radial-gradient(ellipse 80% 40% at 50% 100%, rgba(10, 15, 5, 0.6) 0%, transparent 70%);
+  }
+
+  /* Tile 2 — black + white irrigation */
+  .placeholder-irrigation {
+    background: linear-gradient(180deg, #c8c8c8 0%, #9a9a9a 40%, #5a5a5a 70%, #2a2a2a 100%);
+  }
+  .placeholder-irrigation::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 20% 12% at 20% 35%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
+      radial-gradient(ellipse 22% 14% at 50% 38%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
+      radial-gradient(ellipse 20% 12% at 78% 36%, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
+  }
+  .placeholder-irrigation::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg,
+        transparent 0 12px,
+        rgba(0, 0, 0, 0.15) 12px 13px);
+    opacity: 0.5;
+  }
+
+  /* Tile 3 — field research */
+  .placeholder-field {
+    background: linear-gradient(180deg, #8fa8b4 0%, #a8b5a0 32%, #5a7032 33%, #3d5020 100%);
+  }
+  .placeholder-field::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 20%),
+      radial-gradient(circle at 65% 22%, rgba(255, 255, 255, 0.2) 0%, transparent 18%);
+  }
+  .placeholder-field::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 68%;
+    background-image:
+      repeating-linear-gradient(85deg,
+        transparent 0 20px,
+        rgba(10, 31, 26, 0.12) 20px 21px);
+  }
+
+  /* Tile caption */
+  .tile-label {
+    position: relative;
+    z-index: 3;
+    background: rgba(10, 46, 38, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(153, 204, 51, 0.4);
+    border-radius: 6px;
+    padding: 11px 13px;
+    max-width: 88%;
+  }
+  .tile-label-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass-bright);
+    margin-bottom: 4px;
+  }
+  .tile-label-text {
+    font-size: 11.5px;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .drop-marker {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    background: rgba(245, 239, 225, 0.14);
+    backdrop-filter: blur(6px);
+    border: 1px dashed rgba(245, 239, 225, 0.45);
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: rgba(245, 239, 225, 0.7);
+    text-transform: uppercase;
+    z-index: 4;
+  }
+
+  /* Tile 4 — dark caption card */
+  .tile-4 {
+    background: var(--ink);
+    border-color: var(--ink);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  .tile-4::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -1px;
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle at 100% 0%, rgba(153, 204, 51, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .tile-4:hover { border-color: var(--wheatgrass); }
+  .quote-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .quote-tag::before {
+    content: "";
+    width: 5px; height: 5px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .quote-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(18px, 2vw, 26px);
+    line-height: 1.1;
+    color: var(--cream);
+    max-width: 20ch;
+  }
+  .quote-text em {
+    color: var(--wheatgrass-bright);
+    font-style: normal;
+  }
+
+  /* Tile 5 — stat + archive card */
+  .tile-5 {
+    background:
+      linear-gradient(135deg, rgba(153, 204, 51, 0.1) 0%, rgba(153, 204, 51, 0.02) 100%),
+      var(--cream-card);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-color: rgba(153, 204, 51, 0.35);
+  }
+  .archive-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .archive-label::before {
+    content: "";
+    width: 5px; height: 5px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .archive-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4.5vw, 56px);
+    line-height: 0.9;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .archive-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    max-width: 26ch;
+  }
+  .archive-footer {
+    padding-top: 14px;
+    margin-top: 12px;
+    border-top: 1px solid rgba(10, 46, 38, 0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .archive-dots {
+    display: flex;
+    gap: 4px;
+  }
+  .archive-dots .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--wheatgrass);
+  }
+  .archive-dots .dot:nth-child(3) { background: var(--wheatgrass-bright); }
+  .archive-dots .dot:nth-child(4) { opacity: 0.4; }
+  .archive-dots .dot:nth-child(5) { opacity: 0.2; }
+
+  /* Load animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .text-col > *,
+  .tile {
+    animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .text-col > *:nth-child(2) { animation-delay: 0.1s; }
+  .text-col > *:nth-child(3) { animation-delay: 0.2s; }
+  .tile-1 { animation-delay: 0.15s; }
+  .tile-2 { animation-delay: 0.25s; }
+  .tile-3 { animation-delay: 0.35s; }
+  .tile-4 { animation-delay: 0.45s; }
+  .tile-5 { animation-delay: 0.55s; }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="hero">
+
+    <!-- LEFT: text -->
+    <div class="text-col">
+      <div>
+        <div class="eyebrow">What Support Makes Visible</div>
+        <h1 class="headline">A stronger visual record helps proof <span class="accent">travel</span>.</h1>
+        <p class="body-copy">Support does not only fund research. It also helps document land, water, farmers, and field progress clearly enough for <strong>institutions and the public to understand what is changing</strong>.</p>
+      </div>
+
+      <div class="disciplines">
+        <div class="disciplines-label">What gets documented</div>
+        <div class="disciplines-grid">
+          <div class="discipline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Baseline conditions
+          </div>
+          <div class="discipline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Field infrastructure
+          </div>
+          <div class="discipline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Seasonal change
+          </div>
+          <div class="discipline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Grower practice
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: photo collage -->
+    <div class="collage">
+
+      <!-- Tile 1: dawn field (tall left) -->
+      <div class="tile tile-1">
+        <div class="placeholder placeholder-dawn">
+          <div class="drop-marker">IMG / DAWN FIELD</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">On The Ground</div>
+            <div class="tile-label-text">Public support stays grounded when the work remains visible.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tile 2: irrigation (top right) -->
+      <div class="tile tile-2">
+        <div class="placeholder placeholder-irrigation">
+          <div class="drop-marker">IMG / IRRIGATION</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">Infrastructure</div>
+            <div class="tile-label-text">Field infrastructure is part of the research platform.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tile 3: field research (middle right) -->
+      <div class="tile tile-3">
+        <div class="placeholder placeholder-field">
+          <div class="drop-marker">IMG / FIELD WORK</div>
+          <div class="tile-label">
+            <div class="tile-label-tag">Working Land</div>
+            <div class="tile-label-text">Visible measurement on working land strengthens the case.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tile 4: caption card (bottom left) -->
+      <div class="tile tile-4">
+        <div class="quote-tag">Why It Matters</div>
+        <div class="quote-text">What we can <em>see</em> is what the public can believe.</div>
+      </div>
+
+      <!-- Tile 5: archive card (bottom right) -->
+      <div class="tile tile-5">
+        <div>
+          <div class="archive-label">The Record</div>
+          <div class="archive-num">120+</div>
+          <div class="archive-desc">Photos, field notes, and seasonal updates published as the work unfolds.</div>
+        </div>
+        <div class="archive-footer">
+          <span>Growing archive</span>
+          <div class="archive-dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

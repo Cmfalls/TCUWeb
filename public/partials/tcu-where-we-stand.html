@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Where We Stand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --warn: #e8a547;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 85% 20%, rgba(153, 204, 51, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 40% at 10% 80%, rgba(232, 165, 71, 0.05) 0%, transparent 55%);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  .section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 80px 48px 96px;
+    position: relative;
+  }
+  @media (max-width: 900px) {
+    .section { padding: 56px 24px 72px; }
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === TOP ROW: headline + meta === */
+  .head-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: end;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 900px) {
+    .head-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(48px, 6vw, 88px);
+    line-height: 0.9;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin-bottom: 20px;
+    max-width: 16ch;
+  }
+  h1.headline .accent {
+    color: var(--wheatgrass);
+    position: relative;
+    display: inline-block;
+  }
+  h1.headline .accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.1em;
+    background: var(--wheatgrass);
+    opacity: 0.22;
+    z-index: -1;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+  .lede strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Meta block (right side of head-row) */
+  .meta {
+    padding: 20px 24px;
+    background: var(--cream-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-row strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .meta-label {
+    color: var(--muted);
+  }
+  .meta-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    font-weight: 700;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .meta-header::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === FUNDING PROGRESS CARD === */
+  .progress-card {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) {
+    .progress-card { padding: 28px 24px; }
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .progress-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .progress-title::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .progress-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* Big progress bar */
+  .bar-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .bar {
+    height: 72px;
+    background: var(--cream);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 65%;
+    background: linear-gradient(90deg, var(--wheatgrass) 0%, var(--wheatgrass-bright) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+    transform-origin: left;
+    animation: fillIn 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    animation-delay: 0.3s;
+  }
+  @keyframes fillIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  .bar-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent 0 10px,
+      rgba(255, 255, 255, 0.08) 10px 12px
+    );
+  }
+  .bar-marker {
+    position: absolute;
+    top: -8px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--ink);
+    animation: markerFade 0.8s ease both;
+    animation-delay: 1.5s;
+  }
+  @keyframes markerFade {
+    from { opacity: 0; transform: scaleY(0.6); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+  .bar-marker-label {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    white-space: nowrap;
+    background: var(--cream-card);
+    padding: 2px 6px;
+  }
+
+  /* Labels over/under the bar */
+  .bar-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .bar-scale strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* === TWO BIG STAT CARDS BELOW BAR === */
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1px 1.2fr 1px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin-top: 40px;
+  }
+  @media (max-width: 900px) {
+    .stat-row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .stat-divider { display: none; }
+  }
+
+  .stat-block {
+    padding: 0 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .stat-block:first-child { padding-left: 0; }
+  .stat-block:last-child { padding-right: 0; }
+  @media (max-width: 900px) {
+    .stat-block { padding: 0; }
+  }
+
+  .stat-divider {
+    width: 1px;
+    background: var(--line);
+    min-height: 120px;
+  }
+
+  .stat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wheatgrass);
+    margin-bottom: 12px;
+  }
+  .stat-tag.gap {
+    color: var(--warn);
+  }
+  .stat-tag::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .stat-tag.total::before {
+    background: var(--ink);
+  }
+  .stat-tag.total {
+    color: var(--ink);
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 78px);
+    line-height: 0.88;
+    color: var(--ink);
+    letter-spacing: 0.005em;
+    margin-bottom: 10px;
+  }
+  .stat-num.raised { color: var(--wheatgrass); }
+  .stat-num.gap { color: var(--warn); }
+
+  .stat-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 36ch;
+  }
+  .stat-desc strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Progress tick marks (visual reinforcement) */
+  .ticks {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    align-items: center;
+  }
+  .tick {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .tick-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .tick.done .tick-dot { background: var(--wheatgrass); }
+  .tick.done { color: var(--ink); }
+  .tick.pending .tick-dot {
+    background: transparent;
+    border: 1.5px solid var(--warn);
+  }
+
+  /* Load animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .head-row > *,
+  .progress-card,
+  .stat-block {
+    animation: fadeUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .head-row > *:nth-child(2) { animation-delay: 0.15s; }
+  .progress-card { animation-delay: 0.2s; }
+  .stat-block:nth-child(1) { animation-delay: 0.6s; }
+  .stat-block:nth-child(3) { animation-delay: 0.75s; }
+  .stat-block:nth-child(5) { animation-delay: 0.9s; }
+</style>
+</head>
+<body>
+
+<section class="section">
+
+  <!-- HEAD ROW: headline + meta -->
+  <div class="head-row">
+    <div>
+      <div class="eyebrow">Where We Stand</div>
+      <h1 class="headline">The foundation is in place. The gap is the <span class="accent">operating support</span> to do this right.</h1>
+      <p class="lede">The mission is real and underway. What we need now are people who see what we see and are willing to <strong>do something about it</strong>.</p>
+    </div>
+
+    <div class="meta">
+      <div class="meta-header">Funding Snapshot</div>
+      <div class="meta-row"><span class="meta-label">Phase</span><strong>Phase One</strong></div>
+      <div class="meta-row"><span class="meta-label">Status</span><strong>Active</strong></div>
+      <div class="meta-row"><span class="meta-label">As of</span><strong>April 2026</strong></div>
+      <div class="meta-row"><span class="meta-label">Partner</span><strong>CRARS / CSU Chico</strong></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS CARD -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-title">Capital Raised vs Near-Term Need</div>
+      <div class="progress-meta">PHASE ONE / $10M TARGET</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="bar-wrap">
+      <div class="bar">
+        <div class="bar-fill"></div>
+        <div class="bar-marker" style="left: 65%;">
+          <div class="bar-marker-label">↓ Raised: $6.5M+</div>
+        </div>
+      </div>
+      <div class="bar-scale">
+        <span><strong>$0</strong></span>
+        <span>$2.5M</span>
+        <span>$5M</span>
+        <span>$7.5M</span>
+        <span><strong>$10M</strong></span>
+      </div>
+    </div>
+
+    <!-- Stat breakdown row -->
+    <div class="stat-row">
+
+      <div class="stat-block">
+        <div class="stat-tag">Raised To Date</div>
+        <div class="stat-num raised">$6.5M<span style="font-size: 0.55em; color: var(--wheatgrass-bright);">+</span></div>
+        <div class="stat-desc">Land, operations, and grants secured. <strong>Schuman Family Foundation donated the 320-acre Edison Farm</strong> plus committed operating support.</div>
+        <div class="ticks">
+          <div class="tick done"><span class="tick-dot"></span>Land</div>
+          <div class="tick done"><span class="tick-dot"></span>Staff</div>
+          <div class="tick done"><span class="tick-dot"></span>Partnerships</div>
+        </div>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-block">
+        <div class="stat-tag gap">Near-Term Need</div>
+        <div class="stat-num gap">$3.5M</div>
+        <div class="stat-desc">Operating runway and program launch. Covers research staff, field trials, data platform, and field education programs for the next phase.</div>
+        <div class="ticks">
+          <div class="tick pending"><span class="tick-dot"></span>Operations</div>
+          <div class="tick pending"><span class="tick-dot"></span>Research</div>
+          <div class="tick pending"><span class="tick-dot"></span>Education</div>
+        </div>
+      </div>
+
+      <div class="stat-divider"></div>
+
+      <div class="stat-block">
+        <div class="stat-tag total">Combined Phase One</div>
+        <div class="stat-num">$10M</div>
+        <div class="stat-desc">The total ask across land, build, and runway. Every dollar in this phase is operating capacity, not overhead.</div>
+        <div class="ticks">
+          <div class="tick done"><span class="tick-dot"></span>65% funded</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

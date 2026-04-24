@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Working Lands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --water: #6fa3a0;
+    --soil: #8a6d3b;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+
+  /* === Hero grid: visual + copy === */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 64px;
+    align-items: center;
+    margin-bottom: 64px;
+  }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 0.92;
+    color: var(--ink);
+    max-width: 14ch;
+    margin-bottom: 28px;
+  }
+  .body-copy {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 52ch;
+    margin-bottom: 14px;
+  }
+  .body-copy strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* === Aerial / land visual === */
+  .land-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+  }
+  .land-card svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .land-caption {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    padding: 10px 14px;
+    background: rgba(10, 46, 38, 0.88);
+    border: 1px solid rgba(153, 204, 51, 0.4);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--wheatgrass-bright);
+    z-index: 3;
+    max-width: calc(100% - 32px);
+  }
+  .land-tag {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 10px;
+    background: rgba(245, 239, 225, 0.9);
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    z-index: 3;
+  }
+
+  /* === Convergence diagram: four forces meeting at one point === */
+  .convergence {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 40px 40px 32px;
+    margin-bottom: 0;
+  }
+  @media (max-width: 720px) {
+    .convergence { padding: 28px 24px 24px; }
+  }
+  .convergence-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .convergence-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .convergence-label::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+  }
+  .convergence-caption {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .convergence-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .convergence-grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  /* Left: forces column */
+  .forces {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .force {
+    padding: 14px 16px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+  .force:hover, .force.active {
+    background: rgba(153, 204, 51, 0.06);
+    border-color: var(--line-strong);
+    transform: translateX(3px);
+  }
+  .force-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(153, 204, 51, 0.12);
+    border: 1.5px solid var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+  }
+  .force:hover .force-icon, .force.active .force-icon {
+    background: var(--wheatgrass);
+  }
+  .force-icon svg { width: 13px; height: 13px; }
+  .force-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Center: diagram */
+  .diagram-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    position: relative;
+  }
+  .diagram-wrap svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+  }
+  @media (max-width: 900px) {
+    .diagram-wrap { min-height: 240px; }
+  }
+
+  /* Right: consequence bullets */
+  .consequences {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .consequence {
+    padding: 16px 18px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--wheatgrass);
+    border-radius: 0 6px 6px 0;
+    transition: background 0.3s ease;
+  }
+  .consequence:hover { background: rgba(153, 204, 51, 0.04); }
+  .consequence-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--wheatgrass);
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .consequence-text {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* Diagram element animations */
+  .line-climate, .line-water, .line-econ, .line-public {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: lineIn 1.5s ease forwards;
+  }
+  .line-climate { animation-delay: 0.2s; }
+  .line-water { animation-delay: 0.4s; }
+  .line-econ { animation-delay: 0.6s; }
+  .line-public { animation-delay: 0.8s; }
+  @keyframes lineIn {
+    to { stroke-dashoffset: 0; }
+  }
+  .center-pulse {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: centerPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes centerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .diagram-label {
+    opacity: 0;
+    animation: labelFade 0.8s ease forwards;
+  }
+  .diagram-label.l1 { animation-delay: 1s; }
+  .diagram-label.l2 { animation-delay: 1.1s; }
+  .diagram-label.l3 { animation-delay: 1.2s; }
+  .diagram-label.l4 { animation-delay: 1.3s; }
+  @keyframes labelFade {
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <!-- HERO: visual + copy -->
+  <div class="hero">
+    <!-- Land visual -->
+    <div class="land-card">
+      <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <!-- Sky -->
+        <defs>
+          <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#b8d4d0"/>
+            <stop offset="100%" stop-color="#d4c58a"/>
+          </linearGradient>
+          <linearGradient id="landGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#7a6b4a"/>
+            <stop offset="100%" stop-color="#5a4a2a"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Sky band at top -->
+        <rect width="400" height="60" fill="url(#skyGrad)"/>
+        <!-- Horizon ridge -->
+        <path d="M 0 60 L 60 55 L 120 58 L 180 52 L 240 56 L 300 50 L 360 54 L 400 58 L 400 60 Z" fill="#5a6b3a" opacity="0.6"/>
+
+        <!-- Ground: aerial view of working land -->
+        <rect y="60" width="400" height="240" fill="url(#landGrad)"/>
+
+        <!-- Field plots / irrigation zones -->
+        <g>
+          <!-- Green grass patch -->
+          <path d="M 40 140 Q 120 130 180 150 Q 220 165 250 155 Q 280 145 310 160 L 310 200 Q 250 195 180 210 Q 120 220 50 205 Z" fill="#5a7a35" opacity="0.75"/>
+          <path d="M 60 150 Q 130 145 180 160 Q 220 170 250 165 L 250 195 Q 180 200 130 205 Q 80 200 60 190 Z" fill="#6a8c42" opacity="0.7"/>
+
+          <!-- Water ponds -->
+          <ellipse cx="160" cy="175" rx="22" ry="12" fill="#6fa3a0" opacity="0.9"/>
+          <ellipse cx="158" cy="173" rx="18" ry="9" fill="#8ab8b5" opacity="0.6"/>
+
+          <ellipse cx="215" cy="168" rx="16" ry="8" fill="#6fa3a0" opacity="0.9"/>
+          <ellipse cx="213" cy="167" rx="12" ry="5" fill="#8ab8b5" opacity="0.6"/>
+
+          <ellipse cx="248" cy="185" rx="12" ry="6" fill="#6fa3a0" opacity="0.85"/>
+        </g>
+
+        <!-- Exposed dry soil areas -->
+        <g fill="#8a6d3b" opacity="0.5">
+          <path d="M 0 220 Q 50 215 100 225 Q 150 230 200 220 Q 250 215 300 225 Q 350 230 400 220 L 400 300 L 0 300 Z"/>
+        </g>
+        <!-- Dry soil cracks -->
+        <g stroke="#3d2f17" stroke-width="0.5" fill="none" opacity="0.6">
+          <path d="M 40 240 L 60 260 L 50 280"/>
+          <path d="M 110 245 L 130 265 L 120 285"/>
+          <path d="M 190 250 L 210 270 L 200 290"/>
+          <path d="M 270 240 L 290 260 L 280 285"/>
+          <path d="M 340 245 L 360 265"/>
+        </g>
+
+        <!-- Cattle / small figures near water -->
+        <g fill="#2e1f0e">
+          <ellipse cx="145" cy="185" rx="3" ry="2"/>
+          <ellipse cx="152" cy="186" rx="3" ry="2"/>
+          <ellipse cx="170" cy="183" rx="3" ry="2"/>
+        </g>
+
+        <!-- Fence lines -->
+        <g stroke="#3d2f17" stroke-width="0.6" opacity="0.6">
+          <line x1="0" y1="135" x2="400" y2="138" stroke-dasharray="2 3"/>
+          <line x1="0" y1="215" x2="400" y2="218" stroke-dasharray="2 3"/>
+        </g>
+
+        <!-- Subtle grid texture on field -->
+        <g stroke="#3d5a2a" stroke-width="0.3" opacity="0.3">
+          <line x1="60" y1="140" x2="70" y2="210"/>
+          <line x1="90" y1="140" x2="95" y2="210"/>
+          <line x1="120" y1="140" x2="120" y2="210"/>
+          <line x1="240" y1="140" x2="245" y2="210"/>
+          <line x1="280" y1="140" x2="285" y2="210"/>
+          <line x1="320" y1="140" x2="320" y2="210"/>
+        </g>
+      </svg>
+
+      <div class="land-tag">AERIAL / WORKING LAND</div>
+      <div class="land-caption">WATER + GRAZING + SOIL UNDER STRESS</div>
+    </div>
+
+    <!-- Copy -->
+    <div>
+      <div class="eyebrow">Working Lands</div>
+      <h1 class="headline">Working lands make the stakes visible.</h1>
+      <p class="body-copy">Agriculture sits where climate, water, economics, and public consequence meet. <strong>No industry is more threatened by climate change than the one that feeds us.</strong></p>
+      <p class="body-copy">That makes working land one of the clearest places to show why soil restoration matters and one of the clearest places to test whether regenerative claims can survive real operational pressure.</p>
+    </div>
+  </div>
+
+  <!-- CONVERGENCE DIAGRAM -->
+  <div class="convergence">
+    <div class="convergence-header">
+      <div class="convergence-label">Where Four Forces Meet</div>
+      <div class="convergence-caption">Agriculture as the intersection</div>
+    </div>
+
+    <div class="convergence-grid">
+      <!-- LEFT: forces -->
+      <div class="forces">
+        <div class="force active">
+          <div class="force-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>
+            </svg>
+          </div>
+          <div class="force-name">Climate</div>
+        </div>
+
+        <div class="force">
+          <div class="force-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.5s6 6 6 11a6 6 0 0 1-12 0c0-5 6-11 6-11z"/>
+            </svg>
+          </div>
+          <div class="force-name">Water</div>
+        </div>
+
+        <div class="force">
+          <div class="force-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 20h18M6 20v-8l6-4 6 4v8"/>
+              <path d="M12 20v-6"/>
+            </svg>
+          </div>
+          <div class="force-name">Economics</div>
+        </div>
+
+        <div class="force">
+          <div class="force-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="8" r="3"/>
+              <circle cx="17" cy="10" r="2.5"/>
+              <path d="M3 20c0-3 3-5 6-5s6 2 6 5"/>
+              <path d="M14 20c0-2 2-4 4-4s4 1.5 4 4"/>
+            </svg>
+          </div>
+          <div class="force-name">Public consequence</div>
+        </div>
+      </div>
+
+      <!-- CENTER: diagram -->
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+          <!-- Soft background circle -->
+          <circle cx="140" cy="140" r="130" fill="none" stroke="rgba(10, 46, 38, 0.06)" stroke-width="1" stroke-dasharray="2 4"/>
+          <circle cx="140" cy="140" r="90" fill="none" stroke="rgba(10, 46, 38, 0.08)" stroke-width="1" stroke-dasharray="2 4"/>
+
+          <!-- Lines converging to center -->
+          <line class="line-climate" x1="40" y1="40" x2="140" y2="140" stroke="#99cc33" stroke-width="2" stroke-linecap="round"/>
+          <line class="line-water" x1="240" y1="40" x2="140" y2="140" stroke="#6fa3a0" stroke-width="2" stroke-linecap="round"/>
+          <line class="line-econ" x1="40" y1="240" x2="140" y2="140" stroke="#8a6d3b" stroke-width="2" stroke-linecap="round"/>
+          <line class="line-public" x1="240" y1="240" x2="140" y2="140" stroke="#e8a547" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Outer nodes -->
+          <g>
+            <circle cx="40" cy="40" r="14" fill="#fdfaf0" stroke="#99cc33" stroke-width="2"/>
+            <circle cx="40" cy="40" r="5" fill="#99cc33"/>
+          </g>
+          <g>
+            <circle cx="240" cy="40" r="14" fill="#fdfaf0" stroke="#6fa3a0" stroke-width="2"/>
+            <circle cx="240" cy="40" r="5" fill="#6fa3a0"/>
+          </g>
+          <g>
+            <circle cx="40" cy="240" r="14" fill="#fdfaf0" stroke="#8a6d3b" stroke-width="2"/>
+            <circle cx="40" cy="240" r="5" fill="#8a6d3b"/>
+          </g>
+          <g>
+            <circle cx="240" cy="240" r="14" fill="#fdfaf0" stroke="#e8a547" stroke-width="2"/>
+            <circle cx="240" cy="240" r="5" fill="#e8a547"/>
+          </g>
+
+          <!-- Center node -->
+          <g class="center-pulse">
+            <circle cx="140" cy="140" r="38" fill="rgba(10, 46, 38, 0.95)"/>
+            <circle cx="140" cy="140" r="38" fill="none" stroke="#99cc33" stroke-width="2"/>
+          </g>
+          <text x="140" y="137" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="16" fill="#b8e655" letter-spacing="0.5">WORKING</text>
+          <text x="140" y="152" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="16" fill="#b8e655" letter-spacing="0.5">LAND</text>
+
+          <!-- Node labels -->
+          <g font-family="JetBrains Mono, monospace" font-size="8" fill="#0a2e26" font-weight="600" letter-spacing="0.5">
+            <text class="diagram-label l1" x="40" y="22" text-anchor="middle">CLIMATE</text>
+            <text class="diagram-label l2" x="240" y="22" text-anchor="middle">WATER</text>
+            <text class="diagram-label l3" x="40" y="268" text-anchor="middle">ECONOMICS</text>
+            <text class="diagram-label l4" x="240" y="268" text-anchor="middle">PUBLIC</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- RIGHT: consequences -->
+      <div class="consequences">
+        <div class="consequence">
+          <span class="consequence-num">01 / GROWERS</span>
+          <div class="consequence-text">Growers face climate volatility through cost, timing, water, and risk.</div>
+        </div>
+        <div class="consequence">
+          <span class="consequence-num">02 / LAND</span>
+          <div class="consequence-text">Land stewardship decisions affect food systems, local economies, and resilience far beyond a single field.</div>
+        </div>
+        <div class="consequence">
+          <span class="consequence-num">03 / EVIDENCE</span>
+          <div class="consequence-text">Field-based evidence is what allows bold climate language to become more credible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Force hover syncs with nothing for now, but structure is in place for future
+  const forces = document.querySelectorAll('.force');
+  forces.forEach(f => {
+    f.addEventListener('click', () => {
+      forces.forEach(x => x.classList.remove('active'));
+      f.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

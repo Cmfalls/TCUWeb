@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TCU — Announcing the Edison Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe1;
+    --cream-soft: #ede5d3;
+    --cream-card: #fdfaf0;
+    --ink: #0a2e26;
+    --ink-soft: #1a3d34;
+    --wheatgrass: #99cc33;
+    --wheatgrass-bright: #b8e655;
+    --muted: #6b6558;
+    --line: rgba(10, 46, 38, 0.12);
+    --line-strong: rgba(10, 46, 38, 0.25);
+
+    /* Plot palette */
+    --plot-citrus: #8aa847;
+    --plot-grape: #5a6b3a;
+    --plot-agave: #6a8c62;
+    --plot-fallow: #8a6d3b;
+    --plot-active: #99cc33;
+    --plot-soil: #3d2f17;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  .section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 96px 48px 120px;
+  }
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--wheatgrass);
+    border-radius: 50%;
+    animation: launchPulse 2s ease-in-out infinite;
+  }
+  @keyframes launchPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(153, 204, 51, 0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(153, 204, 51, 0); }
+  }
+
+  /* === Hero grid === */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; gap: 48px; }
+    .section { padding: 56px 24px 72px; }
+  }
+
+  h1.headline {
+    font-family: 'Bebas Neue', 'Inter', sans-serif;
+    font-size: clamp(52px, 6vw, 88px);
+    line-height: 0.9;
+    color: var(--ink);
+    max-width: 13ch;
+    margin-bottom: 28px;
+  }
+  .tagline {
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ink-soft);
+    max-width: 42ch;
+    margin-bottom: 24px;
+  }
+  .lede {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 52ch;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .ctas {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 14px 22px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease, color 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-primary {
+    background: var(--wheatgrass);
+    color: var(--ink);
+    border: none;
+  }
+  .btn-primary:hover { background: var(--wheatgrass-bright); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* === Hero visual: aerial farm view === */
+  .aerial {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    overflow: hidden;
+  }
+  .aerial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    position: relative;
+    z-index: 2;
+  }
+  .aerial-title {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .aerial-compass {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 10px;
+  }
+  .aerial-svg-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+  .aerial-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .plot {
+    opacity: 0;
+    transform-origin: center;
+    animation: plotIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+  @keyframes plotIn {
+    0% { opacity: 0; transform: scale(0.85); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .sensor {
+    opacity: 0;
+    animation: sensorIn 0.6s ease forwards;
+  }
+  @keyframes sensorIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .sensor-dot {
+    animation: sensorPulse 2.5s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes sensorPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+  }
+
+  /* Caption strip on aerial */
+  .aerial-caption {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: rgba(10, 46, 38, 0.04);
+    border-left: 3px solid var(--wheatgrass);
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    z-index: 2;
+  }
+  .aerial-caption-text {
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* === Stats strip === */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .stats { grid-template-columns: 1fr; }
+  }
+
+  .stat {
+    padding: 28px 28px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    transition: background 0.3s ease;
+  }
+  .stat:hover { background: rgba(153, 204, 51, 0.06); }
+  .stat:last-child { border-right: none; }
+  @media (max-width: 900px) {
+    .stat { border-right: none; border-bottom: 1px solid var(--line); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(odd) { border-right: 1px solid var(--line); }
+    .stat:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 500px) {
+    .stat { border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+    .stat:last-child { border-bottom: none !important; }
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    line-height: 0.9;
+    color: var(--wheatgrass);
+    margin-bottom: 10px;
+    letter-spacing: 0.005em;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+    max-width: 24ch;
+  }
+  .stat-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* === Pillar cards === */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px) {
+    .pillars { grid-template-columns: 1fr; }
+  }
+
+  .pillar {
+    background: var(--cream-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 28px 28px;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+                border-color 0.3s ease,
+                box-shadow 0.4s ease;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .pillar:hover {
+    transform: translateY(-4px);
+    border-color: var(--line-strong);
+    box-shadow: 0 20px 36px -22px rgba(10, 46, 38, 0.22);
+  }
+  .pillar::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 0;
+    background: var(--wheatgrass);
+    transition: height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .pillar:hover::before { height: 100%; }
+
+  .pillar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+  }
+  .pillar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(153, 204, 51, 0.12);
+    border: 1.5px solid var(--wheatgrass);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+    transition: background 0.3s ease, transform 0.4s ease;
+  }
+  .pillar:hover .pillar-icon {
+    background: var(--wheatgrass);
+    transform: rotate(-6deg) scale(1.05);
+  }
+  .pillar-icon svg { width: 18px; height: 18px; }
+  .pillar-step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    padding-top: 14px;
+  }
+  .pillar h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .pillar p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="hero">
+    <!-- TEXT COLUMN -->
+    <div>
+      <div class="eyebrow">Announcing the Launch</div>
+      <h1 class="headline">The Carbon Underground is proud to announce the launch of the Edison Institute.</h1>
+      <div class="tagline">Advancing the evolution of agriculture in an era of climate change.</div>
+      <p class="lede">The Edison Institute is a working farm and living laboratory in California's Central Valley. It studies three pressures together: the mutual impact of agriculture and climate change, the economics of transition, and the immediate threat of water shortages.</p>
+      <p class="lede">That matters because the barrier to adoption is rarely inspiration alone. It is confidence. What transition looks like in practice, how long it takes, and what it changes for growers, supply chains, and communities.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#edison">
+          Explore Edison
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8 H13 M9 4 L13 8 L9 12"/>
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="#evidence">See the evidence</a>
+      </div>
+    </div>
+
+    <!-- AERIAL VISUAL COLUMN -->
+    <div class="aerial">
+      <div class="aerial-header">
+        <div>
+          <div class="aerial-title">Edison Institute</div>
+          <div>Central Valley, CA · 320 AC</div>
+        </div>
+        <div class="aerial-compass">N</div>
+      </div>
+
+      <div class="aerial-svg-wrap">
+        <svg class="aerial-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background soil -->
+          <rect x="0" y="0" width="400" height="400" fill="#8a6d3b" opacity="0.15"/>
+
+          <!-- Farm boundary -->
+          <rect x="20" y="20" width="360" height="360" fill="none" stroke="#0a2e26" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+          <!-- Plots: grid of research fields -->
+          <!-- Citrus block (top-left quadrant) -->
+          <g>
+            <rect class="plot" x="30" y="30" width="75" height="55" fill="#8aa847" opacity="0.85" style="animation-delay: 0.05s"/>
+            <rect class="plot" x="110" y="30" width="75" height="55" fill="#8aa847" opacity="0.75" style="animation-delay: 0.1s"/>
+            <rect class="plot" x="30" y="90" width="75" height="55" fill="#8aa847" opacity="0.9" style="animation-delay: 0.15s"/>
+            <rect class="plot" x="110" y="90" width="75" height="55" fill="#8aa847" opacity="0.8" style="animation-delay: 0.2s"/>
+            <!-- Citrus rows (texture) -->
+            <g stroke="#5a6b3a" stroke-width="0.4" opacity="0.4">
+              <line x1="40" y1="35" x2="40" y2="145"/>
+              <line x1="50" y1="35" x2="50" y2="145"/>
+              <line x1="60" y1="35" x2="60" y2="145"/>
+              <line x1="70" y1="35" x2="70" y2="145"/>
+              <line x1="80" y1="35" x2="80" y2="145"/>
+              <line x1="90" y1="35" x2="90" y2="145"/>
+              <line x1="120" y1="35" x2="120" y2="145"/>
+              <line x1="130" y1="35" x2="130" y2="145"/>
+              <line x1="140" y1="35" x2="140" y2="145"/>
+              <line x1="150" y1="35" x2="150" y2="145"/>
+              <line x1="160" y1="35" x2="160" y2="145"/>
+              <line x1="170" y1="35" x2="170" y2="145"/>
+            </g>
+          </g>
+
+          <!-- Grape block (top-right quadrant) -->
+          <g>
+            <rect class="plot" x="200" y="30" width="85" height="55" fill="#5a6b3a" opacity="0.85" style="animation-delay: 0.25s"/>
+            <rect class="plot" x="290" y="30" width="80" height="55" fill="#5a6b3a" opacity="0.75" style="animation-delay: 0.3s"/>
+            <rect class="plot" x="200" y="90" width="85" height="55" fill="#5a6b3a" opacity="0.9" style="animation-delay: 0.35s"/>
+            <rect class="plot" x="290" y="90" width="80" height="55" fill="#5a6b3a" opacity="0.8" style="animation-delay: 0.4s"/>
+            <g stroke="#3d4f28" stroke-width="0.4" opacity="0.5">
+              <line x1="205" y1="40" x2="285" y2="40"/>
+              <line x1="205" y1="55" x2="285" y2="55"/>
+              <line x1="205" y1="70" x2="285" y2="70"/>
+              <line x1="205" y1="100" x2="285" y2="100"/>
+              <line x1="205" y1="115" x2="285" y2="115"/>
+              <line x1="205" y1="130" x2="285" y2="130"/>
+              <line x1="295" y1="40" x2="365" y2="40"/>
+              <line x1="295" y1="55" x2="365" y2="55"/>
+              <line x1="295" y1="70" x2="365" y2="70"/>
+              <line x1="295" y1="100" x2="365" y2="100"/>
+              <line x1="295" y1="115" x2="365" y2="115"/>
+              <line x1="295" y1="130" x2="365" y2="130"/>
+            </g>
+          </g>
+
+          <!-- Access road horizontal divider -->
+          <line x1="30" y1="155" x2="370" y2="155" stroke="#8a6d3b" stroke-width="2.5" opacity="0.6"/>
+          <line x1="30" y1="155" x2="370" y2="155" stroke="#3d2f17" stroke-width="0.8" stroke-dasharray="3 3"/>
+
+          <!-- Agave block (bottom-left) -->
+          <g>
+            <rect class="plot" x="30" y="165" width="75" height="60" fill="#6a8c62" opacity="0.85" style="animation-delay: 0.45s"/>
+            <rect class="plot" x="110" y="165" width="75" height="60" fill="#6a8c62" opacity="0.75" style="animation-delay: 0.5s"/>
+            <rect class="plot" x="30" y="230" width="75" height="60" fill="#6a8c62" opacity="0.9" style="animation-delay: 0.55s"/>
+            <rect class="plot" x="110" y="230" width="75" height="60" fill="#6a8c62" opacity="0.8" style="animation-delay: 0.6s"/>
+            <!-- Agave dot pattern -->
+            <g fill="#3d5a2a" opacity="0.5">
+              <circle cx="45" cy="180" r="1.5"/>
+              <circle cx="60" cy="180" r="1.5"/>
+              <circle cx="75" cy="180" r="1.5"/>
+              <circle cx="90" cy="180" r="1.5"/>
+              <circle cx="45" cy="200" r="1.5"/>
+              <circle cx="60" cy="200" r="1.5"/>
+              <circle cx="75" cy="200" r="1.5"/>
+              <circle cx="90" cy="200" r="1.5"/>
+              <circle cx="45" cy="215" r="1.5"/>
+              <circle cx="60" cy="215" r="1.5"/>
+              <circle cx="75" cy="215" r="1.5"/>
+              <circle cx="90" cy="215" r="1.5"/>
+              <circle cx="125" cy="180" r="1.5"/>
+              <circle cx="140" cy="180" r="1.5"/>
+              <circle cx="155" cy="180" r="1.5"/>
+              <circle cx="170" cy="180" r="1.5"/>
+              <circle cx="125" cy="200" r="1.5"/>
+              <circle cx="140" cy="200" r="1.5"/>
+              <circle cx="155" cy="200" r="1.5"/>
+              <circle cx="170" cy="200" r="1.5"/>
+              <circle cx="125" cy="215" r="1.5"/>
+              <circle cx="140" cy="215" r="1.5"/>
+              <circle cx="155" cy="215" r="1.5"/>
+              <circle cx="170" cy="215" r="1.5"/>
+              <circle cx="45" cy="245" r="1.5"/>
+              <circle cx="60" cy="245" r="1.5"/>
+              <circle cx="75" cy="245" r="1.5"/>
+              <circle cx="90" cy="245" r="1.5"/>
+              <circle cx="45" cy="265" r="1.5"/>
+              <circle cx="60" cy="265" r="1.5"/>
+              <circle cx="75" cy="265" r="1.5"/>
+              <circle cx="90" cy="265" r="1.5"/>
+              <circle cx="125" cy="245" r="1.5"/>
+              <circle cx="140" cy="245" r="1.5"/>
+              <circle cx="155" cy="245" r="1.5"/>
+              <circle cx="170" cy="245" r="1.5"/>
+              <circle cx="125" cy="265" r="1.5"/>
+              <circle cx="140" cy="265" r="1.5"/>
+              <circle cx="155" cy="265" r="1.5"/>
+              <circle cx="170" cy="265" r="1.5"/>
+            </g>
+          </g>
+
+          <!-- Research/active plots (bottom right) -->
+          <g>
+            <rect class="plot" x="200" y="165" width="80" height="60" fill="#99cc33" opacity="0.7" style="animation-delay: 0.65s"/>
+            <rect class="plot" x="285" y="165" width="85" height="60" fill="#99cc33" opacity="0.6" style="animation-delay: 0.7s"/>
+            <rect class="plot" x="200" y="230" width="80" height="60" fill="#8aa847" opacity="0.8" style="animation-delay: 0.75s"/>
+            <rect class="plot" x="285" y="230" width="85" height="60" fill="#8aa847" opacity="0.7" style="animation-delay: 0.8s"/>
+          </g>
+
+          <!-- Road/path horizontal bottom -->
+          <line x1="30" y1="300" x2="370" y2="300" stroke="#8a6d3b" stroke-width="2" opacity="0.5"/>
+
+          <!-- Fallow / future plots (bottom strip) -->
+          <g>
+            <rect class="plot" x="30" y="310" width="100" height="60" fill="#8a6d3b" opacity="0.3" style="animation-delay: 0.85s"/>
+            <rect class="plot" x="135" y="310" width="100" height="60" fill="#8a6d3b" opacity="0.35" style="animation-delay: 0.9s"/>
+            <rect class="plot" x="240" y="310" width="130" height="60" fill="#8a6d3b" opacity="0.3" style="animation-delay: 0.95s"/>
+            <!-- Contour lines in fallow -->
+            <g stroke="#3d2f17" stroke-width="0.3" opacity="0.4" fill="none">
+              <path d="M 35 325 Q 80 320 130 328"/>
+              <path d="M 35 340 Q 80 335 130 343"/>
+              <path d="M 35 355 Q 80 350 130 358"/>
+              <path d="M 140 325 Q 185 320 235 328"/>
+              <path d="M 140 340 Q 185 335 235 343"/>
+              <path d="M 140 355 Q 185 350 235 358"/>
+              <path d="M 245 325 Q 305 320 365 328"/>
+              <path d="M 245 340 Q 305 335 365 343"/>
+              <path d="M 245 355 Q 305 350 365 358"/>
+            </g>
+          </g>
+
+          <!-- Sensor stations with pulsing dots -->
+          <g class="sensor" style="animation-delay: 1.2s">
+            <circle class="sensor-dot" cx="67" cy="87" r="3" fill="#99cc33"/>
+            <circle cx="67" cy="87" r="6" fill="none" stroke="#99cc33" stroke-width="0.8" opacity="0.5"/>
+          </g>
+          <g class="sensor" style="animation-delay: 1.35s">
+            <circle class="sensor-dot" cx="243" cy="87" r="3" fill="#99cc33"/>
+            <circle cx="243" cy="87" r="6" fill="none" stroke="#99cc33" stroke-width="0.8" opacity="0.5"/>
+          </g>
+          <g class="sensor" style="animation-delay: 1.5s">
+            <circle class="sensor-dot" cx="107" cy="225" r="3" fill="#99cc33"/>
+            <circle cx="107" cy="225" r="6" fill="none" stroke="#99cc33" stroke-width="0.8" opacity="0.5"/>
+          </g>
+          <g class="sensor" style="animation-delay: 1.65s">
+            <circle class="sensor-dot" cx="285" cy="225" r="3" fill="#99cc33"/>
+            <circle cx="285" cy="225" r="6" fill="none" stroke="#99cc33" stroke-width="0.8" opacity="0.5"/>
+          </g>
+
+          <!-- Plot labels -->
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#f5efe1" font-weight="600" letter-spacing="0.5">
+            <text x="35" y="42" opacity="0.8">CITRUS</text>
+            <text x="205" y="42" opacity="0.8">GRAPE</text>
+            <text x="35" y="177" opacity="0.8">AGAVE</text>
+            <text x="205" y="177" opacity="0.8">TRIAL</text>
+          </g>
+          <g font-family="JetBrains Mono, monospace" font-size="7" fill="#0a2e26" font-weight="600" letter-spacing="0.5" opacity="0.6">
+            <text x="35" y="322">FALLOW / FUTURE PLOTS</text>
+          </g>
+
+          <!-- Scale bar -->
+          <g>
+            <line x1="310" y1="388" x2="370" y2="388" stroke="#0a2e26" stroke-width="1"/>
+            <line x1="310" y1="385" x2="310" y2="391" stroke="#0a2e26" stroke-width="1"/>
+            <line x1="340" y1="385" x2="340" y2="391" stroke="#0a2e26" stroke-width="1"/>
+            <line x1="370" y1="385" x2="370" y2="391" stroke="#0a2e26" stroke-width="1"/>
+            <text x="340" y="398" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="6" fill="#6b6558" letter-spacing="0.5">160 AC</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="aerial-caption">
+        <div class="aerial-caption-text">Edison gives funders, growers, and institutions a place where theory is tested against real land, real water limits, and real operating decisions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-tag">Land</div>
+      <div class="stat-num">320</div>
+      <div class="stat-label">Acres dedicated to research and demonstration</div>
+    </div>
+    <div class="stat">
+      <div class="stat-tag">Food supply</div>
+      <div class="stat-num">25%</div>
+      <div class="stat-label">Of the nation's food tied to the Central Valley</div>
+    </div>
+    <div class="stat">
+      <div class="stat-tag">Specialty crops</div>
+      <div class="stat-num">40%</div>
+      <div class="stat-label">Of U.S. fruits and nuts connected to this region</div>
+    </div>
+    <div class="stat">
+      <div class="stat-tag">Farmland share</div>
+      <div class="stat-num">1%</div>
+      <div class="stat-label">Of U.S. farmland carrying outsized national importance</div>
+    </div>
+  </div>
+
+  <!-- PILLAR CARDS -->
+  <div class="pillars">
+
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h4l3-8 4 16 3-8h4"/>
+          </svg>
+        </div>
+        <div class="pillar-step">01 / MEASUREMENT</div>
+      </div>
+      <h3>Baseline studies and monitoring</h3>
+      <p>The work starts with measuring soil, water, infrastructure, and farm condition so change can be tracked credibly over time.</p>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 18c3-6 5-6 8-2 3 4 5 4 8-2"/>
+            <path d="M4 14c3-6 5-6 8-2 3 4 5 4 8-2"/>
+          </svg>
+        </div>
+        <div class="pillar-step">02 / RESEARCH</div>
+      </div>
+      <h3>Carbon and research plans</h3>
+      <p>Field trials, research design, and a carbon farm plan help keep the science anchored in a coherent systems strategy.</p>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-top">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 8 L12 3 L22 8 L12 13 Z"/>
+            <path d="M6 10v5c0 1 3 3 6 3s6-2 6-3v-5"/>
+          </svg>
+        </div>
+        <div class="pillar-step">03 / IMPLEMENTATION</div>
+      </div>
+      <h3>Education and implementation</h3>
+      <p>Student learning, grower engagement, and practical implementation are treated as part of the same long-term mission.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
