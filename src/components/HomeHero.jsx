@@ -1,25 +1,28 @@
 import { Link } from "react-router-dom";
+import DeferredVideo from "./DeferredVideo";
 
 function HomeHero({ content }) {
   return (
     <section className="home-hero">
+      <picture className="home-hero-media" aria-hidden="true">
+        {content.mobilePoster ? <source media="(max-width: 780px)" srcSet={content.mobilePoster} /> : null}
+        <img
+          className="home-hero-image"
+          src={content.posterImage}
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
       {content.backgroundVideo ? (
-        <video
+        <DeferredVideo
           className="home-hero-video"
-          autoPlay
-          loop
-          muted
-          playsInline
+          preload="metadata"
           poster={content.posterImage}
-          aria-hidden="true"
-        >
-          <source src={content.backgroundVideo} type="video/mp4" />
-        </video>
-      ) : (
-        <div className="home-hero-media" style={{ backgroundImage: `url(${content.posterImage})` }} />
-      )}
-      {content.mobilePoster && !content.backgroundVideo ? (
-        <div className="home-hero-mobile" style={{ backgroundImage: `url(${content.mobilePoster})` }} />
+          src={content.backgroundVideo}
+          ariaHidden
+        />
       ) : null}
       <div className="home-hero-overlay" />
 
@@ -57,11 +60,19 @@ function HomeHero({ content }) {
         <aside className="home-hero-film">
           <Link className="home-hero-film-frame" to={content.filmLink.to}>
             {content.filmVideo ? (
-              <video autoPlay loop muted playsInline poster={content.filmPoster} aria-hidden="true">
-                <source src={content.filmVideo} type="video/mp4" />
-              </video>
+              <DeferredVideo
+                preload="metadata"
+                poster={content.filmPoster}
+                src={content.filmVideo}
+                ariaHidden
+              />
             ) : (
-              <img src={content.filmPoster} alt="Working farmland tied to The Edison Institute" />
+              <img
+                src={content.filmPoster}
+                alt="Working farmland tied to The Edison Institute"
+                loading="lazy"
+                decoding="async"
+              />
             )}
             <span className="home-hero-film-badge">{content.filmEyebrow}</span>
             <span aria-hidden="true" className="home-hero-play">

@@ -7,8 +7,9 @@ export const homeContent = {
     title: "We can. It all begins with Soil Intelligence.",
     lede:
       "No industry is more threatened by climate change than the one that feeds us. The Carbon Underground is advancing Soil Intelligence - the science of restoring living soil - to turn agriculture from a source of damage into one of the largest immediate opportunities for climate repair.",
-    posterImage: "/images/library/drought-water-supply_2019-08-28_cachuma-jw6ch7nmo_0004.jpg",
-    mobilePoster: "/images/library/water-infrastructure_2014_aqueduct-farm-aerial-kern_0001.jpg",
+    posterImage: "/images/library/brand-photography_undated_rick-van-der-haar-v0j9vnwpos8_0001-hero.jpg",
+    mobilePoster: "/images/library/brand-photography_undated_rick-van-der-haar-v0j9vnwpos8_0001-hero.jpg",
+    backgroundVideo: "/video/SplitGrassfield.mp4",
     filmPoster: "/images/library/people-programs-community_2011-06-29_dk-sow_0001.jpg",
     filmVideo: "/video/video-other-half-founder-film.mp4",
     filmEyebrow: "Founder film",
